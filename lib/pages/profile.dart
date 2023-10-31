@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Profile extends StatelessWidget {
   const Profile({super.key});
@@ -6,7 +7,7 @@ class Profile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("asdasd"),),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.title_profile),),
       body: Text("data"),
     );
   }

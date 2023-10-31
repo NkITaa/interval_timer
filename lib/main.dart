@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:interval_timer/pages/home.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'const.dart';
 
 void main() {
@@ -25,14 +27,15 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'Interval Timer',
       debugShowCheckedModeBanner: false,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       theme: ThemeData(
         bottomNavigationBarTheme:
             const BottomNavigationBarThemeData(backgroundColor: lightNeutral0),
         appBarTheme: const AppBarTheme(
             backgroundColor: Colors.transparent,
             shadowColor: Colors.transparent,
-            titleTextStyle: TextStyle(color: Colors.black)
-        ),
+            titleTextStyle: TextStyle(color: Colors.black)),
         textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme),
       ),
       darkTheme: ThemeData(

@@ -3,8 +3,7 @@ import 'package:interval_timer/pages/direct_start.dart';
 import 'package:interval_timer/pages/profile.dart';
 import 'package:interval_timer/pages/workouts.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
-
-import '../const.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../widgets/hide_widgets_on_scroll.dart';
 
 class Home extends StatefulWidget {
@@ -48,7 +47,7 @@ class _HomeState extends State<Home> {
                       TablerIcons.stretching,
                       color: screenIndex == 0 ? Colors.deepPurple : Colors.grey,
                     )),
-                label: "Workouts"),
+                label: AppLocalizations.of(context)!.title_workouts),
             BottomNavigationBarItem(
                 icon: IconButton(
                     onPressed: () => setState(() {
@@ -58,7 +57,7 @@ class _HomeState extends State<Home> {
                       TablerIcons.player_play,
                       color: screenIndex == 1 ? Colors.deepPurple : Colors.grey,
                     )),
-                label: "Direktstart"),
+                label: AppLocalizations.of(context)!.title_jump_in),
             BottomNavigationBarItem(
               icon: Column(
                 children: [
@@ -73,7 +72,7 @@ class _HomeState extends State<Home> {
                       )),
                 ],
               ),
-              label: "Profil",
+              label: AppLocalizations.of(context)!.title_profile,
             ),
           ],
         ),

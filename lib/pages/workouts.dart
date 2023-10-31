@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../main.dart';
 
@@ -8,7 +9,7 @@ class Workouts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("asdsafsadd"),),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.title_workouts),),
       body: Column(
         children: [
           const Text("data"),
