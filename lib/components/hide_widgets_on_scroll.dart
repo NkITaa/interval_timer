@@ -18,13 +18,13 @@ class ScrollToHideWidget extends StatefulWidget {
 
 class _ScrollToHideWidgetState extends State<ScrollToHideWidget> {
   bool isVisible = true;
-  
+
   @override
   void initState() {
     super.initState();
     widget.controller.addListener(listen);
   }
-  
+
   @override
   void dispose() {
     widget.controller.removeListener(listen);
@@ -35,24 +35,20 @@ class _ScrollToHideWidgetState extends State<ScrollToHideWidget> {
     final direction = widget.controller.position.userScrollDirection;
     if (direction == ScrollDirection.forward) {
       show();
-    }
-    else if (direction == ScrollDirection.reverse) {
+    } else if (direction == ScrollDirection.reverse) {
       hide();
     }
   }
 
   void show() {
     if (!isVisible) {
-      setState(() =>
-      isVisible = true
-    );
+      setState(() => isVisible = true);
     }
   }
 
   void hide() {
     if (isVisible) {
-      setState(() =>
-      isVisible = false);
+      setState(() => isVisible = false);
     }
   }
 

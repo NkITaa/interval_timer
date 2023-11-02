@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:interval_timer/pages/home.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -30,12 +29,16 @@ class _MyAppState extends State<MyApp> {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       theme: ThemeData(
+
         bottomNavigationBarTheme:
             const BottomNavigationBarThemeData(backgroundColor: lightNeutral0),
         appBarTheme: const AppBarTheme(
             backgroundColor: Colors.transparent,
             shadowColor: Colors.transparent,
-            titleTextStyle: TextStyle(color: Colors.black)),
+            titleTextStyle: TextStyle(color: Colors.black),
+            iconTheme: IconThemeData(color: Colors.black),
+            centerTitle: false
+        ),
         textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme),
       ),
       darkTheme: ThemeData(
@@ -43,6 +46,8 @@ class _MyAppState extends State<MyApp> {
             const BottomNavigationBarThemeData(backgroundColor: darkNeutral100),
         appBarTheme: const AppBarTheme(
             backgroundColor: Colors.transparent,
+            titleTextStyle: TextStyle(color: Colors.black),
+            centerTitle: false,
             shadowColor: Colors.transparent),
         textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme),
       ), // standard dark theme

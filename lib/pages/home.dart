@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:interval_timer/pages/direct_start.dart';
-import 'package:interval_timer/pages/profile.dart';
-import 'package:interval_timer/pages/workouts.dart';
-import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import '../widgets/hide_widgets_on_scroll.dart';
+import 'package:interval_timer/components/bottom_navbar.dart';
+import 'package:interval_timer/pages/jump_in/jump_in.dart';
+import 'package:interval_timer/pages/profile/profile.dart';
+import 'package:interval_timer/pages/workouts/workouts.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -15,7 +13,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   late ScrollController controller;
-  final List<Widget> screens = const [Workouts(), DirectStart(), Profile()];
+  final List<Widget> screens = const [Workouts(), JumpIn(), Profile()];
   int screenIndex = 0;
 
   @override
@@ -34,49 +32,15 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: screens[screenIndex],
-      bottomNavigationBar: ScrollToHideWidget(
+      bottomNavigationBar: BottomNavBar(
         controller: controller,
-        child: BottomNavigationBar(
-          items: [
-            BottomNavigationBarItem(
-                icon: IconButton(
-                    onPressed: () => setState(() {
-                          screenIndex = 0;
-                        }),
-                    icon: Icon(
-                      TablerIcons.stretching,
-                      color: screenIndex == 0 ? Colors.deepPurple : Colors.grey,
-                    )),
-                label: AppLocalizations.of(context)!.title_workouts),
-            BottomNavigationBarItem(
-                icon: IconButton(
-                    onPressed: () => setState(() {
-                          screenIndex = 1;
-                        }),
-                    icon: Icon(
-                      TablerIcons.player_play,
-                      color: screenIndex == 1 ? Colors.deepPurple : Colors.grey,
-                    )),
-                label: AppLocalizations.of(context)!.title_jump_in),
-            BottomNavigationBarItem(
-              icon: Column(
-                children: [
-                  IconButton(
-                      onPressed: () => setState(() {
-                            screenIndex = 2;
-                          }),
-                      icon: Icon(
-                        TablerIcons.user_circle,
-                        color:
-                            screenIndex == 2 ? Colors.deepPurple : Colors.grey,
-                      )),
-                ],
-              ),
-              label: AppLocalizations.of(context)!.title_profile,
-            ),
-          ],
-        ),
-      ),
+        screenIndex: screenIndex,
+        onTabTapped: (int index) {
+          setState(() {
+            screenIndex = index;
+          });
+        },
+      )
     );
   }
 }
