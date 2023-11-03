@@ -13,13 +13,20 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   late ScrollController controller;
-  final List<Widget> screens = const [Workouts(), JumpIn(), Profile()];
+  late List<Widget> screens;
   int screenIndex = 0;
 
   @override
   void initState() {
     super.initState();
     controller = ScrollController();
+    screens = [
+      Workouts(
+        controller: controller,
+      ),
+      const JumpIn(),
+      const Profile(),
+    ];
   }
 
   @override
@@ -31,16 +38,15 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: screens[screenIndex],
-      bottomNavigationBar: BottomNavBar(
-        controller: controller,
-        screenIndex: screenIndex,
-        onTabTapped: (int index) {
-          setState(() {
-            screenIndex = index;
-          });
-        },
-      )
-    );
+        body: screens[screenIndex],
+        bottomNavigationBar: BottomNavBar(
+          controller: controller,
+          screenIndex: screenIndex,
+          onTabTapped: (int index) {
+            setState(() {
+              screenIndex = index;
+            });
+          },
+        ));
   }
 }
