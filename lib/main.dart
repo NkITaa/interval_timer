@@ -29,7 +29,6 @@ class _MyAppState extends State<MyApp> {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       theme: ThemeData(
-
         bottomNavigationBarTheme:
             const BottomNavigationBarThemeData(backgroundColor: lightNeutral0),
         appBarTheme: const AppBarTheme(
@@ -37,8 +36,7 @@ class _MyAppState extends State<MyApp> {
             shadowColor: Colors.transparent,
             titleTextStyle: TextStyle(color: Colors.black),
             iconTheme: IconThemeData(color: Colors.black),
-            centerTitle: false
-        ),
+            centerTitle: false),
         textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme),
       ),
       darkTheme: ThemeData(
@@ -60,5 +58,9 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       _themeMode = themeMode;
     });
+  }
+
+  bool isDarkMode() {
+    return _themeMode == ThemeMode.dark;
   }
 }

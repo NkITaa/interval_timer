@@ -15,7 +15,7 @@ class Workouts extends StatelessWidget {
             margin: const EdgeInsets.only(left: 20.0, right: 20.0),
             child: SingleChildScrollView(
               controller: controller,
-              child: Column(
+              child: const Column(
                 children: [WorkoutSearchBar(), WorkoutList()],
               ),
             )));

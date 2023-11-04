@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
-import 'package:interval_timer/components/Dialogs.dart';
+import 'package:interval_timer/components/dialogs.dart';
 
 class WorkoutsAppbar extends StatelessWidget implements PreferredSizeWidget {
   const WorkoutsAppbar({super.key});
@@ -14,9 +14,10 @@ class WorkoutsAppbar extends StatelessWidget implements PreferredSizeWidget {
         IconButton(
           icon: const Icon(TablerIcons.circle_plus),
           onPressed: () {
-            showDialog(
+            showModalBottomSheet(
               context: context,
-              builder: (BuildContext context) => Dialogs.buildAddWorkoutDialog(context),
+              builder: (BuildContext context) =>
+                  Dialogs.buildAddWorkoutDialog(context),
             );
           },
         ),
