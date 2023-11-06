@@ -15,9 +15,15 @@ class WorkoutTimesContainer extends StatelessWidget {
       ),
       child: const Column(
         children: [
-          IncrementDecrementButton(),
-          IncrementDecrementButton(),
-          IncrementDecrementButton(),
+          IncrementDecrementButton(
+            type: "training",
+          ),
+          IncrementDecrementButton(
+            type: "pause",
+          ),
+          IncrementDecrementButton(
+            type: "set",
+          ),
         ],
       ),
     );

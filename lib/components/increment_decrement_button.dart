@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class IncrementDecrementButton extends StatefulWidget {
-  const IncrementDecrementButton({super.key});
+  final String type;
+  const IncrementDecrementButton({super.key, required this.type});
 
   @override
   State<IncrementDecrementButton> createState() =>
@@ -10,7 +11,21 @@ class IncrementDecrementButton extends StatefulWidget {
 }
 
 class _IncrementDecrementButtonState extends State<IncrementDecrementButton> {
-  DateTime minutes = DateTime(0, 0, 0, 0, 1, 0);
+  late DateTime? minutes;
+  late int? sets;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.type == "training") {
+      minutes = DateTime(0, 0, 0, 0, 1, 15);
+    } else if (widget.type == "pause") {
+      minutes = DateTime(0, 0, 0, 0, 0, 15);
+    } else if (widget.type == "set") {
+      sets = 3;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -26,7 +41,11 @@ class _IncrementDecrementButtonState extends State<IncrementDecrementButton> {
           TextButton(
             onPressed: () {
               setState(() {
-                minutes = minutes.subtract(const Duration(seconds: 15));
+                if (widget.type != "set") {
+                  minutes = minutes!.subtract(const Duration(seconds: 15));
+                } else {
+                  sets = sets! - 1;
+                }
               });
             },
             child: const Text('-'),
@@ -40,7 +59,9 @@ class _IncrementDecrementButtonState extends State<IncrementDecrementButton> {
                   style: TextButton.styleFrom(
                     padding: const EdgeInsets.all(0),
                   ),
-                  child: Text(DateFormat('mm:ss').format(minutes)),
+                  child: Text(widget.type != "set"
+                      ? DateFormat('mm:ss').format(minutes!)
+                      : sets.toString()),
                   onPressed: () {},
                 ),
               ],
@@ -49,7 +70,11 @@ class _IncrementDecrementButtonState extends State<IncrementDecrementButton> {
           TextButton(
             onPressed: () {
               setState(() {
-                minutes = minutes.add(const Duration(seconds: 15));
+                if (widget.type != "set") {
+                  minutes = minutes!.add(const Duration(seconds: 15));
+                } else {
+                  sets = sets! + 1;
+                }
               });
             },
             child: const Text('+'),
