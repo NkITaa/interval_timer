@@ -1,12 +1,21 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:interval_timer/pages/home.dart';
 // ignore: depend_on_referenced_packages
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:interval_timer/workout.dart';
 import 'const.dart';
+import 'package:hive/hive.dart';
 
-void main() {
+void main() async {
   runApp(const MyApp());
+  var path = "/Users/nikita/Desktop/interval_timer/db";
+  Hive
+    ..init(path)
+    ..registerAdapter(WorkoutAdapter());
+  var box = await Hive.openBox("workouts");
 }
 
 class MyApp extends StatefulWidget {
