@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import 'dialogs.dart';
+
 class IncrementDecrementButton extends StatefulWidget {
   final String type;
   const IncrementDecrementButton({super.key, required this.type});
@@ -54,7 +56,7 @@ class _IncrementDecrementButtonState extends State<IncrementDecrementButton> {
             width: 100,
             child: Column(
               children: [
-                Text("Training"),
+                Text(widget.type),
                 TextButton(
                   style: TextButton.styleFrom(
                     padding: const EdgeInsets.all(0),
@@ -62,7 +64,13 @@ class _IncrementDecrementButtonState extends State<IncrementDecrementButton> {
                   child: Text(widget.type != "set"
                       ? DateFormat('mm:ss').format(minutes!)
                       : sets.toString()),
-                  onPressed: () {},
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) =>
+                          Dialogs.buildSetTimesDialog(context, widget.type),
+                    );
+                  },
                 ),
               ],
             ),
