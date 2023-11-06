@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:interval_timer/pages/profile/components/settings_block.dart';
 import 'package:interval_timer/pages/profile/components/settings_tile.dart';
+// ignore: depend_on_referenced_packages
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
-
-import '../../main.dart';
 import 'components/settins_page.dart';
 
 class Profile extends StatelessWidget {

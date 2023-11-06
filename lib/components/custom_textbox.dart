@@ -9,7 +9,7 @@ class CustomTextbox extends StatelessWidget {
     return Column(
       children: [
         Text(label),
-        TextField(
+        const TextField(
           decoration: InputDecoration(
             border: OutlineInputBorder(),
           ),

@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:interval_timer/components/hide_widgets_on_scroll.dart';
+// ignore: depend_on_referenced_packages
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BottomNavBar extends StatelessWidget {
-
   final ScrollController controller;
   final int screenIndex;
   final Function(int) onTabTapped;
 
-
-  const BottomNavBar({super.key, required this.controller, required this.screenIndex, required this.onTabTapped});
+  const BottomNavBar(
+      {super.key,
+      required this.controller,
+      required this.screenIndex,
+      required this.onTabTapped});
 
   @override
   Widget build(BuildContext context) {
@@ -41,8 +44,7 @@ class BottomNavBar extends StatelessWidget {
                     onPressed: () => onTabTapped(2),
                     icon: Icon(
                       TablerIcons.user_circle,
-                      color:
-                      screenIndex == 2 ? Colors.deepPurple : Colors.grey,
+                      color: screenIndex == 2 ? Colors.deepPurple : Colors.grey,
                     )),
               ],
             ),

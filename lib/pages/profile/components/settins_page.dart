@@ -14,24 +14,24 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Settings Page'),
+          title: const Text('Settings Page'),
         ),
         body: (() {
           switch (index) {
             case 0:
-              return SettingsPageSound();
+              return const SettingsPageSound();
             case 1:
-              return SettingsPageFAQ();
+              return const SettingsPageFAQ();
             case 2:
-              return SettingsPageContact();
+              return const SettingsPageContact();
             case 3:
-              return SettingsPageAbout();
+              return const SettingsPageAbout();
             case 4:
-              return SettingsPageLegal();
+              return const SettingsPageLegal();
             case 5:
-              return SettingsPageLegal();
+              return const SettingsPageLegal();
             case 6:
-              return SettingsPageLegal();
+              return const SettingsPageLegal();
           }
         }()));
   }

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import 'dialogs.dart';
 
 class IncrementDecrementButton extends StatelessWidget {
   final String type;
   int? sets;
-  DateTime? minutes;
+  Duration? minutes;
   final Function(String type, bool increment) update;
   final Function(String type, int value, bool? minute) setValue;
   IncrementDecrementButton(
@@ -35,7 +34,7 @@ class IncrementDecrementButton extends StatelessWidget {
             },
             child: const Text('-'),
           ),
-          Container(
+          SizedBox(
             width: 100,
             child: Column(
               children: [
@@ -45,7 +44,7 @@ class IncrementDecrementButton extends StatelessWidget {
                     padding: const EdgeInsets.all(0),
                   ),
                   child: Text(type != "set"
-                      ? DateFormat('mm:ss').format(minutes!)
+                      ? minutes.toString().substring(2, 7)
                       : sets.toString()),
                   onPressed: () {
                     showDialog(

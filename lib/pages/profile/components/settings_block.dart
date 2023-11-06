@@ -15,7 +15,6 @@ class SettingsBlock extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: Theme.of(context).textTheme.headline6,
               ),
             ],
           ),
@@ -25,7 +24,7 @@ class SettingsBlock extends StatelessWidget {
             color: Colors.grey,
             borderRadius: BorderRadius.circular(16),
           ),
-          padding: EdgeInsets.only(left: 24.0, right: 24),
+          padding: const EdgeInsets.only(left: 24.0, right: 24),
           child: ListView.builder(
             itemBuilder: (BuildContext context, int index) {
               return tiles[index];

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+// ignore: depend_on_referenced_packages
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
 import '../../../main.dart';
@@ -26,7 +27,7 @@ class _SettingsTileState extends State<SettingsTile> {
       children: [
         ListTile(
           leading: widget.icon,
-          title: Text("data"),
+          title: const Text("data"),
           trailing: widget.switching
               ? Switch(
                   value: MyApp.of(context).isDarkMode(),
@@ -36,7 +37,7 @@ class _SettingsTileState extends State<SettingsTile> {
                         : MyApp.of(context).changeTheme(ThemeMode.light);
                     setState(() {});
                   })
-              : Icon(TablerIcons.chevron_right),
+              : const Icon(TablerIcons.chevron_right),
           onTap: widget.onTap,
         ),
         const Divider(

@@ -16,7 +16,7 @@ class WorkoutList extends StatelessWidget {
         height: 12,
       ),
       itemCount: 100,
-      itemBuilder: (context, index) => WorkoutTile(),
+      itemBuilder: (context, index) => const WorkoutTile(),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+// ignore: depend_on_referenced_packages
 import 'package:scroll_snap_list/scroll_snap_list.dart';
 
 class TimeWheel extends StatelessWidget {
@@ -16,12 +17,12 @@ class TimeWheel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 76,
       height: 224,
       child: Stack(
         children: [
-          Column(
+          const Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Divider(color: Colors.black, thickness: 4),
@@ -40,7 +41,7 @@ class TimeWheel extends StatelessWidget {
               alignment: Alignment.center,
               child: Text(
                 index.toString(),
-                style: TextStyle(fontSize: 32),
+                style: const TextStyle(fontSize: 32),
               ),
             ),
             initialIndex: value.toDouble(),

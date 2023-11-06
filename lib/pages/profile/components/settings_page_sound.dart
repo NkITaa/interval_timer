@@ -5,6 +5,6 @@ class SettingsPageSound extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text("data");
+    return const Text("data");
   }
 }

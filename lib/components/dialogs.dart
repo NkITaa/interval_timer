@@ -1,31 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:interval_timer/components/custom_textbox.dart';
 import 'package:interval_timer/components/time_wheel.dart';
-import 'package:scroll_snap_list/scroll_snap_list.dart';
 import 'package:interval_timer/components/workout_times_container.dart';
 
 class Dialogs {
   static Widget buildAddWorkoutDialog(BuildContext context) {
-    return Container(
-        padding: const EdgeInsets.all(24),
-        color: Colors.amber,
-        child: Column(children: [
-          const Text('Workout Erstellen'),
-          const CustomTextbox(
-            label: "Bezeichnung",
-          ),
-          WorkoutTimesContainer(),
-          ElevatedButton(
-            onPressed: () {},
-            child: const Text('Cancel'),
-          ),
-        ]));
+    Duration workoutTime = const Duration(minutes: 4, seconds: 30);
+    return StatefulBuilder(builder: (context, setState) {
+      void updateTime(Duration pause, Duration training, int sets) {
+        workoutTime = (pause + training) * sets;
+        setState(() {});
+      }
+
+      return Container(
+          padding: const EdgeInsets.all(24),
+          color: Colors.amber,
+          child: Column(children: [
+            const Text('Workout Erstellen'),
+            const CustomTextbox(
+              label: "Bezeichnung",
+            ),
+            WorkoutTimesContainer(
+              updateTime: updateTime,
+            ),
+            Text("Workoutdauer ${workoutTime.toString().substring(2, 7)}"),
+            ElevatedButton(
+              onPressed: () {},
+              child: const Text('Speichern'),
+            ),
+          ]));
+    });
   }
 
   static Widget buildSetTimesDialog(
       BuildContext context,
       String type,
-      DateTime? minutes,
+      Duration? minutes,
       int? sets,
       Function(String type, int value, bool? minute) setValue) {
     return AlertDialog(
@@ -40,14 +50,14 @@ class Dialogs {
                       children: [
                         TimeWheel(
                           type: type,
-                          value: minutes!.minute,
+                          value: minutes!.inMinutes.remainder(60),
                           setValue: setValue,
                           minute: true,
                         ),
-                        Text(":"),
+                        const Text(":"),
                         TimeWheel(
                           type: type,
-                          value: minutes.second,
+                          value: minutes.inSeconds.remainder(60),
                           setValue: setValue,
                           minute: false,
                         ),
@@ -58,8 +68,9 @@ class Dialogs {
                       value: sets!,
                       setValue: setValue,
                     ),
-              Text("Workoutdauer 00:00:00"),
-              TextButton(onPressed: () {}, child: Text("Workout Speichern")),
+              const Text("Workoutdauer 00:00:00"),
+              TextButton(
+                  onPressed: () {}, child: const Text("Workout Speichern")),
             ],
           ),
         ));
