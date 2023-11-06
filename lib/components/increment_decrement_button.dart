@@ -3,30 +3,19 @@ import 'package:intl/intl.dart';
 
 import 'dialogs.dart';
 
-class IncrementDecrementButton extends StatefulWidget {
+class IncrementDecrementButton extends StatelessWidget {
   final String type;
-  const IncrementDecrementButton({super.key, required this.type});
-
-  @override
-  State<IncrementDecrementButton> createState() =>
-      _IncrementDecrementButtonState();
-}
-
-class _IncrementDecrementButtonState extends State<IncrementDecrementButton> {
-  late DateTime? minutes;
-  late int? sets;
-
-  @override
-  void initState() {
-    super.initState();
-    if (widget.type == "training") {
-      minutes = DateTime(0, 0, 0, 0, 1, 15);
-    } else if (widget.type == "pause") {
-      minutes = DateTime(0, 0, 0, 0, 0, 15);
-    } else if (widget.type == "set") {
-      sets = 3;
-    }
-  }
+  int? sets;
+  DateTime? minutes;
+  final Function(String type, bool increment) update;
+  final Function(String type, int value, bool? minute) setValue;
+  IncrementDecrementButton(
+      {super.key,
+      required this.type,
+      required this.update,
+      required this.setValue,
+      this.sets,
+      this.minutes});
 
   @override
   Widget build(BuildContext context) {
@@ -42,13 +31,7 @@ class _IncrementDecrementButtonState extends State<IncrementDecrementButton> {
         children: [
           TextButton(
             onPressed: () {
-              setState(() {
-                if (widget.type != "set") {
-                  minutes = minutes!.subtract(const Duration(seconds: 15));
-                } else {
-                  sets = sets! - 1;
-                }
-              });
+              update(type, false);
             },
             child: const Text('-'),
           ),
@@ -56,19 +39,20 @@ class _IncrementDecrementButtonState extends State<IncrementDecrementButton> {
             width: 100,
             child: Column(
               children: [
-                Text(widget.type),
+                Text(type),
                 TextButton(
                   style: TextButton.styleFrom(
                     padding: const EdgeInsets.all(0),
                   ),
-                  child: Text(widget.type != "set"
+                  child: Text(type != "set"
                       ? DateFormat('mm:ss').format(minutes!)
                       : sets.toString()),
                   onPressed: () {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) =>
-                          Dialogs.buildSetTimesDialog(context, widget.type),
+                          Dialogs.buildSetTimesDialog(
+                              context, type, minutes, sets, setValue),
                     );
                   },
                 ),
@@ -77,13 +61,7 @@ class _IncrementDecrementButtonState extends State<IncrementDecrementButton> {
           ),
           TextButton(
             onPressed: () {
-              setState(() {
-                if (widget.type != "set") {
-                  minutes = minutes!.add(const Duration(seconds: 15));
-                } else {
-                  sets = sets! + 1;
-                }
-              });
+              update(type, true);
             },
             child: const Text('+'),
           ),

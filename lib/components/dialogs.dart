@@ -14,7 +14,7 @@ class Dialogs {
           const CustomTextbox(
             label: "Bezeichnung",
           ),
-          const WorkoutTimesContainer(),
+          WorkoutTimesContainer(),
           ElevatedButton(
             onPressed: () {},
             child: const Text('Cancel'),
@@ -22,7 +22,12 @@ class Dialogs {
         ]));
   }
 
-  static Widget buildSetTimesDialog(BuildContext context, String type) {
+  static Widget buildSetTimesDialog(
+      BuildContext context,
+      String type,
+      DateTime? minutes,
+      int? sets,
+      Function(String type, int value, bool? minute) setValue) {
     return AlertDialog(
         title: const Text('Set Times'),
         content: SizedBox(
@@ -33,12 +38,26 @@ class Dialogs {
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        TimeWheel(),
+                        TimeWheel(
+                          type: type,
+                          value: minutes!.minute,
+                          setValue: setValue,
+                          minute: true,
+                        ),
                         Text(":"),
-                        TimeWheel(),
+                        TimeWheel(
+                          type: type,
+                          value: minutes.second,
+                          setValue: setValue,
+                          minute: false,
+                        ),
                       ],
                     )
-                  : TimeWheel(),
+                  : TimeWheel(
+                      type: type,
+                      value: sets!,
+                      setValue: setValue,
+                    ),
               Text("Workoutdauer 00:00:00"),
               TextButton(onPressed: () {}, child: Text("Workout Speichern")),
             ],

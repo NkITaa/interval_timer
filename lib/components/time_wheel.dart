@@ -2,8 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:scroll_snap_list/scroll_snap_list.dart';
 
 class TimeWheel extends StatelessWidget {
-  final List<int> data = List.generate(100, (index) => index);
-  TimeWheel({super.key});
+  final List<int> data = List.generate(59, (index) => index);
+  final Function(String type, int newValue, bool? minute) setValue;
+  final String type;
+  final int value;
+  final bool? minute;
+  TimeWheel(
+      {super.key,
+      required this.setValue,
+      required this.type,
+      this.minute,
+      required this.value});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +31,7 @@ class TimeWheel extends StatelessWidget {
           ),
           ScrollSnapList(
             onItemFocus: (int index) {
-              print('Item $index now in focus');
+              setValue(type, index, minute);
             },
             itemSize: 76,
             dynamicItemOpacity: 0.3,
@@ -34,7 +43,7 @@ class TimeWheel extends StatelessWidget {
                 style: TextStyle(fontSize: 32),
               ),
             ),
-            initialIndex: 15,
+            initialIndex: value.toDouble(),
             itemCount: data.length,
             focusOnItemTap: true,
             scrollDirection: Axis.vertical,
