@@ -7,10 +7,12 @@ class SettingsTile extends StatefulWidget {
   final Icon icon;
   final String title;
   final bool switching;
+  final Function()? onTap;
   const SettingsTile(
       {super.key,
       required this.icon,
       required this.title,
+      this.onTap,
       this.switching = false});
 
   @override
@@ -35,7 +37,7 @@ class _SettingsTileState extends State<SettingsTile> {
                     setState(() {});
                   })
               : Icon(TablerIcons.chevron_right),
-          onTap: () {},
+          onTap: widget.onTap,
         ),
         const Divider(
           height: 0,
