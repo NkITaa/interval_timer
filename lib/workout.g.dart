@@ -27,13 +27,15 @@ class WorkoutAdapter extends TypeAdapter<Workout> {
   @override
   void write(BinaryWriter writer, Workout obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.secondsTraining)
       ..writeByte(1)
       ..write(obj.secondsPause)
       ..writeByte(2)
-      ..write(obj.sets);
+      ..write(obj.sets)
+      ..writeByte(3)
+      ..write(obj.name);
   }
 
   @override
