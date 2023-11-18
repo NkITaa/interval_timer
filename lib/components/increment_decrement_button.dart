@@ -1,4 +1,6 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
 import 'dialogs.dart';
 
@@ -28,42 +30,42 @@ class IncrementDecrementButton extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          TextButton(
-            onPressed: () {
-              update(type, false);
-            },
-            child: const Text('-'),
-          ),
+          IconButton(
+              onPressed: () {
+                update(type, false);
+              },
+              icon: Icon(TablerIcons.minus)),
           SizedBox(
             width: 100,
             child: Column(
               children: [
                 Text(type),
-                TextButton(
-                  style: TextButton.styleFrom(
-                    padding: const EdgeInsets.all(0),
+                RichText(
+                  text: TextSpan(
+                    style: const TextStyle(
+                      fontSize: 14.0,
+                      color: Colors.black,
+                    ),
+                    text: type != "set"
+                        ? minutes.toString().substring(2, 7)
+                        : sets.toString(),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () => showDialog(
+                            context: context,
+                            builder: (BuildContext context) =>
+                                Dialogs.buildSetTimesDialog(
+                                    context, type, minutes, sets, setValue),
+                          ),
                   ),
-                  child: Text(type != "set"
-                      ? minutes.toString().substring(2, 7)
-                      : sets.toString()),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) =>
-                          Dialogs.buildSetTimesDialog(
-                              context, type, minutes, sets, setValue),
-                    );
-                  },
                 ),
               ],
             ),
           ),
-          TextButton(
-            onPressed: () {
-              update(type, true);
-            },
-            child: const Text('+'),
-          ),
+          IconButton(
+              onPressed: () {
+                update(type, true);
+              },
+              icon: Icon(TablerIcons.plus)),
         ],
       ),
     );

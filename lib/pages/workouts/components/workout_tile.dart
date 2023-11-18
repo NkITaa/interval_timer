@@ -28,6 +28,7 @@ class WorkoutTile extends StatelessWidget {
                 icon: const Icon(TablerIcons.dots),
                 onPressed: () {
                   showModalBottomSheet(
+                    isScrollControlled: true,
                     context: context,
                     builder: (BuildContext context) =>
                         Dialogs.buildEditWorkoutDialog(context, workout, index),

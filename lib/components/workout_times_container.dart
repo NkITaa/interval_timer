@@ -20,13 +20,12 @@ class WorkoutTimesContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        children: [
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Wrap(spacing: 12, runSpacing: 12, children: [
           IncrementDecrementButton(
             type: "training",
             minutes: minutesTraining,
@@ -45,8 +44,6 @@ class WorkoutTimesContainer extends StatelessWidget {
             update: update,
             setValue: setValue,
           ),
-        ],
-      ),
-    );
+        ]));
   }
 }

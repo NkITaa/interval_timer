@@ -7,11 +7,17 @@ class CustomTextbox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label),
-        const TextField(
-          decoration: InputDecoration(
-            border: OutlineInputBorder(),
+        const Padding(
+          padding: EdgeInsets.only(top: 8.0, bottom: 16.0),
+          child: TextField(
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(12.0)),
+              ),
+            ),
           ),
         ),
       ],

@@ -4,6 +4,9 @@ import 'package:interval_timer/components/time_wheel.dart';
 import 'package:interval_timer/components/workout_times_container.dart';
 import 'package:hive/hive.dart';
 import 'package:interval_timer/workout.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
+
+import '../const.dart';
 
 class Dialogs {
   static Widget buildAddWorkoutDialog(BuildContext context) {
@@ -68,9 +71,26 @@ class Dialogs {
 
       return Container(
           padding: const EdgeInsets.all(24),
-          color: Colors.amber,
+          height: 566,
+          decoration: const BoxDecoration(
+            color: lightNeutral50,
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
           child: Column(children: [
-            const Text('Workout Erstellen'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Workout Erstellen',
+                    style: Theme.of(context).textTheme.headline6),
+                IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(
+                      TablerIcons.x,
+                    )),
+              ],
+            ),
             const CustomTextbox(
               label: "Bezeichnung",
             ),
@@ -81,17 +101,34 @@ class Dialogs {
               minutesPause: minutesPause,
               sets: sets,
             ),
-            Text("Workoutdauer ${workoutTime.toString().substring(2, 7)}"),
-            ElevatedButton(
-              onPressed: () async {
-                Hive.box("workouts").add(Workout(
-                    name: "Test",
-                    secondsTraining: minutesTraining.inSeconds,
-                    secondsPause: minutesPause.inSeconds,
-                    sets: sets));
-              },
-              child: const Text('Speichern'),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: Text(
+                  "Workoutdauer ${workoutTime.toString().substring(2, 7)}"),
             ),
+            SizedBox(
+              height: 8,
+            ),
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                onPressed: () {
+                  Hive.box("workouts").add(Workout(
+                      name: "Test",
+                      secondsTraining: minutesTraining.inSeconds,
+                      secondsPause: minutesPause.inSeconds,
+                      sets: sets));
+                },
+                child: const Text('Workout Speichern',
+                    style: TextStyle(fontSize: 16)),
+              ),
+            )
           ]));
     });
   }
@@ -161,9 +198,26 @@ class Dialogs {
 
       return Container(
           padding: const EdgeInsets.all(24),
-          color: Colors.amber,
+          height: 608,
+          decoration: const BoxDecoration(
+            color: lightNeutral50,
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
           child: Column(children: [
-            const Text('Workout Erstellen'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Workout Erstellen',
+                    style: Theme.of(context).textTheme.headline6),
+                IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(
+                      TablerIcons.x,
+                    )),
+              ],
+            ),
             const CustomTextbox(
               label: "Bezeichnung",
             ),
@@ -174,22 +228,51 @@ class Dialogs {
               minutesPause: minutesPause,
               sets: sets,
             ),
-            Text("Workoutdauer ${workoutTime.toString().substring(2, 7)}"),
-            ElevatedButton(
-              onPressed: () {
-                Hive.box("workouts").add(Workout(
-                    name: "Test",
-                    secondsTraining: minutesTraining.inSeconds,
-                    secondsPause: minutesPause.inSeconds,
-                    sets: sets));
-              },
-              child: const Text('Speichern'),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: Text(
+                  "Workoutdauer ${workoutTime.toString().substring(2, 7)}"),
             ),
-            ElevatedButton(
-              onPressed: () {
-                Hive.box("workouts").deleteAt(index);
-              },
-              child: const Text('Löschen'),
+            SizedBox(
+              height: 12,
+            ),
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                onPressed: () {
+                  Hive.box("workouts").add(Workout(
+                      name: "Test",
+                      secondsTraining: minutesTraining.inSeconds,
+                      secondsPause: minutesPause.inSeconds,
+                      sets: sets));
+                },
+                child: const Text('Workout Speichern',
+                    style: TextStyle(fontSize: 16)),
+              ),
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                onPressed: () {
+                  Hive.box("workouts").deleteAt(index);
+                },
+                child: const Text('Löschen', style: TextStyle(fontSize: 16)),
+              ),
             ),
           ]));
     });
