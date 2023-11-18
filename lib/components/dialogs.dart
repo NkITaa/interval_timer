@@ -83,13 +83,113 @@ class Dialogs {
             ),
             Text("Workoutdauer ${workoutTime.toString().substring(2, 7)}"),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 Hive.box("workouts").add(Workout(
+                    name: "Test",
                     secondsTraining: minutesTraining.inSeconds,
                     secondsPause: minutesPause.inSeconds,
                     sets: sets));
               },
               child: const Text('Speichern'),
+            ),
+          ]));
+    });
+  }
+
+  static Widget buildEditWorkoutDialog(
+      BuildContext context, Workout workout, int index) {
+    Duration workoutTime = Duration(
+        seconds:
+            workout.secondsTraining * workout.secondsTraining * workout.sets);
+    Duration minutesTraining = Duration(seconds: workout.secondsTraining);
+    Duration minutesPause = Duration(seconds: workout.secondsPause);
+    int sets = workout.sets;
+
+    return StatefulBuilder(builder: (context, setState) {
+      void updateTime(Duration pause, Duration training, int sets) {
+        workoutTime = (pause + training) * sets;
+        setState(() {});
+      }
+
+      update(String type, bool increment) {
+        if (increment) {
+          if (type == "training") {
+            minutesTraining = minutesTraining + const Duration(seconds: 15);
+          } else if (type == "pause") {
+            minutesPause = minutesPause + const Duration(seconds: 15);
+          } else {
+            sets = sets + 1;
+          }
+        } else {
+          if (type == "training") {
+            minutesTraining = minutesTraining - const Duration(seconds: 15);
+          } else if (type == "pause") {
+            minutesPause = minutesPause - const Duration(seconds: 15);
+          } else {
+            sets = sets - 1;
+          }
+        }
+        updateTime(minutesPause, minutesTraining, sets);
+        setState(() {});
+      }
+
+      setValue(String type, int value, bool? minute) {
+        if (type == "training") {
+          if (minute!) {
+            minutesTraining = Duration(
+                minutes: value,
+                seconds: minutesTraining.inSeconds.remainder(60));
+          } else {
+            minutesTraining = Duration(
+                minutes: minutesTraining.inMinutes.remainder(60),
+                seconds: value);
+          }
+        } else if (type == "pause") {
+          if (minute!) {
+            minutesPause = Duration(
+                minutes: value, seconds: minutesPause.inSeconds.remainder(60));
+          } else {
+            minutesPause = Duration(
+                minutes: minutesPause.inMinutes.remainder(60), seconds: value);
+          }
+        } else {
+          sets = value;
+        }
+        updateTime(minutesPause, minutesTraining, sets);
+        setState(() {});
+      }
+
+      return Container(
+          padding: const EdgeInsets.all(24),
+          color: Colors.amber,
+          child: Column(children: [
+            const Text('Workout Erstellen'),
+            const CustomTextbox(
+              label: "Bezeichnung",
+            ),
+            WorkoutTimesContainer(
+              update: update,
+              setValue: setValue,
+              minutesTraining: minutesTraining,
+              minutesPause: minutesPause,
+              sets: sets,
+            ),
+            Text("Workoutdauer ${workoutTime.toString().substring(2, 7)}"),
+            ElevatedButton(
+              onPressed: () {
+                Hive.box("workouts").add(Workout(
+                    name: "Test",
+                    secondsTraining: minutesTraining.inSeconds,
+                    secondsPause: minutesPause.inSeconds,
+                    sets: sets));
+              },
+              child: const Text('Speichern'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Hive.box("workouts").deleteAt(index);
+              },
+              child: const Text('Löschen'),
             ),
           ]));
     });

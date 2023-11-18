@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:interval_timer/workout.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
+
+import '../../../components/dialogs.dart';
 
 class WorkoutTile extends StatelessWidget {
-  const WorkoutTile({super.key});
+  final Workout workout;
+  final int index;
+
+  const WorkoutTile({super.key, required this.workout, required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -16,10 +23,16 @@ class WorkoutTile extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Workout 1'),
+              Text(workout.name.toString()),
               IconButton(
-                icon: const Icon(Icons.more_vert),
-                onPressed: () {},
+                icon: const Icon(TablerIcons.dots),
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (BuildContext context) =>
+                        Dialogs.buildEditWorkoutDialog(context, workout, index),
+                  );
+                },
               )
             ],
           ),
@@ -27,44 +40,44 @@ class WorkoutTile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               RichText(
-                text: const TextSpan(
-                  style: TextStyle(
+                text: TextSpan(
+                  style: const TextStyle(
                     fontSize: 14.0,
                     color: Colors.black,
                   ),
                   children: <TextSpan>[
                     TextSpan(
-                        text: '1:30',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    TextSpan(text: ' Training'),
+                        text: workout.secondsTraining.toString(),
+                        style: const TextStyle(fontWeight: FontWeight.bold)),
+                    const TextSpan(text: ' Training'),
                   ],
                 ),
               ),
               RichText(
-                text: const TextSpan(
-                  style: TextStyle(
+                text: TextSpan(
+                  style: const TextStyle(
                     fontSize: 14.0,
                     color: Colors.black,
                   ),
                   children: <TextSpan>[
                     TextSpan(
-                        text: '1:30',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    TextSpan(text: ' Training'),
+                        text: workout.secondsPause.toString(),
+                        style: const TextStyle(fontWeight: FontWeight.bold)),
+                    const TextSpan(text: ' Pause'),
                   ],
                 ),
               ),
               RichText(
-                text: const TextSpan(
-                  style: TextStyle(
+                text: TextSpan(
+                  style: const TextStyle(
                     fontSize: 14.0,
                     color: Colors.black,
                   ),
                   children: <TextSpan>[
                     TextSpan(
-                        text: '1:30',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    TextSpan(text: ' Training'),
+                        text: workout.sets.toString(),
+                        style: const TextStyle(fontWeight: FontWeight.bold)),
+                    const TextSpan(text: ' Sets'),
                   ],
                 ),
               ),

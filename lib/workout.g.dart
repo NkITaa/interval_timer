@@ -20,6 +20,7 @@ class WorkoutAdapter extends TypeAdapter<Workout> {
       secondsTraining: fields[0] as int,
       secondsPause: fields[1] as int,
       sets: fields[2] as int,
+      name: fields[3] as String,
     );
   }
 

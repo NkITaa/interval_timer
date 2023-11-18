@@ -10,14 +10,18 @@ class WorkoutList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      separatorBuilder: (context, index) => const Divider(
-        color: Colors.transparent,
-        height: 12,
-      ),
-      itemCount: Hive.box("workouts").values.length,
-      itemBuilder: (context, index) => const WorkoutTile(),
-    );
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        separatorBuilder: (context, index) => const Divider(
+              color: Colors.transparent,
+              height: 12,
+            ),
+        itemCount: Hive.box("workouts").values.length,
+        itemBuilder: (context, index) {
+          return WorkoutTile(
+            index: index,
+            workout: Hive.box("workouts").getAt(index),
+          );
+        });
   }
 }
