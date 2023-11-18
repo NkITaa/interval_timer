@@ -14,6 +14,7 @@ class Dialogs {
     Duration workoutTime = const Duration(minutes: 4, seconds: 30);
     Duration minutesTraining = const Duration(minutes: 1, seconds: 15);
     Duration minutesPause = const Duration(seconds: 15);
+    TextEditingController nameController = TextEditingController();
     int sets = 3;
 
     return StatefulBuilder(builder: (context, setState) {
@@ -92,8 +93,9 @@ class Dialogs {
                     )),
               ],
             ),
-            const CustomTextbox(
+            CustomTextbox(
               label: "Bezeichnung",
+              nameController: nameController,
             ),
             WorkoutTimesContainer(
               update: update,
@@ -121,7 +123,7 @@ class Dialogs {
                 ),
                 onPressed: () {
                   Hive.box("workouts").add(Workout(
-                      name: "Test",
+                      name: nameController.text.trim(),
                       secondsTraining: minutesTraining.inSeconds,
                       secondsPause: minutesPause.inSeconds,
                       sets: sets));
@@ -144,6 +146,8 @@ class Dialogs {
             workout.secondsTraining * workout.secondsTraining * workout.sets);
     Duration minutesTraining = Duration(seconds: workout.secondsTraining);
     Duration minutesPause = Duration(seconds: workout.secondsPause);
+    TextEditingController nameController =
+        TextEditingController(text: workout.name);
     int sets = workout.sets;
 
     return StatefulBuilder(builder: (context, setState) {
@@ -222,8 +226,9 @@ class Dialogs {
                     )),
               ],
             ),
-            const CustomTextbox(
+            CustomTextbox(
               label: "Bezeichnung",
+              nameController: nameController,
             ),
             WorkoutTimesContainer(
               update: update,
@@ -253,7 +258,7 @@ class Dialogs {
                   Hive.box("workouts").putAt(
                       index,
                       Workout(
-                          name: "Test",
+                          name: nameController.text.trim(),
                           secondsTraining: minutesTraining.inSeconds,
                           secondsPause: minutesPause.inSeconds,
                           sets: sets));

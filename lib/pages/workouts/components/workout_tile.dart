@@ -44,7 +44,7 @@ class WorkoutTile extends StatelessWidget {
             ],
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               RichText(
                 text: TextSpan(
@@ -54,12 +54,18 @@ class WorkoutTile extends StatelessWidget {
                   ),
                   children: <TextSpan>[
                     TextSpan(
-                        text: workout.secondsTraining.toString(),
+                        text:
+                            (workout.secondsTraining / 60).floor().toString() +
+                                ":" +
+                                (workout.secondsTraining % 60)
+                                    .toString()
+                                    .padLeft(2, '0'),
                         style: const TextStyle(fontWeight: FontWeight.bold)),
                     const TextSpan(text: ' Training'),
                   ],
                 ),
               ),
+              const SizedBox(width: 40),
               RichText(
                 text: TextSpan(
                   style: const TextStyle(
@@ -68,12 +74,17 @@ class WorkoutTile extends StatelessWidget {
                   ),
                   children: <TextSpan>[
                     TextSpan(
-                        text: workout.secondsPause.toString(),
+                        text: (workout.secondsPause / 60).floor().toString() +
+                            ":" +
+                            (workout.secondsPause % 60)
+                                .toString()
+                                .padLeft(2, '0'),
                         style: const TextStyle(fontWeight: FontWeight.bold)),
                     const TextSpan(text: ' Pause'),
                   ],
                 ),
               ),
+              const SizedBox(width: 40),
               RichText(
                 text: TextSpan(
                   style: const TextStyle(
@@ -90,12 +101,17 @@ class WorkoutTile extends StatelessWidget {
               ),
             ],
           ),
-          ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                maximumSize: const Size(300, 50),
-              ),
-              child: const Text("do asdfasd"))
+          const SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            height: 50,
+            child: ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  maximumSize: const Size(300, 50),
+                ),
+                child: const Text("do asdfasd")),
+          )
         ],
       ),
     );

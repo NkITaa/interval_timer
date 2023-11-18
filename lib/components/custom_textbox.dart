@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 class CustomTextbox extends StatelessWidget {
   final String label;
-  const CustomTextbox({super.key, required this.label});
+  final TextEditingController nameController;
+  const CustomTextbox(
+      {super.key, required this.label, required this.nameController});
 
   @override
   Widget build(BuildContext context) {
@@ -10,10 +12,11 @@ class CustomTextbox extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label),
-        const Padding(
-          padding: EdgeInsets.only(top: 8.0, bottom: 16.0),
+        Padding(
+          padding: const EdgeInsets.only(top: 8.0, bottom: 16.0),
           child: TextField(
-            decoration: InputDecoration(
+            controller: nameController,
+            decoration: const InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(12.0)),
               ),
