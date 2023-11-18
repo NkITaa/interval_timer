@@ -5,7 +5,9 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:interval_timer/components/dialogs.dart';
 
 class WorkoutsAppbar extends StatelessWidget implements PreferredSizeWidget {
-  const WorkoutsAppbar({super.key});
+  final Function setListState;
+
+  const WorkoutsAppbar({super.key, required this.setListState});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +21,7 @@ class WorkoutsAppbar extends StatelessWidget implements PreferredSizeWidget {
               isScrollControlled: true,
               context: context,
               builder: (BuildContext context) =>
-                  Dialogs.buildAddWorkoutDialog(context),
+                  Dialogs.buildAddWorkoutDialog(context, setListState),
             );
           },
         ),

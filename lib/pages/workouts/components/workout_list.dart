@@ -3,8 +3,10 @@ import 'package:interval_timer/pages/workouts/components/workout_tile.dart';
 import 'package:hive/hive.dart';
 
 class WorkoutList extends StatelessWidget {
+  final Function setListState;
   const WorkoutList({
     super.key,
+    required this.setListState,
   });
 
   @override
@@ -19,6 +21,7 @@ class WorkoutList extends StatelessWidget {
         itemCount: Hive.box("workouts").values.length,
         itemBuilder: (context, index) {
           return WorkoutTile(
+            setListState: setListState,
             index: index,
             workout: Hive.box("workouts").getAt(index),
           );

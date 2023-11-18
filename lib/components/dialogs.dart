@@ -9,7 +9,8 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import '../const.dart';
 
 class Dialogs {
-  static Widget buildAddWorkoutDialog(BuildContext context) {
+  static Widget buildAddWorkoutDialog(
+      BuildContext context, Function setListState) {
     Duration workoutTime = const Duration(minutes: 4, seconds: 30);
     Duration minutesTraining = const Duration(minutes: 1, seconds: 15);
     Duration minutesPause = const Duration(seconds: 15);
@@ -124,6 +125,9 @@ class Dialogs {
                       secondsTraining: minutesTraining.inSeconds,
                       secondsPause: minutesPause.inSeconds,
                       sets: sets));
+
+                  Navigator.pop(context);
+                  setListState();
                 },
                 child: const Text('Workout Speichern',
                     style: TextStyle(fontSize: 16)),
@@ -134,7 +138,7 @@ class Dialogs {
   }
 
   static Widget buildEditWorkoutDialog(
-      BuildContext context, Workout workout, int index) {
+      BuildContext context, Workout workout, int index, Function setListState) {
     Duration workoutTime = Duration(
         seconds:
             workout.secondsTraining * workout.secondsTraining * workout.sets);
@@ -246,11 +250,15 @@ class Dialogs {
                   ),
                 ),
                 onPressed: () {
-                  Hive.box("workouts").add(Workout(
-                      name: "Test",
-                      secondsTraining: minutesTraining.inSeconds,
-                      secondsPause: minutesPause.inSeconds,
-                      sets: sets));
+                  Hive.box("workouts").putAt(
+                      index,
+                      Workout(
+                          name: "Test",
+                          secondsTraining: minutesTraining.inSeconds,
+                          secondsPause: minutesPause.inSeconds,
+                          sets: sets));
+                  setListState();
+                  Navigator.pop(context);
                 },
                 child: const Text('Workout Speichern',
                     style: TextStyle(fontSize: 16)),
@@ -270,6 +278,8 @@ class Dialogs {
                 ),
                 onPressed: () {
                   Hive.box("workouts").deleteAt(index);
+                  setListState();
+                  Navigator.pop(context);
                 },
                 child: const Text('Löschen', style: TextStyle(fontSize: 16)),
               ),

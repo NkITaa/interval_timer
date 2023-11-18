@@ -7,8 +7,13 @@ import '../../../components/dialogs.dart';
 class WorkoutTile extends StatelessWidget {
   final Workout workout;
   final int index;
+  final Function setListState;
 
-  const WorkoutTile({super.key, required this.workout, required this.index});
+  const WorkoutTile(
+      {super.key,
+      required this.workout,
+      required this.index,
+      required this.setListState});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +36,8 @@ class WorkoutTile extends StatelessWidget {
                     isScrollControlled: true,
                     context: context,
                     builder: (BuildContext context) =>
-                        Dialogs.buildEditWorkoutDialog(context, workout, index),
+                        Dialogs.buildEditWorkoutDialog(
+                            context, workout, index, setListState),
                   );
                 },
               )
