@@ -34,7 +34,7 @@ class IncrementDecrementButton extends StatelessWidget {
               onPressed: () {
                 update(type, false);
               },
-              icon: Icon(TablerIcons.minus)),
+              icon: const Icon(TablerIcons.minus)),
           SizedBox(
             width: 100,
             child: Column(
@@ -65,7 +65,7 @@ class IncrementDecrementButton extends StatelessWidget {
               onPressed: () {
                 update(type, true);
               },
-              icon: Icon(TablerIcons.plus)),
+              icon: const Icon(TablerIcons.plus)),
         ],
       ),
     );

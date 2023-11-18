@@ -106,7 +106,7 @@ class Dialogs {
               child: Text(
                   "Workoutdauer ${workoutTime.toString().substring(2, 7)}"),
             ),
-            SizedBox(
+            const SizedBox(
               height: 8,
             ),
             SizedBox(
@@ -233,7 +233,7 @@ class Dialogs {
               child: Text(
                   "Workoutdauer ${workoutTime.toString().substring(2, 7)}"),
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
             SizedBox(
@@ -256,7 +256,7 @@ class Dialogs {
                     style: TextStyle(fontSize: 16)),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 8,
             ),
             SizedBox(
