@@ -1,25 +1,73 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:interval_timer/pages/workouts/components/workout_list.dart';
+import 'package:interval_timer/pages/workouts/components/workout_tile.dart';
 
-class WorkoutSearchBar extends StatelessWidget {
-  const WorkoutSearchBar({super.key});
+import '../../../workout.dart';
+
+class WorkoutSearchBar extends StatefulWidget {
+  const WorkoutSearchBar({
+    super.key,
+  });
+
+  @override
+  State<WorkoutSearchBar> createState() => _WorkoutSearchBarState();
+}
+
+class _WorkoutSearchBarState extends State<WorkoutSearchBar> {
+  final SearchController controller = SearchController();
+
+  setListState() {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 20.0, bottom: 32.0),
       child: SearchAnchor(
-        builder: (BuildContext context, SearchController controller) {
-          return const SearchBar();
+        searchController: controller,
+        viewHintText: 'Search',
+        builder: (context, controller) {
+          return SearchBar(
+            hintText: 'Search',
+            controller: controller,
+            leading:
+                IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+            trailing: [
+              IconButton(onPressed: () {}, icon: const Icon(Icons.close))
+            ],
+            onTap: () {
+              controller.openView();
+            },
+          );
         },
-        suggestionsBuilder:
-            (BuildContext context, SearchController controller) {
-          return List<ListTile>.generate(5, (int index) {
-            final String item = 'item $index';
-            return ListTile(
-              title: Text(item),
-              onTap: () {},
-            );
-          });
+        suggestionsBuilder: (context, controller) {
+          var results = controller.text.trim().isEmpty
+              ? Hive.box('workouts').values.toList() // whole list
+              : Hive.box('workouts')
+                  .values
+                  .where((c) => c.name
+                      .toLowerCase()
+                      .contains(controller.text.trim().toLowerCase()))
+                  .toList();
+          return [
+            results.isEmpty
+                ? const Center(
+                    child: Text(
+                      'No results found !',
+                    ),
+                  )
+                : Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 12.0, horizontal: 24.0),
+                    child: WorkoutList(
+                      setListState: setListState,
+                      results: results,
+                    ),
+                  )
+          ];
         },
       ),
     );

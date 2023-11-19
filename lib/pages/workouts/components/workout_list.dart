@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:interval_timer/pages/workouts/components/workout_tile.dart';
 import 'package:hive/hive.dart';
 
+import '../../../workout.dart';
+
 class WorkoutList extends StatelessWidget {
   final Function setListState;
+  final List<dynamic>? results;
   const WorkoutList({
     super.key,
     required this.setListState,
+    this.results,
   });
 
   @override
@@ -18,12 +22,16 @@ class WorkoutList extends StatelessWidget {
               color: Colors.transparent,
               height: 12,
             ),
-        itemCount: Hive.box("workouts").values.length,
+        itemCount: results != null
+            ? results!.length
+            : Hive.box("workouts").values.length,
         itemBuilder: (context, index) {
           return WorkoutTile(
             setListState: setListState,
             index: index,
-            workout: Hive.box("workouts").getAt(index),
+            workout: results != null
+                ? results![index]
+                : Hive.box("workouts").getAt(index),
           );
         });
   }
