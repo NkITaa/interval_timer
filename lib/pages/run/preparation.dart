@@ -52,6 +52,8 @@ class _PreparationState extends State<Preparation> {
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
           colors: [Color(0xffFFA24B), Color(0xffEABB2D)],
         ),
       ),
