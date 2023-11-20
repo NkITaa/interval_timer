@@ -6,11 +6,11 @@ import 'dialogs.dart';
 
 class IncrementDecrementButton extends StatelessWidget {
   final String type;
-  int? sets;
-  Duration? minutes;
+  final int? sets;
+  final Duration? minutes;
   final Function(String type, bool increment) update;
   final Function(String type, int value, bool? minute) setValue;
-  IncrementDecrementButton(
+  const IncrementDecrementButton(
       {super.key,
       required this.type,
       required this.update,

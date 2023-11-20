@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:interval_timer/components/workout_times_container.dart';
 import 'package:interval_timer/pages/jump_in/components/total_time.dart';
 import 'package:interval_timer/pages/run/preparation.dart';
-import 'package:interval_timer/pages/run/run.dart';
 import 'package:interval_timer/workout.dart';
 
 import '../../components/dialogs.dart';

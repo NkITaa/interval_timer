@@ -24,7 +24,8 @@ class _PreparationState extends State<Preparation> {
 
   @override
   void initState() {
-    Timer.periodic(Duration(seconds: 1), (timer) {
+    super.initState();
+    Timer.periodic(const Duration(seconds: 1), (timer) {
       if (counter > 0) {
         setState(() {
           counter--;
@@ -50,7 +51,7 @@ class _PreparationState extends State<Preparation> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Preparation'),
+        title: const Text('Preparation'),
       ),
       body: Center(
         child: Text(counter.toString()),

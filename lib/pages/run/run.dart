@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:interval_timer/pages/run/preparation.dart';
@@ -12,7 +10,7 @@ class Run extends StatefulWidget {
   final int currentSet;
   final int indexTime;
 
-  Run({
+  const Run({
     super.key,
     required this.time,
     required this.sets,
@@ -28,7 +26,7 @@ class _RunState extends State<Run> {
   next() {
     if (widget.indexTime == 0 && widget.sets == widget.currentSet) {
       Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => Congrats()));
+          .push(MaterialPageRoute(builder: (context) => const Congrats()));
     } else {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => Run(
@@ -64,15 +62,10 @@ class _RunState extends State<Run> {
   }
 
   @override
-  void dipose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(
+        const SizedBox(
           height: 48,
         ),
         CircularCountDownTimer(
@@ -90,12 +83,12 @@ class _RunState extends State<Run> {
             onPressed: () {
               next();
             },
-            child: Text('Next')),
+            child: const Text('Next')),
         TextButton(
             onPressed: () {
               back();
             },
-            child: Text('Back')),
+            child: const Text('Back')),
         Text(widget.currentSet.toString()),
         Text(widget.indexTime.toString()),
         Text(widget.sets.toString()),

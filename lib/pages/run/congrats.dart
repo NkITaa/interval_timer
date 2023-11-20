@@ -7,14 +7,14 @@ class Congrats extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Finish'),
+        title: const Text('Finish'),
       ),
       body: Center(
         child: TextButton(
           onPressed: () {
             Navigator.of(context).popUntil((route) => route.isFirst);
           },
-          child: Text('Finish'),
+          child: const Text('Finish'),
         ),
       ),
     );
