@@ -55,11 +55,7 @@ class WorkoutTile extends StatelessWidget {
                   children: <TextSpan>[
                     TextSpan(
                         text:
-                            (workout.secondsTraining / 60).floor().toString() +
-                                ":" +
-                                (workout.secondsTraining % 60)
-                                    .toString()
-                                    .padLeft(2, '0'),
+                            "${(workout.secondsTraining / 60).floor()}:${(workout.secondsTraining % 60).toString().padLeft(2, '0')}",
                         style: const TextStyle(fontWeight: FontWeight.bold)),
                     const TextSpan(text: ' Training'),
                   ],
@@ -74,11 +70,8 @@ class WorkoutTile extends StatelessWidget {
                   ),
                   children: <TextSpan>[
                     TextSpan(
-                        text: (workout.secondsPause / 60).floor().toString() +
-                            ":" +
-                            (workout.secondsPause % 60)
-                                .toString()
-                                .padLeft(2, '0'),
+                        text:
+                            "${(workout.secondsPause / 60).floor()}:${(workout.secondsPause % 60).toString().padLeft(2, '0')}",
                         style: const TextStyle(fontWeight: FontWeight.bold)),
                     const TextSpan(text: ' Pause'),
                   ],

@@ -28,7 +28,7 @@ class _WorkoutsState extends State<Workouts> {
               controller: widget.controller,
               child: Column(
                 children: [
-                  WorkoutSearchBar(),
+                  const WorkoutSearchBar(),
                   WorkoutList(
                     setListState: setListState,
                   ),

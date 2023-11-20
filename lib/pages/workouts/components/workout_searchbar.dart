@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:interval_timer/pages/workouts/components/workout_list.dart';
-import 'package:interval_timer/pages/workouts/components/workout_tile.dart';
-
-import '../../../workout.dart';
 
 class WorkoutSearchBar extends StatefulWidget {
   const WorkoutSearchBar({
@@ -33,10 +30,12 @@ class _WorkoutSearchBarState extends State<WorkoutSearchBar> {
           return SearchBar(
             hintText: 'Search',
             controller: controller,
-            leading:
-                IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
             trailing: [
-              IconButton(onPressed: () {}, icon: const Icon(Icons.close))
+              IconButton(
+                  onPressed: () {
+                    controller.clear();
+                  },
+                  icon: const Icon(Icons.close))
             ],
             onTap: () {
               controller.openView();
