@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:interval_timer/pages/run/preparation.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
 import 'congrats.dart';
 
@@ -23,6 +24,8 @@ class Run extends StatefulWidget {
 }
 
 class _RunState extends State<Run> {
+  final CountDownController controller = CountDownController();
+
   next() {
     if (widget.indexTime == 0 && widget.sets == widget.currentSet) {
       Navigator.of(context)
@@ -63,36 +66,68 @@ class _RunState extends State<Run> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const SizedBox(
-          height: 48,
-        ),
-        CircularCountDownTimer(
-          duration: widget.time[widget.indexTime],
-          initialDuration: 0,
-          onComplete: () {
-            next();
-          },
-          width: MediaQuery.of(context).size.width / 2,
-          height: MediaQuery.of(context).size.height / 2,
-          ringColor: Colors.red,
-          fillColor: Colors.yellow,
-        ),
-        TextButton(
+    return Scaffold(
+      backgroundColor: controller.isPaused
+          ? Colors.grey
+          : widget.indexTime == 0
+              ? Colors.red
+              : Colors.blue,
+      appBar: AppBar(
+        leading: IconButton(
             onPressed: () {
-              next();
+              Navigator.of(context).popUntil((route) => route.isFirst);
             },
-            child: const Text('Next')),
-        TextButton(
-            onPressed: () {
-              back();
-            },
-            child: const Text('Back')),
-        Text(widget.currentSet.toString()),
-        Text(widget.indexTime.toString()),
-        Text(widget.sets.toString()),
-      ],
+            icon: const Icon(TablerIcons.x)),
+        title: Text("Satz: " +
+            widget.currentSet.toString() +
+            ' von ' +
+            widget.sets.toString()),
+      ),
+      body: SizedBox(
+        width: double.infinity,
+        height: double.infinity,
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 48,
+            ),
+            CircularCountDownTimer(
+              controller: controller,
+              isReverse: true,
+              duration: widget.time[widget.indexTime],
+              initialDuration: 0,
+              onComplete: () {
+                next();
+              },
+              width: MediaQuery.of(context).size.width / 2,
+              height: MediaQuery.of(context).size.height / 2,
+              ringColor: Colors.red,
+              fillColor: Colors.yellow,
+            ),
+            TextButton(
+                onPressed: () {
+                  next();
+                },
+                child: const Text('Next')),
+            TextButton(
+                onPressed: () {
+                  back();
+                },
+                child: const Text('Back')),
+            TextButton(
+                onPressed: () {
+                  if (controller.isPaused) {
+                    controller.resume();
+                  } else {
+                    controller.pause();
+                  }
+                  setState(() {});
+                },
+                child: Text(controller.isPaused ? "Resume" : 'Pause')),
+            Text(widget.indexTime.toString()),
+          ],
+        ),
+      ),
     );
   }
 }
