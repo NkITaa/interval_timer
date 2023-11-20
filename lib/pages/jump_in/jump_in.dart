@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:interval_timer/components/workout_times_container.dart';
 import 'package:interval_timer/pages/jump_in/components/total_time.dart';
+import 'package:interval_timer/pages/run/preparation.dart';
+import 'package:interval_timer/pages/run/run.dart';
 import 'package:interval_timer/workout.dart';
 
 import '../../components/dialogs.dart';
@@ -100,7 +102,19 @@ class _JumpInState extends State<JumpIn> {
               width: double.infinity,
               height: 48,
               child: ElevatedButton(
-                  onPressed: () {}, child: const Text("Workout starten"))),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => Preparation(
+                              time: [
+                                minutesTraining.inSeconds,
+                                minutesPause.inSeconds
+                              ],
+                              sets: sets,
+                              currentSet: 1,
+                              indexTime: 0,
+                            )));
+                  },
+                  child: const Text("Workout starten"))),
           const SizedBox(
             height: 12,
           ),
