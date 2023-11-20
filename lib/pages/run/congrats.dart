@@ -5,16 +5,18 @@ class Congrats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Finish'),
-      ),
-      body: Center(
-        child: TextButton(
-          onPressed: () {
-            Navigator.of(context).popUntil((route) => route.isFirst);
-          },
-          child: const Text('Finish'),
+    return Container(
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Finish'),
+        ),
+        body: Center(
+          child: TextButton(
+            onPressed: () {
+              Navigator.of(context).popUntil((route) => route.isFirst);
+            },
+            child: const Text('Finish'),
+          ),
         ),
       ),
     );

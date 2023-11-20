@@ -49,12 +49,20 @@ class _PreparationState extends State<Preparation> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Preparation'),
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Color(0xffFFA24B), Color(0xffEABB2D)],
+        ),
       ),
-      body: Center(
-        child: Text(counter.toString()),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          title: const Text('Preparation'),
+        ),
+        body: Center(
+          child: Text(counter.toString()),
+        ),
       ),
     );
   }
