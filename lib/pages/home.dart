@@ -5,7 +5,8 @@ import 'package:interval_timer/pages/profile/profile.dart';
 import 'package:interval_timer/pages/workouts/workouts.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  final int screenIndex;
+  const Home({super.key, required this.screenIndex});
 
   @override
   State<Home> createState() => _HomeState();
@@ -14,7 +15,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   late ScrollController controller;
   late List<Widget> screens;
-  int screenIndex = 0;
+  late int screenIndex = widget.screenIndex;
 
   @override
   void initState() {

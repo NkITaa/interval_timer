@@ -58,7 +58,7 @@ class _MyAppState extends State<MyApp> {
         textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme),
       ), // standard dark theme
       themeMode: _themeMode, // device controls theme
-      home: const Home(),
+      home: const Home(screenIndex: 0),
     );
   }
 

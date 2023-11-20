@@ -45,6 +45,7 @@ dev_dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   circular_countdown_timer: ^0.2.3
+  confetti: ^0.7.0
   hive_generator: ^2.0.1
   build_runner: ^2.0.5
 

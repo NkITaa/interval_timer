@@ -5,6 +5,7 @@ import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:interval_timer/pages/run/preparation.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
+import '../home.dart';
 import 'congrats.dart';
 
 class Run extends StatefulWidget {
@@ -28,7 +29,7 @@ class Run extends StatefulWidget {
 class _RunState extends State<Run> {
   final CountDownController controller = CountDownController();
 
-  late int counter = widget.time[widget.indexTime];
+  late int counter = widget.time[widget.indexTime] - 1;
   late int remainingPlus = widget.indexTime == 0
       ? (((widget.time[0] + widget.time[1]) *
               (widget.sets - widget.currentSet + 1)) -
@@ -41,7 +42,7 @@ class _RunState extends State<Run> {
   next() {
     if (widget.indexTime == 1 && widget.sets == widget.currentSet) {
       Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => const Congrats()));
+          .push(MaterialPageRoute(builder: (context) => Congrats()));
     } else {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => Run(
@@ -107,7 +108,8 @@ class _RunState extends State<Run> {
         appBar: AppBar(
           leading: IconButton(
               onPressed: () {
-                Navigator.of(context).popUntil((route) => route.isFirst);
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const Home(screenIndex: 1)));
               },
               icon: const Icon(TablerIcons.x)),
           title: Text("Satz: " +
