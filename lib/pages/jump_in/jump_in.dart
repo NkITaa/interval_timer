@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:interval_timer/components/workout_times_container.dart';
 import 'package:interval_timer/pages/jump_in/components/total_time.dart';
+import 'package:interval_timer/workout.dart';
+
+import '../../components/dialogs.dart';
 
 class JumpIn extends StatefulWidget {
   const JumpIn({super.key});
@@ -70,21 +73,60 @@ class _JumpInState extends State<JumpIn> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TotalTime(
-          totalTime: workoutTime,
-        ),
-        WorkoutTimesContainer(
-          update: update,
-          setValue: setValue,
-          minutesTraining: minutesTraining,
-          minutesPause: minutesPause,
-          sets: sets,
-        ),
-        TextButton(onPressed: () {}, child: const Text("Workout starten")),
-        TextButton(onPressed: () {}, child: const Text("als Workout speichern"))
-      ],
+    return Container(
+      margin: const EdgeInsets.only(left: 20.0, right: 20.0),
+      child: Column(
+        children: [
+          const SizedBox(
+            height: 48,
+          ),
+          TotalTime(
+            totalTime: workoutTime,
+          ),
+          const SizedBox(
+            height: 48,
+          ),
+          WorkoutTimesContainer(
+            update: update,
+            setValue: setValue,
+            minutesTraining: minutesTraining,
+            minutesPause: minutesPause,
+            sets: sets,
+          ),
+          const SizedBox(
+            height: 24,
+          ),
+          SizedBox(
+              width: double.infinity,
+              height: 48,
+              child: ElevatedButton(
+                  onPressed: () {}, child: const Text("Workout starten"))),
+          const SizedBox(
+            height: 12,
+          ),
+          SizedBox(
+              width: double.infinity,
+              height: 48,
+              child: ElevatedButton(
+                  onPressed: () {
+                    showModalBottomSheet(
+                      isScrollControlled: true,
+                      context: context,
+                      builder: (BuildContext context) =>
+                          Dialogs.buildEditWorkoutDialog(
+                              context,
+                              Workout(
+                                  secondsTraining: minutesTraining.inSeconds,
+                                  secondsPause: minutesPause.inSeconds,
+                                  sets: sets,
+                                  name: ""),
+                              null,
+                              null),
+                    );
+                  },
+                  child: const Text("als Workout speichern"))),
+        ],
+      ),
     );
   }
 }

@@ -139,16 +139,15 @@ class Dialogs {
     });
   }
 
-  static Widget buildEditWorkoutDialog(
-      BuildContext context, Workout workout, int index, Function setListState) {
-    Duration workoutTime = Duration(
-        seconds:
-            workout.secondsTraining * workout.secondsTraining * workout.sets);
+  static Widget buildEditWorkoutDialog(BuildContext context, Workout workout,
+      int? index, Function? setListState) {
     Duration minutesTraining = Duration(seconds: workout.secondsTraining);
     Duration minutesPause = Duration(seconds: workout.secondsPause);
     TextEditingController nameController =
         TextEditingController(text: workout.name);
     int sets = workout.sets;
+    Duration workoutTime = Duration(
+        seconds: (minutesTraining.inSeconds + minutesPause.inSeconds) * sets);
 
     return StatefulBuilder(builder: (context, setState) {
       void updateTime(Duration pause, Duration training, int sets) {
@@ -255,14 +254,20 @@ class Dialogs {
                   ),
                 ),
                 onPressed: () {
-                  Hive.box("workouts").putAt(
-                      index,
-                      Workout(
+                  index != null
+                      ? Hive.box("workouts").putAt(
+                          index,
+                          Workout(
+                              name: nameController.text.trim(),
+                              secondsTraining: minutesTraining.inSeconds,
+                              secondsPause: minutesPause.inSeconds,
+                              sets: sets))
+                      : Hive.box("workouts").add(Workout(
                           name: nameController.text.trim(),
                           secondsTraining: minutesTraining.inSeconds,
                           secondsPause: minutesPause.inSeconds,
                           sets: sets));
-                  setListState();
+                  setListState != null ? setListState() : null;
                   Navigator.pop(context);
                 },
                 child: const Text('Workout Speichern',
@@ -272,23 +277,26 @@ class Dialogs {
             const SizedBox(
               height: 8,
             ),
-            SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                onPressed: () {
-                  Hive.box("workouts").deleteAt(index);
-                  setListState();
-                  Navigator.pop(context);
-                },
-                child: const Text('Löschen', style: TextStyle(fontSize: 16)),
-              ),
-            ),
+            index != null && setListState != null
+                ? SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      onPressed: () {
+                        Hive.box("workouts").deleteAt(index);
+                        setListState();
+                        Navigator.pop(context);
+                      },
+                      child:
+                          const Text('Löschen', style: TextStyle(fontSize: 16)),
+                    ),
+                  )
+                : const SizedBox(),
           ]));
     });
   }
