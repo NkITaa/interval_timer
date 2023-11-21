@@ -7,6 +7,7 @@ import 'package:interval_timer/workout.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
 import '../const.dart';
+import '../main.dart';
 
 class Dialogs {
   static Widget buildAddWorkoutDialog(
@@ -74,8 +75,9 @@ class Dialogs {
       return Container(
           padding: const EdgeInsets.all(24),
           height: 566,
-          decoration: const BoxDecoration(
-            color: lightNeutral50,
+          decoration: BoxDecoration(
+            color:
+                MyApp.of(context).isDarkMode() ? darkNeutral0 : lightNeutral100,
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
           child: Column(children: [
@@ -83,7 +85,12 @@ class Dialogs {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text('Workout Erstellen',
-                    style: Theme.of(context).textTheme.headline6),
+                    style: TextStyle(
+                      color: MyApp.of(context).isDarkMode()
+                          ? darkNeutral900
+                          : lightNeutral900,
+                      fontSize: 24,
+                    )),
                 IconButton(
                     onPressed: () {
                       Navigator.pop(context);
@@ -206,16 +213,24 @@ class Dialogs {
       return Container(
           padding: const EdgeInsets.all(24),
           height: 608,
-          decoration: const BoxDecoration(
-            color: lightNeutral50,
+          decoration: BoxDecoration(
+            color:
+                MyApp.of(context).isDarkMode() ? darkNeutral0 : lightNeutral100,
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
           child: Column(children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Workout Erstellen',
-                    style: Theme.of(context).textTheme.headline6),
+                Text(
+                  'Workout Erstellen',
+                  style: TextStyle(
+                    color: MyApp.of(context).isDarkMode()
+                        ? darkNeutral900
+                        : lightNeutral900,
+                    fontSize: 24,
+                  ),
+                ),
                 IconButton(
                     onPressed: () {
                       Navigator.pop(context);

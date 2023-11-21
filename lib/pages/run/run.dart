@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:interval_timer/pages/run/preparation.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../home.dart';
 import 'congrats.dart';
@@ -112,39 +113,39 @@ class _RunState extends State<Run> {
                     builder: (context) => const Home(screenIndex: 1)));
               },
               icon: const Icon(TablerIcons.x)),
-          title: Text("Satz: " +
+          title: Text(AppLocalizations.of(context)!.run_set_from_one +
               widget.currentSet.toString() +
-              ' von ' +
+              AppLocalizations.of(context)!.run_set_from_two +
               widget.sets.toString()),
         ),
-        body: Stack(
-          children: [
-            SizedBox(
-              width: double.infinity,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+        body: SizedBox(
+          width: double.infinity,
+          height: double.infinity,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Stack(
                 children: [
                   SizedBox(
-                    height: 230,
-                  ),
-                  Text(
-                    controller.isPaused
-                        ? 'pausiert'
-                        : widget.indexTime == 0
-                            ? 'Training'
-                            : 'Pause',
-                    style: const TextStyle(fontSize: 30, color: Colors.white),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              width: double.infinity,
-              height: double.infinity,
-              child: Column(
-                children: [
-                  const SizedBox(
-                    height: 48,
+                    width: 320,
+                    height: 300,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: 180,
+                        ),
+                        Text(
+                          controller.isPaused
+                              ? AppLocalizations.of(context)!.paused
+                              : widget.indexTime == 0
+                                  ? AppLocalizations.of(context)!.training
+                                  : AppLocalizations.of(context)!.pause,
+                          style: const TextStyle(
+                              fontSize: 30, color: Colors.white),
+                        ),
+                      ],
+                    ),
                   ),
                   CircularCountDownTimer(
                     controller: controller,
@@ -175,58 +176,58 @@ class _RunState extends State<Run> {
                         color: Colors.white,
                         fontWeight: FontWeight.bold),
                   ),
-                  Text(
-                      "${((remainingPlus + counter) / 60).floor()}:${((remainingPlus + counter) % 60).toString().padLeft(2, '0')}"),
-                  Text("verbleibende Zeit"),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: IconButton(
-                            onPressed: () {
-                              back();
-                            },
-                            icon: Icon(
-                              TablerIcons.chevron_left,
-                              size: 50,
-                            )),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: IconButton(
-                            onPressed: () {
-                              if (controller.isPaused) {
-                                controller.resume();
-                              } else {
-                                controller.pause();
-                              }
-                              setState(() {});
-                            },
-                            icon: Icon(
-                              controller.isPaused
-                                  ? TablerIcons.player_play_filled
-                                  : TablerIcons.player_pause,
-                              size: 50,
-                            )),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: IconButton(
-                            onPressed: () {
-                              next();
-                            },
-                            icon: Icon(
-                              TablerIcons.chevron_right,
-                              size: 50,
-                            )),
-                      ),
-                    ],
-                  ),
                 ],
               ),
-            ),
-          ],
+              Column(
+                children: [
+                  Text(
+                      "${((remainingPlus + counter) / 60).floor()}:${((remainingPlus + counter) % 60).toString().padLeft(2, '0')}"),
+                  Text(AppLocalizations.of(context)!.run_remaining),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        back();
+                      },
+                      iconSize: 50,
+                      icon: Icon(
+                        TablerIcons.chevron_left,
+                      )),
+                  CircleAvatar(
+                    radius: 30,
+                    backgroundColor: Colors.white,
+                    child: IconButton(
+                        iconSize: 35,
+                        color: Colors.grey,
+                        onPressed: () {
+                          if (controller.isPaused) {
+                            controller.resume();
+                          } else {
+                            controller.pause();
+                          }
+                          setState(() {});
+                        },
+                        icon: Icon(
+                          controller.isPaused
+                              ? TablerIcons.player_play_filled
+                              : TablerIcons.player_pause_filled,
+                        )),
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        next();
+                      },
+                      iconSize: 50,
+                      icon: Icon(
+                        TablerIcons.chevron_right,
+                      )),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

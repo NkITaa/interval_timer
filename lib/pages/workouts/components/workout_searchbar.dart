@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:interval_timer/pages/workouts/components/workout_list.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../../../const.dart';
+import '../../../main.dart';
 
 class WorkoutSearchBar extends StatefulWidget {
   const WorkoutSearchBar({
@@ -25,10 +29,12 @@ class _WorkoutSearchBarState extends State<WorkoutSearchBar> {
       padding: const EdgeInsets.only(top: 20.0, bottom: 32.0),
       child: SearchAnchor(
         searchController: controller,
-        viewHintText: 'Search',
+        viewHintText: AppLocalizations.of(context)!.workouts_search,
+        viewBackgroundColor:
+            MyApp.of(context).isDarkMode() ? darkNeutral0 : lightNeutral100,
         builder: (context, controller) {
           return SearchBar(
-            hintText: 'Search',
+            hintText: AppLocalizations.of(context)!.workouts_search,
             controller: controller,
             trailing: [
               IconButton(
@@ -52,20 +58,14 @@ class _WorkoutSearchBarState extends State<WorkoutSearchBar> {
                       .contains(controller.text.trim().toLowerCase()))
                   .toList();
           return [
-            results.isEmpty
-                ? const Center(
-                    child: Text(
-                      'No results found !',
-                    ),
-                  )
-                : Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 12.0, horizontal: 24.0),
-                    child: WorkoutList(
-                      setListState: setListState,
-                      results: results,
-                    ),
-                  )
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
+              child: WorkoutList(
+                setListState: setListState,
+                results: results,
+              ),
+            )
           ];
         },
       ),

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../../const.dart';
+import '../../../main.dart';
+
 class SettingsBlock extends StatelessWidget {
   final List<Widget> tiles;
   final String title;
@@ -21,7 +24,8 @@ class SettingsBlock extends StatelessWidget {
         ),
         Container(
           decoration: BoxDecoration(
-            color: Colors.grey,
+            color:
+                MyApp.of(context).isDarkMode() ? darkNeutral50 : lightNeutral0,
             borderRadius: BorderRadius.circular(16),
           ),
           padding: const EdgeInsets.only(left: 24.0, right: 24),

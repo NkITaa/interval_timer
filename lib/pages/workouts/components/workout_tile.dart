@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:interval_timer/const.dart';
 import 'package:interval_timer/workout.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../components/dialogs.dart';
+import '../../../main.dart';
+import '../../run/preparation.dart';
 
 class WorkoutTile extends StatelessWidget {
   final Workout workout;
@@ -20,7 +24,7 @@ class WorkoutTile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
-        color: Colors.grey[200],
+        color: MyApp.of(context).isDarkMode() ? darkNeutral50 : lightNeutral0,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -28,9 +32,21 @@ class WorkoutTile extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(workout.name.toString()),
+              Text(
+                workout.name.toString(),
+                style: TextStyle(
+                  color: MyApp.of(context).isDarkMode()
+                      ? darkNeutral900
+                      : lightNeutral850,
+                ),
+              ),
               IconButton(
-                icon: const Icon(TablerIcons.dots),
+                icon: Icon(
+                  TablerIcons.dots,
+                  color: MyApp.of(context).isDarkMode()
+                      ? darkNeutral900
+                      : lightNeutral850,
+                ),
                 onPressed: () {
                   showModalBottomSheet(
                     isScrollControlled: true,
@@ -48,47 +64,53 @@ class WorkoutTile extends StatelessWidget {
             children: [
               RichText(
                 text: TextSpan(
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14.0,
-                    color: Colors.black,
+                    color: MyApp.of(context).isDarkMode()
+                        ? darkNeutral900
+                        : lightNeutral850,
                   ),
                   children: <TextSpan>[
                     TextSpan(
                         text:
-                            "${(workout.secondsTraining / 60).floor()}:${(workout.secondsTraining % 60).toString().padLeft(2, '0')}",
+                            "${(workout.secondsTraining / 60).floor()}:${(workout.secondsTraining % 60).toString().padLeft(2, '0')} ",
                         style: const TextStyle(fontWeight: FontWeight.bold)),
-                    const TextSpan(text: ' Training'),
+                    TextSpan(text: AppLocalizations.of(context)!.training),
                   ],
                 ),
               ),
               const SizedBox(width: 40),
               RichText(
                 text: TextSpan(
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14.0,
-                    color: Colors.black,
+                    color: MyApp.of(context).isDarkMode()
+                        ? darkNeutral900
+                        : lightNeutral850,
                   ),
                   children: <TextSpan>[
                     TextSpan(
                         text:
-                            "${(workout.secondsPause / 60).floor()}:${(workout.secondsPause % 60).toString().padLeft(2, '0')}",
+                            "${(workout.secondsPause / 60).floor()}:${(workout.secondsPause % 60).toString().padLeft(2, '0')} ",
                         style: const TextStyle(fontWeight: FontWeight.bold)),
-                    const TextSpan(text: ' Pause'),
+                    TextSpan(text: AppLocalizations.of(context)!.pause),
                   ],
                 ),
               ),
               const SizedBox(width: 40),
               RichText(
                 text: TextSpan(
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14.0,
-                    color: Colors.black,
+                    color: MyApp.of(context).isDarkMode()
+                        ? darkNeutral900
+                        : lightNeutral850,
                   ),
                   children: <TextSpan>[
                     TextSpan(
-                        text: workout.sets.toString(),
+                        text: workout.sets.toString() + ' ',
                         style: const TextStyle(fontWeight: FontWeight.bold)),
-                    const TextSpan(text: ' Sets'),
+                    TextSpan(text: AppLocalizations.of(context)!.sets),
                   ],
                 ),
               ),
@@ -99,11 +121,22 @@ class WorkoutTile extends StatelessWidget {
             width: double.infinity,
             height: 50,
             child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => Preparation(
+                            time: [
+                              workout.secondsTraining,
+                              workout.secondsPause
+                            ],
+                            sets: workout.sets,
+                            currentSet: 1,
+                            indexTime: 0,
+                          )));
+                },
                 style: ElevatedButton.styleFrom(
                   maximumSize: const Size(300, 50),
                 ),
-                child: const Text("do asdfasd")),
+                child: Text(AppLocalizations.of(context)!.start_workout)),
           )
         ],
       ),

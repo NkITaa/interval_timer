@@ -37,6 +37,7 @@ class _MyAppState extends State<MyApp> {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       theme: ThemeData(
+        scaffoldBackgroundColor: lightNeutral100,
         bottomNavigationBarTheme:
             const BottomNavigationBarThemeData(backgroundColor: lightNeutral0),
         appBarTheme: const AppBarTheme(
@@ -45,9 +46,16 @@ class _MyAppState extends State<MyApp> {
             titleTextStyle: TextStyle(color: Colors.black),
             iconTheme: IconThemeData(color: Colors.black),
             centerTitle: false),
+        iconTheme: const IconThemeData(color: lightNeutral900),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: lightNeutral850,
+          ),
+        ),
         textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme),
       ),
       darkTheme: ThemeData(
+        scaffoldBackgroundColor: darkNeutral0,
         bottomNavigationBarTheme:
             const BottomNavigationBarThemeData(backgroundColor: darkNeutral100),
         appBarTheme: const AppBarTheme(
@@ -55,6 +63,12 @@ class _MyAppState extends State<MyApp> {
             titleTextStyle: TextStyle(color: Colors.black),
             centerTitle: false,
             shadowColor: Colors.transparent),
+        iconTheme: const IconThemeData(color: darkNeutral900),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: darkNeutral850,
+          ),
+        ),
         textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme),
       ), // standard dark theme
       themeMode: _themeMode, // device controls theme

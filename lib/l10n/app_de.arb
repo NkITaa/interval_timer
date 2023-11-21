@@ -1,5 +1,35 @@
 {
+
+  "training": "Training",
+  "pause": "Pause",
+  "sets": "Sätze",
+  "start_workout": "Workout starten",
+
   "title_workouts": "Workouts",
+    "workouts_search": "Suche",
+    "workouts_edit": "Workout Bearbeiten",
+    "workouts_create": "Workout erstellen",
+    "workouts_delete": "Workout Löschen",
+    "workouts_delete_confirm": "Workout wirklich löschen?",
+    "workouts_delete_cancel": "Abbrechen",
+    "workouts_delete_ok": "Löschen",
+    "workouts_add": "Workout Hinzufügen",
   "title_jump_in": "Direktstart",
-  "title_profile": "Profil"
+    "jump_in_total_time": "Gesamtzeit",
+    "jump_in_save_workout": "als Workout speichern",
+  "title_profile": "Profil",
+  "profile_settings": "Systemeinstellungen",
+    "profile_settings_darkmode": "Dunkler Modus",
+      "profile_settings_language": "Sprache",
+      "profile_settings_language_english": "Englisch",
+      "profile_settings_language_german": "Deutsch",
+      "profile_settings_sound": "Sound",
+    "profile_help": "Hilfe und Kontakt",
+      "profile_help_faq": "Fragen & Antworten",
+      "profile_help_feedback": "Feedback",
+      "profile_help_info": "Info",
+    "profile_legal": "Rechtliches",
+      "profile_legal_privacy": "Datenschutz",
+      "profile_legal_imprint": "Impressum",
+      "profile_legal_terms": "Haftungsausschluss"
 }

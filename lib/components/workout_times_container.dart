@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../const.dart';
+import '../main.dart';
 import 'increment_decrement_button.dart';
 
 class WorkoutTimesContainer extends StatelessWidget {
@@ -22,7 +24,8 @@ class WorkoutTimesContainer extends StatelessWidget {
     return Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color:
+              MyApp.of(context).isDarkMode() ? darkNeutral100 : lightNeutral0,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Wrap(spacing: 12, runSpacing: 12, children: [

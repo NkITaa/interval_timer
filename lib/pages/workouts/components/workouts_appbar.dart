@@ -3,6 +3,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:interval_timer/components/dialogs.dart';
+import 'package:interval_timer/const.dart';
+import 'package:interval_timer/main.dart';
 
 class WorkoutsAppbar extends StatelessWidget implements PreferredSizeWidget {
   final Function setListState;
@@ -12,7 +14,15 @@ class WorkoutsAppbar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text(AppLocalizations.of(context)!.title_workouts),
+      title: Text(AppLocalizations.of(context)!.title_workouts,
+          style: TextStyle(
+            color: MyApp.of(context).isDarkMode()
+                ? darkNeutral900
+                : lightNeutral900,
+            fontWeight: FontWeight.bold,
+            fontSize: 22.0,
+          )),
+      automaticallyImplyLeading: false,
       actions: [
         IconButton(
           icon: const Icon(TablerIcons.circle_plus),

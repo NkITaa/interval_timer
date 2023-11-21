@@ -1,7 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:interval_timer/pages/run/run.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../home.dart';
 
 class Preparation extends StatefulWidget {
   final List<int> time;
@@ -60,10 +64,19 @@ class _PreparationState extends State<Preparation> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: const Text('Preparation'),
-        ),
-        body: Center(
-          child: Text(counter.toString()),
+            leading: IconButton(
+          icon: Icon(TablerIcons.x),
+          onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => Home(
+                    screenIndex: 1,
+                  ))),
+        )),
+        body: Column(
+          children: [
+            Text(counter.toString()),
+            Text(AppLocalizations.of(context)!.run_preparing),
+            Text(AppLocalizations.of(context)!.run_skip),
+          ],
         ),
       ),
     );

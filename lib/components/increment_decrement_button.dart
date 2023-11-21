@@ -2,6 +2,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
+import '../const.dart';
+import '../main.dart';
 import 'dialogs.dart';
 
 class IncrementDecrementButton extends StatelessWidget {
@@ -23,7 +25,7 @@ class IncrementDecrementButton extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.only(top: 8, bottom: 8, left: 12, right: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: MyApp.of(context).isDarkMode() ? darkNeutral100 : lightNeutral0,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.grey),
       ),
@@ -39,12 +41,22 @@ class IncrementDecrementButton extends StatelessWidget {
             width: 100,
             child: Column(
               children: [
-                Text(type),
+                Text(
+                  type,
+                  style: TextStyle(
+                    fontSize: 14.0,
+                    color: MyApp.of(context).isDarkMode()
+                        ? darkNeutral900
+                        : lightNeutral900,
+                  ),
+                ),
                 RichText(
                   text: TextSpan(
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 14.0,
-                      color: Colors.black,
+                      color: MyApp.of(context).isDarkMode()
+                          ? darkNeutral900
+                          : lightNeutral900,
                     ),
                     text: type != "set"
                         ? minutes.toString().substring(2, 7)
@@ -65,7 +77,7 @@ class IncrementDecrementButton extends StatelessWidget {
               onPressed: () {
                 update(type, true);
               },
-              icon: const Icon(TablerIcons.plus)),
+              icon: Icon(TablerIcons.plus)),
         ],
       ),
     );
