@@ -16,9 +16,11 @@ class SettingsBlock extends StatelessWidget {
           padding: const EdgeInsets.only(top: 24.0, bottom: 8.0),
           child: Row(
             children: [
-              Text(
-                title,
-              ),
+              Text(title,
+                  style: TextStyle(
+                      color: MyApp.of(context).isDarkMode()
+                          ? darkNeutral900
+                          : lightNeutral850)),
             ],
           ),
         ),

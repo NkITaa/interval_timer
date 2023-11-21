@@ -8,9 +8,14 @@ import '../../const.dart';
 import '../../main.dart';
 import 'components/settins_page.dart';
 
-class Profile extends StatelessWidget {
+class Profile extends StatefulWidget {
   const Profile({super.key});
 
+  @override
+  State<Profile> createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,18 +45,30 @@ class Profile extends StatelessWidget {
                   SettingsTile(
                     title:
                         AppLocalizations.of(context)!.profile_settings_darkmode,
-                    icon: const Icon(TablerIcons.moon),
+                    icon: Icon(TablerIcons.moon,
+                        color: MyApp.of(context).isDarkMode()
+                            ? darkNeutral900
+                            : lightNeutral850),
                     switching: true,
+                    onTap: () {
+                      setState(() {});
+                    },
                   ),
                   SettingsTile(
                     title:
                         AppLocalizations.of(context)!.profile_settings_language,
-                    icon: const Icon(TablerIcons.language),
+                    icon: Icon(TablerIcons.language,
+                        color: MyApp.of(context).isDarkMode()
+                            ? darkNeutral900
+                            : lightNeutral850),
                   ),
                   SettingsTile(
                       title:
                           AppLocalizations.of(context)!.profile_settings_sound,
-                      icon: const Icon(TablerIcons.volume),
+                      icon: Icon(TablerIcons.volume,
+                          color: MyApp.of(context).isDarkMode()
+                              ? darkNeutral900
+                              : lightNeutral850),
                       onTap: () => Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => const SettingsPage(
                                 index: 0,
@@ -63,7 +80,10 @@ class Profile extends StatelessWidget {
                 tiles: [
                   SettingsTile(
                     title: AppLocalizations.of(context)!.profile_help_faq,
-                    icon: const Icon(TablerIcons.help),
+                    icon: Icon(TablerIcons.help,
+                        color: MyApp.of(context).isDarkMode()
+                            ? darkNeutral900
+                            : lightNeutral850),
                     onTap: () => Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => const SettingsPage(
                               index: 1,
@@ -71,7 +91,10 @@ class Profile extends StatelessWidget {
                   ),
                   SettingsTile(
                     title: AppLocalizations.of(context)!.profile_help_feedback,
-                    icon: const Icon(TablerIcons.message_circle),
+                    icon: Icon(TablerIcons.message_circle,
+                        color: MyApp.of(context).isDarkMode()
+                            ? darkNeutral900
+                            : lightNeutral850),
                     onTap: () => Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => const SettingsPage(
                               index: 2,
@@ -79,7 +102,10 @@ class Profile extends StatelessWidget {
                   ),
                   SettingsTile(
                     title: AppLocalizations.of(context)!.profile_help_info,
-                    icon: const Icon(TablerIcons.info_circle),
+                    icon: Icon(TablerIcons.info_circle,
+                        color: MyApp.of(context).isDarkMode()
+                            ? darkNeutral900
+                            : lightNeutral850),
                     onTap: () => Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => const SettingsPage(
                               index: 3,

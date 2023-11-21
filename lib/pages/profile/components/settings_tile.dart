@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
+import '../../../const.dart';
 import '../../../main.dart';
 
 class SettingsTile extends StatefulWidget {
@@ -27,13 +28,24 @@ class _SettingsTileState extends State<SettingsTile> {
       children: [
         widget.icon == null
             ? ListTile(
-                title: Text(widget.title),
-                trailing: const Icon(TablerIcons.chevron_right),
+                title: Text(widget.title,
+                    style: TextStyle(
+                        color: MyApp.of(context).isDarkMode()
+                            ? darkNeutral900
+                            : lightNeutral850)),
+                trailing: Icon(TablerIcons.chevron_right,
+                    color: MyApp.of(context).isDarkMode()
+                        ? darkNeutral900
+                        : lightNeutral850),
                 onTap: widget.onTap,
               )
             : ListTile(
                 leading: widget.icon,
-                title: Text(widget.title),
+                title: Text(widget.title,
+                    style: TextStyle(
+                        color: MyApp.of(context).isDarkMode()
+                            ? darkNeutral900
+                            : lightNeutral850)),
                 trailing: widget.switching
                     ? Switch(
                         value: MyApp.of(context).isDarkMode(),
@@ -41,9 +53,14 @@ class _SettingsTileState extends State<SettingsTile> {
                           selected
                               ? MyApp.of(context).changeTheme(ThemeMode.dark)
                               : MyApp.of(context).changeTheme(ThemeMode.light);
-                          setState(() {});
+                          widget.onTap!();
                         })
-                    : const Icon(TablerIcons.chevron_right),
+                    : Icon(
+                        TablerIcons.chevron_right,
+                        color: MyApp.of(context).isDarkMode()
+                            ? darkNeutral900
+                            : lightNeutral850,
+                      ),
                 onTap: widget.onTap,
               ),
         const Divider(
