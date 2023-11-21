@@ -65,9 +65,9 @@ class _PreparationState extends State<Preparation> {
         backgroundColor: Colors.transparent,
         appBar: AppBar(
             leading: IconButton(
-          icon: Icon(TablerIcons.x),
+          icon: const Icon(TablerIcons.x),
           onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => Home(
+              builder: (context) => const Home(
                     screenIndex: 1,
                   ))),
         )),

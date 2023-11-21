@@ -3,8 +3,10 @@ import 'package:interval_timer/components/hide_widgets_on_scroll.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:interval_timer/const.dart';
+import 'package:interval_timer/main.dart';
 
-class BottomNavBar extends StatelessWidget {
+class BottomNavBar extends StatefulWidget {
   final ScrollController controller;
   final int screenIndex;
   final Function(int) onTabTapped;
@@ -16,35 +18,51 @@ class BottomNavBar extends StatelessWidget {
       required this.onTabTapped});
 
   @override
+  State<BottomNavBar> createState() => _BottomNavBarState();
+}
+
+class _BottomNavBarState extends State<BottomNavBar> {
+  @override
   Widget build(BuildContext context) {
     return ScrollToHideWidget(
-      controller: controller,
+      controller: widget.controller,
       child: BottomNavigationBar(
+        selectedIconTheme: MyApp.of(context).isDarkMode()
+            ? const IconThemeData(color: darkNeutral850)
+            : const IconThemeData(color: lightNeutral850),
+        unselectedIconTheme: MyApp.of(context).isDarkMode()
+            ? const IconThemeData(color: darkNeutral500)
+            : const IconThemeData(color: lightNeutral300),
+        selectedItemColor:
+            MyApp.of(context).isDarkMode() ? darkNeutral850 : lightNeutral850,
+        unselectedItemColor:
+            MyApp.of(context).isDarkMode() ? darkNeutral500 : lightNeutral300,
+        currentIndex: widget.screenIndex,
         items: [
           BottomNavigationBarItem(
               icon: IconButton(
-                  onPressed: () => onTabTapped(0),
-                  icon: Icon(
+                  visualDensity: VisualDensity.compact,
+                  onPressed: () => {widget.onTabTapped(0), setState(() {})},
+                  icon: const Icon(
                     TablerIcons.stretching,
-                    color: screenIndex == 0 ? Colors.deepPurple : Colors.grey,
                   )),
               label: AppLocalizations.of(context)!.title_workouts),
           BottomNavigationBarItem(
               icon: IconButton(
-                  onPressed: () => onTabTapped(1),
-                  icon: Icon(
+                  visualDensity: VisualDensity.compact,
+                  onPressed: () => {widget.onTabTapped(1), setState(() {})},
+                  icon: const Icon(
                     TablerIcons.player_play,
-                    color: screenIndex == 1 ? Colors.deepPurple : Colors.grey,
                   )),
               label: AppLocalizations.of(context)!.title_jump_in),
           BottomNavigationBarItem(
             icon: Column(
               children: [
                 IconButton(
-                    onPressed: () => onTabTapped(2),
-                    icon: Icon(
+                    visualDensity: VisualDensity.compact,
+                    onPressed: () => widget.onTabTapped(2),
+                    icon: const Icon(
                       TablerIcons.user_circle,
-                      color: screenIndex == 2 ? Colors.deepPurple : Colors.grey,
                     )),
               ],
             ),

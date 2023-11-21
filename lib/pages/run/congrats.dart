@@ -35,16 +35,16 @@ class _CongratsState extends State<Congrats> {
                 blastDirectionality: BlastDirectionality.explosive,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 50,
             ),
             Text(
               AppLocalizations.of(context)!.run_finish_one,
-              style: TextStyle(fontSize: 30),
+              style: const TextStyle(fontSize: 30),
             ),
             Text(
               AppLocalizations.of(context)!.run_finish_two,
-              style: TextStyle(fontSize: 20),
+              style: const TextStyle(fontSize: 20),
             ),
             TextButton(
               onPressed: () {

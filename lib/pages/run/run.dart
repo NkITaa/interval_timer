@@ -43,7 +43,7 @@ class _RunState extends State<Run> {
   next() {
     if (widget.indexTime == 1 && widget.sets == widget.currentSet) {
       Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => Congrats()));
+          .push(MaterialPageRoute(builder: (context) => const Congrats()));
     } else {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => Run(
@@ -132,7 +132,7 @@ class _RunState extends State<Run> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SizedBox(
+                        const SizedBox(
                           height: 180,
                         ),
                         Text(
@@ -193,7 +193,7 @@ class _RunState extends State<Run> {
                         back();
                       },
                       iconSize: 50,
-                      icon: Icon(
+                      icon: const Icon(
                         TablerIcons.chevron_left,
                       )),
                   CircleAvatar(
@@ -221,7 +221,7 @@ class _RunState extends State<Run> {
                         next();
                       },
                       iconSize: 50,
-                      icon: Icon(
+                      icon: const Icon(
                         TablerIcons.chevron_right,
                       )),
                 ],

@@ -5,6 +5,7 @@ import 'package:interval_timer/components/workout_times_container.dart';
 import 'package:hive/hive.dart';
 import 'package:interval_timer/workout.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../const.dart';
 import '../main.dart';
@@ -78,13 +79,13 @@ class Dialogs {
           decoration: BoxDecoration(
             color:
                 MyApp.of(context).isDarkMode() ? darkNeutral0 : lightNeutral100,
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
           ),
           child: Column(children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Workout Erstellen',
+                Text(AppLocalizations.of(context)!.workouts_create,
                     style: TextStyle(
                       color: MyApp.of(context).isDarkMode()
                           ? darkNeutral900
@@ -101,7 +102,7 @@ class Dialogs {
               ],
             ),
             CustomTextbox(
-              label: "Bezeichnung",
+              label: AppLocalizations.of(context)!.workouts_name,
               nameController: nameController,
             ),
             WorkoutTimesContainer(
@@ -114,7 +115,7 @@ class Dialogs {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 12),
               child: Text(
-                  "Workoutdauer ${workoutTime.toString().substring(2, 7)}"),
+                  "${AppLocalizations.of(context)!.workouts_duration} ${workoutTime.toString().substring(2, 7)}"),
             ),
             const SizedBox(
               height: 8,
@@ -138,8 +139,8 @@ class Dialogs {
                   Navigator.pop(context);
                   setListState();
                 },
-                child: const Text('Workout Speichern',
-                    style: TextStyle(fontSize: 16)),
+                child: Text(AppLocalizations.of(context)!.save_workout,
+                    style: const TextStyle(fontSize: 16)),
               ),
             )
           ]));
@@ -216,14 +217,14 @@ class Dialogs {
           decoration: BoxDecoration(
             color:
                 MyApp.of(context).isDarkMode() ? darkNeutral0 : lightNeutral100,
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
           ),
           child: Column(children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Workout Erstellen',
+                  AppLocalizations.of(context)!.workouts_edit,
                   style: TextStyle(
                     color: MyApp.of(context).isDarkMode()
                         ? darkNeutral900
@@ -241,7 +242,7 @@ class Dialogs {
               ],
             ),
             CustomTextbox(
-              label: "Bezeichnung",
+              label: AppLocalizations.of(context)!.workouts_name,
               nameController: nameController,
             ),
             WorkoutTimesContainer(
@@ -254,7 +255,7 @@ class Dialogs {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 12),
               child: Text(
-                  "Workoutdauer ${workoutTime.toString().substring(2, 7)}"),
+                  "${AppLocalizations.of(context)!.workouts_duration} ${workoutTime.toString().substring(2, 7)}"),
             ),
             const SizedBox(
               height: 12,
@@ -285,8 +286,8 @@ class Dialogs {
                   setListState != null ? setListState() : null;
                   Navigator.pop(context);
                 },
-                child: const Text('Workout Speichern',
-                    style: TextStyle(fontSize: 16)),
+                child: Text(AppLocalizations.of(context)!.save_workout,
+                    style: const TextStyle(fontSize: 16)),
               ),
             ),
             const SizedBox(
@@ -307,8 +308,8 @@ class Dialogs {
                         setListState();
                         Navigator.pop(context);
                       },
-                      child:
-                          const Text('Löschen', style: TextStyle(fontSize: 16)),
+                      child: Text(AppLocalizations.of(context)!.workouts_delete,
+                          style: const TextStyle(fontSize: 16)),
                     ),
                   )
                 : const SizedBox(),
@@ -319,11 +320,18 @@ class Dialogs {
   static Widget buildSetTimesDialog(
       BuildContext context,
       String type,
-      Duration? minutes,
-      int? sets,
+      Duration minutes,
+      Duration otherMinutes,
+      int sets,
       Function(String type, int value, bool? minute) setValue) {
+    late int workoutTime = (minutes.inSeconds + otherMinutes.inSeconds) * sets;
+
     return AlertDialog(
-        title: const Text('Set Times'),
+        title: Text(type == "set"
+            ? AppLocalizations.of(context)!.workout_sets
+            : type == "pause"
+                ? AppLocalizations.of(context)!.workout_pause_time
+                : AppLocalizations.of(context)!.workout_training_time),
         content: SizedBox(
           height: 300,
           child: Column(
@@ -334,7 +342,7 @@ class Dialogs {
                       children: [
                         TimeWheel(
                           type: type,
-                          value: minutes!.inMinutes.remainder(60),
+                          value: minutes.inMinutes.remainder(60),
                           setValue: setValue,
                           minute: true,
                         ),
@@ -349,12 +357,14 @@ class Dialogs {
                     )
                   : TimeWheel(
                       type: type,
-                      value: sets!,
+                      value: sets,
                       setValue: setValue,
                     ),
-              const Text("Workoutdauer 00:00:00"),
+              Text(
+                  "${AppLocalizations.of(context)!.workouts_duration} ${(workoutTime / 60).floor()}:${(workoutTime % 60).toString().padLeft(2, '0')}"),
               TextButton(
-                  onPressed: () {}, child: const Text("Workout Speichern")),
+                  onPressed: () {},
+                  child: Text(AppLocalizations.of(context)!.save_workout)),
             ],
           ),
         ));

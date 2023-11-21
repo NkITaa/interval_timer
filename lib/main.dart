@@ -38,8 +38,9 @@ class _MyAppState extends State<MyApp> {
       supportedLocales: AppLocalizations.supportedLocales,
       theme: ThemeData(
         scaffoldBackgroundColor: lightNeutral100,
-        bottomNavigationBarTheme:
-            const BottomNavigationBarThemeData(backgroundColor: lightNeutral0),
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          backgroundColor: lightNeutral0,
+        ),
         appBarTheme: const AppBarTheme(
             backgroundColor: Colors.transparent,
             shadowColor: Colors.transparent,

@@ -18,18 +18,18 @@ class WorkoutList extends StatelessWidget {
             results != null && results!.isEmpty
         ? Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 100,
               ),
               Text(
                 AppLocalizations.of(context)!.workouts_search_no_results_one,
-                style: TextStyle(fontSize: 24),
+                style: const TextStyle(fontSize: 24),
               ),
               Text(
                 AppLocalizations.of(context)!.workouts_search_no_results_two,
-                style: TextStyle(fontSize: 24),
+                style: const TextStyle(fontSize: 24),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 100,
               ),
             ],

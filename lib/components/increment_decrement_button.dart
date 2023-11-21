@@ -8,8 +8,9 @@ import 'dialogs.dart';
 
 class IncrementDecrementButton extends StatelessWidget {
   final String type;
-  final int? sets;
-  final Duration? minutes;
+  final int sets;
+  final Duration minutes;
+  final Duration otherMinutes;
   final Function(String type, bool increment) update;
   final Function(String type, int value, bool? minute) setValue;
   const IncrementDecrementButton(
@@ -17,8 +18,9 @@ class IncrementDecrementButton extends StatelessWidget {
       required this.type,
       required this.update,
       required this.setValue,
-      this.sets,
-      this.minutes});
+      required this.sets,
+      required this.minutes,
+      required this.otherMinutes});
 
   @override
   Widget build(BuildContext context) {
@@ -65,8 +67,8 @@ class IncrementDecrementButton extends StatelessWidget {
                       ..onTap = () => showDialog(
                             context: context,
                             builder: (BuildContext context) =>
-                                Dialogs.buildSetTimesDialog(
-                                    context, type, minutes, sets, setValue),
+                                Dialogs.buildSetTimesDialog(context, type,
+                                    minutes, otherMinutes, sets, setValue),
                           ),
                   ),
                 ),
@@ -77,7 +79,7 @@ class IncrementDecrementButton extends StatelessWidget {
               onPressed: () {
                 update(type, true);
               },
-              icon: Icon(TablerIcons.plus)),
+              icon: const Icon(TablerIcons.plus)),
         ],
       ),
     );
