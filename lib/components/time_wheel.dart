@@ -35,8 +35,13 @@ class TimeWheel extends StatelessWidget {
           ),
           ScrollSnapList(
             onItemFocus: (int index) {
-              setValueLocal(type, index, minute);
-              setValue(type, index, minute);
+              if (index == 0 && minute == false ||
+                  index == 0 && type == 'set') {
+                return;
+              } else {
+                setValueLocal(type, index, minute);
+                setValue(type, index, minute);
+              }
             },
             itemSize: 76,
             dynamicItemOpacity: 0.3,

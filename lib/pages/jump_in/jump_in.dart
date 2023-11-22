@@ -3,8 +3,11 @@ import 'package:interval_timer/components/workout_times_container.dart';
 import 'package:interval_timer/pages/jump_in/components/total_time.dart';
 import 'package:interval_timer/pages/run/preparation.dart';
 import 'package:interval_timer/workout.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../components/dialogs.dart';
+import '../../const.dart';
+import '../../main.dart';
 
 class JumpIn extends StatefulWidget {
   const JumpIn({super.key});
@@ -21,19 +24,19 @@ class _JumpInState extends State<JumpIn> {
 
   update(String type, bool increment) {
     if (increment) {
-      if (type == "training") {
+      if (type == "training" && minutesTraining.inSeconds < 3585) {
         minutesTraining = minutesTraining + const Duration(seconds: 15);
-      } else if (type == "pause") {
+      } else if (type == "pause" && minutesPause.inSeconds < 3585) {
         minutesPause = minutesPause + const Duration(seconds: 15);
-      } else {
+      } else if (sets < 99 && type == "set") {
         sets = sets + 1;
       }
     } else {
-      if (type == "training") {
+      if (type == "training" && minutesTraining.inSeconds > 15) {
         minutesTraining = minutesTraining - const Duration(seconds: 15);
-      } else if (type == "pause") {
+      } else if (type == "pause" && minutesPause.inSeconds > 15) {
         minutesPause = minutesPause - const Duration(seconds: 15);
-      } else {
+      } else if (sets > 1 && type == "set") {
         sets = sets - 1;
       }
     }
@@ -113,7 +116,7 @@ class _JumpInState extends State<JumpIn> {
                               indexTime: 0,
                             )));
                   },
-                  child: const Text("Workout starten"))),
+                  child: Text(AppLocalizations.of(context)!.start_workout))),
           const SizedBox(
             height: 12,
           ),
@@ -121,6 +124,11 @@ class _JumpInState extends State<JumpIn> {
               width: double.infinity,
               height: 48,
               child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: MyApp.of(context).isDarkMode()
+                        ? darkNeutral100
+                        : lightNeutral0,
+                  ),
                   onPressed: () {
                     showModalBottomSheet(
                       isScrollControlled: true,
@@ -138,7 +146,14 @@ class _JumpInState extends State<JumpIn> {
                               null),
                     );
                   },
-                  child: const Text("als Workout speichern"))),
+                  child: Text(
+                    AppLocalizations.of(context)!.jump_in_save_workout,
+                    style: TextStyle(
+                      color: MyApp.of(context).isDarkMode()
+                          ? darkNeutral900
+                          : lightNeutral900,
+                    ),
+                  ))),
         ],
       ),
     );

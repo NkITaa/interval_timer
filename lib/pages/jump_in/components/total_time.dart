@@ -16,7 +16,7 @@ class TotalTime extends StatelessWidget {
         children: [
           Text('Gesamtzeit',
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 26,
                 color: MyApp.of(context).isDarkMode()
                     ? darkNeutral900
                     : lightNeutral900,
@@ -24,7 +24,8 @@ class TotalTime extends StatelessWidget {
           Text(
               "${(totalTime.inSeconds / 60).floor()}:${(totalTime.inSeconds % 60).toString().padLeft(2, '0')}",
               style: TextStyle(
-                fontSize: 50,
+                fontSize: 100,
+                fontWeight: FontWeight.bold,
                 color: MyApp.of(context).isDarkMode()
                     ? darkNeutral900
                     : lightNeutral900,
