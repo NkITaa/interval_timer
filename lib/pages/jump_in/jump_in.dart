@@ -124,6 +124,7 @@ class _JumpInState extends State<JumpIn> {
                   onPressed: () {
                     showModalBottomSheet(
                       isScrollControlled: true,
+                      enableDrag: false,
                       context: context,
                       builder: (BuildContext context) =>
                           Dialogs.buildEditWorkoutDialog(

@@ -29,6 +29,7 @@ class WorkoutsAppbar extends StatelessWidget implements PreferredSizeWidget {
           onPressed: () {
             showModalBottomSheet(
               isScrollControlled: true,
+              enableDrag: false,
               context: context,
               builder: (BuildContext context) =>
                   Dialogs.buildAddWorkoutDialog(context, setListState),

@@ -50,6 +50,7 @@ class WorkoutTile extends StatelessWidget {
                 onPressed: () {
                   showModalBottomSheet(
                     isScrollControlled: true,
+                    enableDrag: false,
                     context: context,
                     builder: (BuildContext context) =>
                         Dialogs.buildEditWorkoutDialog(

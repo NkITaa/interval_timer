@@ -160,7 +160,6 @@ class Dialogs {
     return StatefulBuilder(builder: (context, setState) {
       void updateTime(Duration pause, Duration training, int sets) {
         workoutTime = (pause + training) * sets;
-        setState(() {});
       }
 
       update(String type, bool increment) {
@@ -327,46 +326,104 @@ class Dialogs {
     late int workoutTime = (minutes.inSeconds + otherMinutes.inSeconds) * sets;
 
     return AlertDialog(
+        backgroundColor:
+            MyApp.of(context).isDarkMode() ? darkNeutral0 : lightNeutral100,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
         title: Text(type == "set"
             ? AppLocalizations.of(context)!.workout_sets
             : type == "pause"
                 ? AppLocalizations.of(context)!.workout_pause_time
                 : AppLocalizations.of(context)!.workout_training_time),
-        content: SizedBox(
-          height: 300,
-          child: Column(
-            children: [
-              type != "set"
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        TimeWheel(
-                          type: type,
-                          value: minutes.inMinutes.remainder(60),
-                          setValue: setValue,
-                          minute: true,
+        content: StatefulBuilder(builder: (context, setState) {
+          void updateTime(Duration minutes, Duration otherMinutes, int sets) {
+            workoutTime = (minutes.inSeconds + otherMinutes.inSeconds) * sets;
+          }
+
+          setValueLocal(String type, int value, bool? minute) {
+            if (type != "set") {
+              if (minute!) {
+                minutes = Duration(
+                    minutes: value, seconds: minutes.inSeconds.remainder(60));
+              } else {
+                minutes = Duration(
+                    minutes: minutes.inMinutes.remainder(60), seconds: value);
+              }
+            } else {
+              sets = value;
+            }
+            updateTime(minutes, otherMinutes, sets);
+            setState(() {});
+          }
+
+          return SizedBox(
+            height: 327,
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              children: [
+                type != "set"
+                    ? Container(
+                        decoration: BoxDecoration(
+                          color: MyApp.of(context).isDarkMode()
+                              ? darkNeutral100
+                              : lightNeutral0,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
                         ),
-                        const Text(":"),
-                        TimeWheel(
-                          type: type,
-                          value: minutes.inSeconds.remainder(60),
-                          setValue: setValue,
-                          minute: false,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            TimeWheel(
+                              type: type,
+                              value: minutes.inMinutes.remainder(60),
+                              setValue: setValue,
+                              minute: true,
+                              setValueLocal: setValueLocal,
+                            ),
+                            SizedBox(width: 18),
+                            const Text(":", style: TextStyle(fontSize: 32)),
+                            SizedBox(width: 18),
+                            TimeWheel(
+                              type: type,
+                              value: minutes.inSeconds.remainder(60),
+                              setValue: setValue,
+                              minute: false,
+                              setValueLocal: setValueLocal,
+                            ),
+                          ],
                         ),
-                      ],
-                    )
-                  : TimeWheel(
-                      type: type,
-                      value: sets,
-                      setValue: setValue,
-                    ),
-              Text(
-                  "${AppLocalizations.of(context)!.workouts_duration} ${(workoutTime / 60).floor()}:${(workoutTime % 60).toString().padLeft(2, '0')}"),
-              TextButton(
-                  onPressed: () {},
-                  child: Text(AppLocalizations.of(context)!.save_workout)),
-            ],
-          ),
-        ));
+                      )
+                    : TimeWheel(
+                        type: type,
+                        value: sets,
+                        setValue: setValue,
+                        setValueLocal: setValueLocal,
+                      ),
+                const SizedBox(height: 18),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                      "${AppLocalizations.of(context)!.workouts_duration} ${(workoutTime / 60).floor()}:${(workoutTime % 60).toString().padLeft(2, '0')}"),
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text(type == "set"
+                          ? AppLocalizations.of(context)!.workout_sets_save
+                          : type == "pause"
+                              ? AppLocalizations.of(context)!
+                                  .workout_pause_time_save
+                              : AppLocalizations.of(context)!
+                                  .workout_training_time_save)),
+                ),
+              ],
+            ),
+          );
+        }));
   }
 }
