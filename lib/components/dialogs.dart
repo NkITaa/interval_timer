@@ -298,6 +298,9 @@ class Dialogs {
                     height: 50,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
+                        backgroundColor: MyApp.of(context).isDarkMode()
+                            ? darkNeutral100
+                            : lightNeutral0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -307,8 +310,25 @@ class Dialogs {
                         setListState();
                         Navigator.pop(context);
                       },
-                      child: Text(AppLocalizations.of(context)!.workouts_delete,
-                          style: const TextStyle(fontSize: 16)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            TablerIcons.trash,
+                            size: 24,
+                            color: MyApp.of(context).isDarkMode()
+                                ? lightError600
+                                : darkError600,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(AppLocalizations.of(context)!.workouts_delete,
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: MyApp.of(context).isDarkMode()
+                                      ? lightError600
+                                      : darkError600)),
+                        ],
+                      ),
                     ),
                   )
                 : const SizedBox(),
