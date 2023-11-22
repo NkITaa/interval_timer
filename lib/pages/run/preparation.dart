@@ -27,18 +27,19 @@ class Preparation extends StatefulWidget {
 
 class _PreparationState extends State<Preparation> {
   int counter = 9;
+  bool isStoped = false;
 
   @override
   void initState() {
     super.initState();
     Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (counter > 1) {
+      if (isStoped || counter == 0) {
+        timer.cancel();
+        next();
+      } else {
         setState(() {
           counter--;
         });
-      } else {
-        timer.cancel();
-        next();
       }
     });
   }
@@ -108,7 +109,7 @@ class _PreparationState extends State<Preparation> {
                   text: AppLocalizations.of(context)!.run_skip,
                   recognizer: TapGestureRecognizer()
                     ..onTap = () {
-                      next();
+                      isStoped = true;
                     }),
             ),
           ],
