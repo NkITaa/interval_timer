@@ -3,6 +3,8 @@
   "pause": "Pause",
   "paused": "pausiert",
   "sets": "Sätze",
+  "confirm": "Bestätigen",
+  "system_language": "System Sprache",
   "dialog_required_field": "Das Feld darf nicht leer sein!",
   "start_workout": "Workout starten",
   "save_workout": "Workout speichern",

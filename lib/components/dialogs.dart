@@ -549,26 +549,79 @@ class Dialogs {
   }
 
   static Widget buildChangeLanguageDialog(
-      BuildContext context, Function setState) {
-    return SizedBox(
-      height: 100,
-      child: Column(
-        children: [
-          TextButton(
-              child: Text("Set locale to German"),
-              onPressed: () {
-                MyApp.of(context).setLocale(Locale("de"));
-                setState(() {});
-              }),
-          TextButton(
-            child: Text("Set locale to English"),
-            onPressed: () {
-              MyApp.of(context).setLocale(Locale("en"));
-              setState(() {});
-            },
-          )
-        ],
-      ),
-    );
+      BuildContext context, Function setStateParent) {
+    String language = Hive.box("settings").get("language");
+
+    return StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+      return Container(
+        decoration: BoxDecoration(
+          color:
+              MyApp.of(context).isDarkMode() ? darkNeutral100 : lightNeutral0,
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        padding:
+            const EdgeInsets.only(left: 24, right: 24, bottom: 24, top: 12),
+        height: 258,
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  AppLocalizations.of(context)!.system_language,
+                  style: heading3Bold,
+                ),
+                IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(
+                      TablerIcons.x,
+                    )),
+              ],
+            ),
+            ListTile(
+              title: const Text('Deutsch'),
+              trailing: Radio(
+                activeColor: MyApp.of(context).isDarkMode()
+                    ? darkNeutral850
+                    : lightNeutral700,
+                value: "de",
+                groupValue: language,
+                onChanged: (value) {
+                  language = value.toString();
+                  setState(() {});
+                },
+              ),
+            ),
+            ListTile(
+              title: const Text('English'),
+              trailing: Radio(
+                activeColor: MyApp.of(context).isDarkMode()
+                    ? darkNeutral850
+                    : lightNeutral700,
+                value: "en",
+                groupValue: language,
+                onChanged: (value) {
+                  language = value.toString();
+                  setState(() {});
+                },
+              ),
+            ),
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                  onPressed: () {
+                    MyApp.of(context).setLocale(Locale(language));
+                    Navigator.pop(context);
+                  },
+                  child: Text(AppLocalizations.of(context)!.confirm)),
+            )
+          ],
+        ),
+      );
+    });
   }
 }

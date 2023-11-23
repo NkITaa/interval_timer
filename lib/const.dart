@@ -1,4 +1,4 @@
-import 'dart:ui';
+import 'package:flutter/material.dart';
 
 // L - lightNeutral
 const lightNeutral0 = Color(0xffFCFCFC);
@@ -101,40 +101,44 @@ const darkError800 = Color(0xff99423A);
 const darkError900 = Color(0xff7F3D37);
 
 // headingFonts
-TextStyle heading1 = TextStyle(fontSize: 26, height: 3.12);
-TextStyle heading1Bold =
-    TextStyle(fontSize: 26, height: 3.12, fontWeight: FontWeight.bold);
-TextStyle heading2Bold =
-    TextStyle(fontSize: 24, height: 2.88, fontWeight: FontWeight.bold);
-TextStyle heading3Bold =
-    TextStyle(fontSize: 22, height: 2.64, fontWeight: FontWeight.bold);
+final TextStyle heading1 = TextStyle(fontSize: 26);
+final TextStyle heading1Bold =
+    TextStyle(fontSize: 26, fontWeight: FontWeight.bold);
+final TextStyle heading2Bold =
+    TextStyle(fontSize: 24, fontWeight: FontWeight.bold);
+final TextStyle heading3Bold =
+    TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
 
 // bodyFonts
-TextStyle body0Bold =
-    TextStyle(fontSize: 20, height: 2.8, fontWeight: FontWeight.bold);
-TextStyle body1 = TextStyle(fontSize: 16, height: 2.24);
-TextStyle body1Bold =
-    TextStyle(fontSize: 16, height: 2.24, fontWeight: FontWeight.bold);
-TextStyle body1Underlined =
-    TextStyle(fontSize: 16, height: 2.24, decoration: TextDecoration.underline);
-TextStyle body2 = TextStyle(fontSize: 14, height: 1.96);
-TextStyle body2Bold =
-    TextStyle(fontSize: 14, height: 1.96, fontWeight: FontWeight.bold);
-TextStyle body2Underlined =
-    TextStyle(fontSize: 14, height: 1.96, decoration: TextDecoration.underline);
-TextStyle body3 = TextStyle(fontSize: 12, height: 1.6);
-TextStyle body3Bold =
-    TextStyle(fontSize: 12, height: 1.6, fontWeight: FontWeight.bold);
+final TextStyle body0Bold =
+    TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
+final TextStyle body1 = TextStyle(fontSize: 16);
+final TextStyle body1Bold =
+    TextStyle(fontSize: 16, fontWeight: FontWeight.bold);
+final TextStyle body1Underlined =
+    TextStyle(fontSize: 16, decoration: TextDecoration.underline);
+final TextStyle body2 = TextStyle(
+  fontSize: 14,
+);
+final TextStyle body2Bold =
+    TextStyle(fontSize: 14, fontWeight: FontWeight.bold);
+final TextStyle body2Underlined =
+    TextStyle(fontSize: 14, decoration: TextDecoration.underline);
+final TextStyle body3 = TextStyle(
+  fontSize: 12,
+);
+final TextStyle body3Bold =
+    TextStyle(fontSize: 12, fontWeight: FontWeight.bold);
 
 // footerFonts
-TextStyle footer = TextStyle(fontSize: 12, height: 1.4);
-TextStyle footerBold =
-    TextStyle(fontSize: 12, height: 1.4, fontWeight: FontWeight.bold);
+final TextStyle footer = TextStyle(
+  fontSize: 12,
+);
+final TextStyle footerBold =
+    TextStyle(fontSize: 12, fontWeight: FontWeight.bold);
 
 // displayFonts
-TextStyle display1 =
-    TextStyle(fontSize: 100, height: 12, fontWeight: FontWeight.bold);
-TextStyle display2 =
-    TextStyle(fontSize: 80, height: 9.6, fontWeight: FontWeight.bold);
-TextStyle display3 =
-    TextStyle(fontSize: 32, height: 3.84, fontWeight: FontWeight.bold);
+final TextStyle display1 =
+    TextStyle(fontSize: 100, fontWeight: FontWeight.bold);
+final TextStyle display2 = TextStyle(fontSize: 80, fontWeight: FontWeight.bold);
+final TextStyle display3 = TextStyle(fontSize: 32, fontWeight: FontWeight.bold);
