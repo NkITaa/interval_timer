@@ -14,7 +14,6 @@ const lightNeutral800 = Color(0xff282B2E);
 const lightNeutral850 = Color(0xff16181A);
 const lightNeutral900 = Color(0xff141617);
 
-
 // D - darkNeutral
 const darkNeutral0 = Color(0xff121212);
 const darkNeutral50 = Color(0xff222222);
@@ -29,7 +28,6 @@ const darkNeutral800 = Color(0xffB6B6B6);
 const darkNeutral850 = Color(0xffBFBBBB);
 const darkNeutral900 = Color(0xffD9D4D4);
 
-
 // L - lightSuccess
 const lightSuccess50 = Color(0xffE9FDF6);
 const lightSuccess100 = Color(0xffC3FAE8);
@@ -41,7 +39,6 @@ const lightSuccess600 = Color(0xff059666);
 const lightSuccess700 = Color(0xff047851);
 const lightSuccess800 = Color(0xff065F41);
 const lightSuccess900 = Color(0xff064E36);
-
 
 // D - darkSuccess
 const darkSuccess50 = Color(0xffFDF3F3);
@@ -55,7 +52,6 @@ const darkSuccess700 = Color(0xff1C7859);
 const darkSuccess800 = Color(0xff195F48);
 const darkSuccess900 = Color(0xff164E3B);
 
-
 // L - lightWarning
 const lightWarning50 = Color(0xffFFFCEB);
 const lightWarning100 = Color(0xffFEF5C7);
@@ -67,7 +63,6 @@ const lightWarning600 = Color(0xffD97006);
 const lightWarning700 = Color(0xffB45F09);
 const lightWarning800 = Color(0xff92500E);
 const lightWarning900 = Color(0xff78440F);
-
 
 // D - darkWarning
 const darkWarning50 = Color(0xffFFFDF5);
@@ -81,7 +76,6 @@ const darkWarning700 = Color(0xffB4712D);
 const darkWarning800 = Color(0xff925F2C);
 const darkWarning900 = Color(0xff784F26);
 
-
 // L - lightError
 const lightError50 = Color(0xffFEF3F2);
 const lightError100 = Color(0xffFEE4E2);
@@ -94,7 +88,6 @@ const lightError700 = Color(0xffB9291C);
 const lightError800 = Color(0xff99261B);
 const lightError900 = Color(0xff7F251D);
 
-
 // D - darkError
 const darkError50 = Color(0xffFEF7F6);
 const darkError100 = Color(0xffFEF0EF);
@@ -106,3 +99,42 @@ const darkError600 = Color(0xffDC5D51);
 const darkError700 = Color(0xffB94B41);
 const darkError800 = Color(0xff99423A);
 const darkError900 = Color(0xff7F3D37);
+
+// headingFonts
+TextStyle heading1 = TextStyle(fontSize: 26, height: 3.12);
+TextStyle heading1Bold =
+    TextStyle(fontSize: 26, height: 3.12, fontWeight: FontWeight.bold);
+TextStyle heading2Bold =
+    TextStyle(fontSize: 24, height: 2.88, fontWeight: FontWeight.bold);
+TextStyle heading3Bold =
+    TextStyle(fontSize: 22, height: 2.64, fontWeight: FontWeight.bold);
+
+// bodyFonts
+TextStyle body0Bold =
+    TextStyle(fontSize: 20, height: 2.8, fontWeight: FontWeight.bold);
+TextStyle body1 = TextStyle(fontSize: 16, height: 2.24);
+TextStyle body1Bold =
+    TextStyle(fontSize: 16, height: 2.24, fontWeight: FontWeight.bold);
+TextStyle body1Underlined =
+    TextStyle(fontSize: 16, height: 2.24, decoration: TextDecoration.underline);
+TextStyle body2 = TextStyle(fontSize: 14, height: 1.96);
+TextStyle body2Bold =
+    TextStyle(fontSize: 14, height: 1.96, fontWeight: FontWeight.bold);
+TextStyle body2Underlined =
+    TextStyle(fontSize: 14, height: 1.96, decoration: TextDecoration.underline);
+TextStyle body3 = TextStyle(fontSize: 12, height: 1.6);
+TextStyle body3Bold =
+    TextStyle(fontSize: 12, height: 1.6, fontWeight: FontWeight.bold);
+
+// footerFonts
+TextStyle footer = TextStyle(fontSize: 12, height: 1.4);
+TextStyle footerBold =
+    TextStyle(fontSize: 12, height: 1.4, fontWeight: FontWeight.bold);
+
+// displayFonts
+TextStyle display1 =
+    TextStyle(fontSize: 100, height: 12, fontWeight: FontWeight.bold);
+TextStyle display2 =
+    TextStyle(fontSize: 80, height: 9.6, fontWeight: FontWeight.bold);
+TextStyle display3 =
+    TextStyle(fontSize: 32, height: 3.84, fontWeight: FontWeight.bold);

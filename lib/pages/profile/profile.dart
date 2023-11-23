@@ -4,6 +4,7 @@ import 'package:interval_timer/pages/profile/components/settings_block.dart';
 import 'package:interval_timer/pages/profile/components/settings_tile.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
+import '../../components/dialogs.dart';
 import '../../const.dart';
 import '../../main.dart';
 import 'components/settins_page.dart';
@@ -55,13 +56,20 @@ class _ProfileState extends State<Profile> {
                     },
                   ),
                   SettingsTile(
-                    title:
-                        AppLocalizations.of(context)!.profile_settings_language,
-                    icon: Icon(TablerIcons.language,
-                        color: MyApp.of(context).isDarkMode()
-                            ? darkNeutral900
-                            : lightNeutral850),
-                  ),
+                      title: AppLocalizations.of(context)!
+                          .profile_settings_language,
+                      icon: Icon(TablerIcons.language,
+                          color: MyApp.of(context).isDarkMode()
+                              ? darkNeutral900
+                              : lightNeutral850),
+                      onTap: () => showModalBottomSheet(
+                            isScrollControlled: true,
+                            enableDrag: false,
+                            context: context,
+                            builder: (BuildContext context) =>
+                                Dialogs.buildChangeLanguageDialog(
+                                    context, setState),
+                          )),
                   SettingsTile(
                       title:
                           AppLocalizations.of(context)!.profile_settings_sound,

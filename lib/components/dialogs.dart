@@ -547,4 +547,28 @@ class Dialogs {
       ),
     );
   }
+
+  static Widget buildChangeLanguageDialog(
+      BuildContext context, Function setState) {
+    return SizedBox(
+      height: 100,
+      child: Column(
+        children: [
+          TextButton(
+              child: Text("Set locale to German"),
+              onPressed: () {
+                MyApp.of(context).setLocale(Locale("de"));
+                setState(() {});
+              }),
+          TextButton(
+            child: Text("Set locale to English"),
+            onPressed: () {
+              MyApp.of(context).setLocale(Locale("en"));
+              setState(() {});
+            },
+          )
+        ],
+      ),
+    );
+  }
 }

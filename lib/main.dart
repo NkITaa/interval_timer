@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:interval_timer/pages/home.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -12,6 +13,12 @@ void main() async {
     ..init(path)
     ..registerAdapter(WorkoutAdapter());
   await Hive.openBox("workouts");
+  await Hive.openBox("settings");
+
+  if (Hive.box("settings").get("language") == null) {
+    await Hive.box("settings").put("language", "en");
+  }
+
   runApp(const MyApp());
 }
 
@@ -28,14 +35,23 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   ThemeMode _themeMode = ThemeMode.system;
+  Locale _locale = Locale(Hive.box("settings").get("language"));
+
+  void setLocale(Locale value) {
+    setState(() {
+      _locale = value;
+      Hive.box("settings").put("language", value.languageCode);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Interval Timer',
       debugShowCheckedModeBanner: false,
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      locale: _locale,
       supportedLocales: AppLocalizations.supportedLocales,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
       theme: ThemeData(
         scaffoldBackgroundColor: lightNeutral100,
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
