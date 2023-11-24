@@ -5,6 +5,8 @@ import 'package:interval_timer/const.dart';
 import 'package:interval_timer/pages/run/preparation.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:hive/hive.dart';
 
 import '../home.dart';
 import 'circular_countdown/circular_countdown.dart';
@@ -30,6 +32,18 @@ class Run extends StatefulWidget {
 
 class _RunState extends State<Run> {
   final CountDownController controller = CountDownController();
+  final player = AudioPlayer();
+  String sound = Hive.box("settings").get("sound");
+  late Timer timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+    if (counter > 0 && !controller.isPaused) {
+      setState(() {
+        counter--;
+      });
+    }
+    if (counter == 3 && sound != "off") {
+      playAudio();
+    }
+  });
 
   late int counter = widget.time[widget.indexTime] - 1;
   late int remainingPlus = widget.indexTime == 0
@@ -42,6 +56,7 @@ class _RunState extends State<Run> {
           widget.time[1]);
 
   next() {
+    player.dispose();
     if (widget.indexTime == 1 && widget.sets == widget.currentSet) {
       Navigator.of(context)
           .push(MaterialPageRoute(builder: (context) => const Congrats()));
@@ -79,16 +94,14 @@ class _RunState extends State<Run> {
     }
   }
 
+  playAudio() async {
+    await player.play(AssetSource(sound));
+  }
+
   @override
   void initState() {
     super.initState();
-    Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (counter > 0 && !controller.isPaused) {
-        setState(() {
-          counter--;
-        });
-      }
-    });
+    timer;
   }
 
   @override
@@ -111,6 +124,8 @@ class _RunState extends State<Run> {
           leading: IconButton(
               color: lightNeutral50,
               onPressed: () {
+                player.dispose();
+                timer.cancel();
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => const Home(screenIndex: 1)));
               },
@@ -197,7 +212,7 @@ class _RunState extends State<Run> {
                         icon: const Icon(
                           TablerIcons.chevron_left,
                         )),
-                    SizedBox(
+                    const SizedBox(
                       width: 20,
                     ),
                     CircleAvatar(
@@ -206,10 +221,10 @@ class _RunState extends State<Run> {
                       child: IconButton(
                           iconSize: 60,
                           color: controller.isPaused
-                              ? Color(0xff7C7C7C)
+                              ? const Color(0xff7C7C7C)
                               : widget.indexTime == 0
-                                  ? Color(0xffFA5F54)
-                                  : Color(0xff7189E1),
+                                  ? const Color(0xffFA5F54)
+                                  : const Color(0xff7189E1),
                           onPressed: () {
                             if (controller.isPaused) {
                               controller.resume();
@@ -224,7 +239,7 @@ class _RunState extends State<Run> {
                                 : TablerIcons.player_pause_filled,
                           )),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 20,
                     ),
                     IconButton(

@@ -6,6 +6,8 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:interval_timer/const.dart';
 import 'package:interval_timer/pages/run/run.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:hive/hive.dart';
 
 import '../home.dart';
 
@@ -27,24 +29,37 @@ class Preparation extends StatefulWidget {
 
 class _PreparationState extends State<Preparation> {
   int counter = 9;
+  final player = AudioPlayer();
   bool isStoped = false;
+  String sound = Hive.box("settings").get("sound");
+
+  late Timer timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+    if (counter == 0) {
+      next();
+    }
+    if (counter > 0) {
+      setState(() {
+        counter--;
+      });
+    }
+    if (counter == 3 && sound != "off") {
+      playAudio();
+    }
+  });
 
   @override
   void initState() {
     super.initState();
-    Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (isStoped || counter == 0) {
-        timer.cancel();
-        next();
-      } else {
-        setState(() {
-          counter--;
-        });
-      }
-    });
+    timer;
+  }
+
+  playAudio() async {
+    await player.play(AssetSource(sound));
   }
 
   next() {
+    player.dispose();
+    timer.cancel();
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => Run(
               time: widget.time,
@@ -67,13 +82,17 @@ class _PreparationState extends State<Preparation> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-            leading: IconButton(
-          icon: const Icon(TablerIcons.x),
-          onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => const Home(
-                    screenIndex: 1,
-                  ))),
-        )),
+          leading: IconButton(
+              icon: const Icon(TablerIcons.x),
+              onPressed: () {
+                player.dispose();
+                timer.cancel();
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const Home(
+                          screenIndex: 1,
+                        )));
+              }),
+        ),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -109,7 +128,7 @@ class _PreparationState extends State<Preparation> {
                   text: AppLocalizations.of(context)!.run_skip,
                   recognizer: TapGestureRecognizer()
                     ..onTap = () {
-                      isStoped = true;
+                      next();
                     }),
             ),
           ],

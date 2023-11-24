@@ -77,10 +77,14 @@ class _ProfileState extends State<Profile> {
                           color: MyApp.of(context).isDarkMode()
                               ? darkNeutral900
                               : lightNeutral850),
-                      onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const SettingsPage(
-                                index: 0,
-                              )))),
+                      onTap: () => showModalBottomSheet(
+                            isScrollControlled: true,
+                            enableDrag: false,
+                            context: context,
+                            builder: (BuildContext context) =>
+                                Dialogs.buildChangeSoundDialog(
+                                    context, setState),
+                          )),
                 ],
               ),
               SettingsBlock(

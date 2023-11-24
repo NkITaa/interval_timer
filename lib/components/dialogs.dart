@@ -6,7 +6,7 @@ import 'package:hive/hive.dart';
 import 'package:interval_timer/workout.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
+import 'package:audioplayers/audioplayers.dart';
 import '../const.dart';
 import '../main.dart';
 import '../pages/home.dart';
@@ -616,6 +616,161 @@ class Dialogs {
                   onPressed: () {
                     MyApp.of(context).setLocale(Locale(language));
                     Navigator.pop(context);
+                  },
+                  child: Text(AppLocalizations.of(context)!.confirm)),
+            )
+          ],
+        ),
+      );
+    });
+  }
+
+  static Widget buildChangeSoundDialog(
+      BuildContext context, Function setStateParent) {
+    String sound = Hive.box("settings").get("sound");
+    final player = AudioPlayer();
+    final List<int> soundIndexes = List.generate(7, (index) => index + 1);
+
+    return StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+      return Container(
+        decoration: BoxDecoration(
+          color:
+              MyApp.of(context).isDarkMode() ? darkNeutral50 : lightNeutral50,
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        padding:
+            const EdgeInsets.only(left: 24, right: 24, bottom: 24, top: 12),
+        height: 632,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  AppLocalizations.of(context)!.system_language,
+                  style: heading3Bold.copyWith(
+                      color: MyApp.of(context).isDarkMode()
+                          ? darkNeutral900
+                          : lightNeutral900),
+                ),
+                IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(
+                      TablerIcons.x,
+                    )),
+              ],
+            ),
+            Container(
+              decoration: BoxDecoration(
+                color: MyApp.of(context).isDarkMode()
+                    ? darkNeutral100
+                    : lightNeutral0,
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+              ),
+              child: ListTile(
+                leading: Icon(
+                  TablerIcons.music,
+                  color: MyApp.of(context).isDarkMode()
+                      ? darkNeutral600
+                      : lightNeutral600,
+                ),
+                title: Text(AppLocalizations.of(context)!.countdown,
+                    style: TextStyle(
+                        color: MyApp.of(context).isDarkMode()
+                            ? darkNeutral900
+                            : lightNeutral850)),
+                trailing: Switch(
+                    value: sound != "off" ? true : false,
+                    onChanged: (selected) {
+                      if (selected) {
+                        sound = "sounds/Countdown 1.mp3";
+                      } else {
+                        player.dispose();
+                        sound = "off";
+                      }
+                      Hive.box("settings").put("sound", sound);
+                      setState(() {});
+                    }),
+              ),
+            ),
+            sound != "off"
+                ? const Divider(
+                    height: 0,
+                    thickness: 1,
+                  )
+                : const SizedBox(),
+            sound != "off"
+                ? Container(
+                    decoration: BoxDecoration(
+                        color: MyApp.of(context).isDarkMode()
+                            ? darkNeutral100
+                            : lightNeutral0,
+                        borderRadius: const BorderRadius.only(
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10))),
+                    child: ListView.builder(
+                      itemCount: soundIndexes.length,
+                      padding: const EdgeInsets.all(0),
+                      shrinkWrap: true,
+                      itemBuilder: (BuildContext context, int index) {
+                        return ListTile(
+                          leading: Padding(
+                            padding: EdgeInsets.only(left: 16.0),
+                            child: Icon(TablerIcons.player_play,
+                                color: MyApp.of(context).isDarkMode()
+                                    ? darkNeutral600
+                                    : lightNeutral600),
+                          ),
+                          title: Text(
+                            'Sound ${soundIndexes[index]}',
+                            style: TextStyle(
+                                color: MyApp.of(context).isDarkMode()
+                                    ? darkNeutral900
+                                    : lightNeutral850),
+                          ),
+                          trailing: Radio(
+                            activeColor: MyApp.of(context).isDarkMode()
+                                ? darkNeutral850
+                                : lightNeutral700,
+                            fillColor: MaterialStateProperty.all(
+                                MyApp.of(context).isDarkMode()
+                                    ? darkNeutral850
+                                    : lightNeutral700),
+                            value:
+                                "sounds/Countdown ${soundIndexes[index]}.mp3",
+                            groupValue: sound,
+                            onChanged: (value) async {
+                              sound = value.toString();
+                              await player.play(AssetSource(sound));
+                              setState(() {});
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                : const SizedBox(),
+            sound != "off"
+                ? SizedBox()
+                : Text(AppLocalizations.of(context)!.countdown_description,
+                    style: TextStyle(
+                        color: MyApp.of(context).isDarkMode()
+                            ? darkNeutral900
+                            : lightNeutral850)),
+            const SizedBox(
+              height: 16,
+            ),
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                  onPressed: () async {
+                    Navigator.pop(context);
+                    await Hive.box("settings").put("sound", sound);
                   },
                   child: Text(AppLocalizations.of(context)!.confirm)),
             )

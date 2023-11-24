@@ -38,7 +38,7 @@ class _CongratsState extends State<Congrats> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     width: 30,
                   ),
                   ConfettiWidget(
@@ -50,7 +50,7 @@ class _CongratsState extends State<Congrats> {
               IconButton(
                 onPressed: () => controller.play(),
                 iconSize: 64,
-                icon: Icon(
+                icon: const Icon(
                   TablerIcons.trophy,
                   color: lightNeutral700,
                 ),

@@ -101,44 +101,44 @@ const darkError800 = Color(0xff99423A);
 const darkError900 = Color(0xff7F3D37);
 
 // headingFonts
-final TextStyle heading1 = TextStyle(fontSize: 26);
-final TextStyle heading1Bold =
+const TextStyle heading1 = TextStyle(fontSize: 26);
+const TextStyle heading1Bold =
     TextStyle(fontSize: 26, fontWeight: FontWeight.bold);
-final TextStyle heading2Bold =
+const TextStyle heading2Bold =
     TextStyle(fontSize: 24, fontWeight: FontWeight.bold);
-final TextStyle heading3Bold =
+const TextStyle heading3Bold =
     TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
 
 // bodyFonts
-final TextStyle body0Bold =
+const TextStyle body0Bold =
     TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
-final TextStyle body1 = TextStyle(fontSize: 16);
-final TextStyle body1Bold =
+const TextStyle body1 = TextStyle(fontSize: 16);
+const TextStyle body1Bold =
     TextStyle(fontSize: 16, fontWeight: FontWeight.bold);
-final TextStyle body1Underlined =
+const TextStyle body1Underlined =
     TextStyle(fontSize: 16, decoration: TextDecoration.underline);
-final TextStyle body2 = TextStyle(
+const TextStyle body2 = TextStyle(
   fontSize: 14,
 );
-final TextStyle body2Bold =
+const TextStyle body2Bold =
     TextStyle(fontSize: 14, fontWeight: FontWeight.bold);
-final TextStyle body2Underlined =
+const TextStyle body2Underlined =
     TextStyle(fontSize: 14, decoration: TextDecoration.underline);
-final TextStyle body3 = TextStyle(
+const TextStyle body3 = TextStyle(
   fontSize: 12,
 );
-final TextStyle body3Bold =
+const TextStyle body3Bold =
     TextStyle(fontSize: 12, fontWeight: FontWeight.bold);
 
 // footerFonts
-final TextStyle footer = TextStyle(
+const TextStyle footer = TextStyle(
   fontSize: 12,
 );
-final TextStyle footerBold =
+const TextStyle footerBold =
     TextStyle(fontSize: 12, fontWeight: FontWeight.bold);
 
 // displayFonts
-final TextStyle display1 =
+const TextStyle display1 =
     TextStyle(fontSize: 100, fontWeight: FontWeight.bold);
-final TextStyle display2 = TextStyle(fontSize: 80, fontWeight: FontWeight.bold);
-final TextStyle display3 = TextStyle(fontSize: 32, fontWeight: FontWeight.bold);
+const TextStyle display2 = TextStyle(fontSize: 80, fontWeight: FontWeight.bold);
+const TextStyle display3 = TextStyle(fontSize: 32, fontWeight: FontWeight.bold);
