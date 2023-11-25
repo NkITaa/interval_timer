@@ -9,12 +9,14 @@ class SettingsTile extends StatefulWidget {
   final Icon? icon;
   final String title;
   final bool switching;
+  final bool last;
   final Function()? onTap;
   const SettingsTile(
       {super.key,
       this.icon,
       required this.title,
       this.onTap,
+      this.last = false,
       this.switching = false});
 
   @override
@@ -28,11 +30,7 @@ class _SettingsTileState extends State<SettingsTile> {
       children: [
         widget.icon == null
             ? ListTile(
-                title: Text(widget.title,
-                    style: TextStyle(
-                        color: MyApp.of(context).isDarkMode()
-                            ? darkNeutral900
-                            : lightNeutral850)),
+                title: Text(widget.title, style: body1(context)),
                 trailing: Icon(TablerIcons.chevron_right,
                     color: MyApp.of(context).isDarkMode()
                         ? darkNeutral900
@@ -41,11 +39,7 @@ class _SettingsTileState extends State<SettingsTile> {
               )
             : ListTile(
                 leading: widget.icon,
-                title: Text(widget.title,
-                    style: TextStyle(
-                        color: MyApp.of(context).isDarkMode()
-                            ? darkNeutral900
-                            : lightNeutral850)),
+                title: Text(widget.title, style: body1(context)),
                 trailing: widget.switching
                     ? Switch(
                         value: MyApp.of(context).isDarkMode(),
@@ -63,10 +57,12 @@ class _SettingsTileState extends State<SettingsTile> {
                       ),
                 onTap: widget.onTap,
               ),
-        const Divider(
-          height: 0,
-          thickness: 1,
-        )
+        widget.last
+            ? SizedBox()
+            : Divider(
+                height: 0,
+                thickness: 1,
+              )
       ],
     );
   }

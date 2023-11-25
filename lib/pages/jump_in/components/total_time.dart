@@ -14,18 +14,10 @@ class TotalTime extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Text('Gesamtzeit',
-              style: TextStyle(
-                fontSize: 26,
-                color: MyApp.of(context).isDarkMode()
-                    ? darkNeutral900
-                    : lightNeutral900,
-              )),
+          Text('Gesamtzeit', style: heading1(context)),
           Text(
               "${(totalTime.inSeconds / 60).floor()}:${(totalTime.inSeconds % 60).toString().padLeft(2, '0')}",
-              style: TextStyle(
-                fontSize: 100,
-                fontWeight: FontWeight.bold,
+              style: display1(context).copyWith(
                 color: MyApp.of(context).isDarkMode()
                     ? darkNeutral900
                     : lightNeutral900,

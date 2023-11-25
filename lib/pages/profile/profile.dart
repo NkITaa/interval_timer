@@ -34,14 +34,10 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.title_profile,
-            style: TextStyle(
-              color: MyApp.of(context).isDarkMode()
-                  ? darkNeutral900
-                  : lightNeutral900,
-              fontWeight: FontWeight.bold,
-              fontSize: 22.0,
-            )),
+        title: Text(
+          AppLocalizations.of(context)!.title_profile,
+          style: heading2Bold(context),
+        ),
         automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
@@ -90,6 +86,7 @@ class _ProfileState extends State<Profile> {
                           color: MyApp.of(context).isDarkMode()
                               ? darkNeutral900
                               : lightNeutral850),
+                      last: true,
                       onTap: () => showModalBottomSheet(
                             isScrollControlled: true,
                             enableDrag: false,
@@ -131,6 +128,7 @@ class _ProfileState extends State<Profile> {
                         color: MyApp.of(context).isDarkMode()
                             ? darkNeutral900
                             : lightNeutral850),
+                    last: true,
                     onTap: () => Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => const SettingsPage(
                               index: 3,
@@ -156,6 +154,7 @@ class _ProfileState extends State<Profile> {
                             ))),
                   ),
                   SettingsTile(
+                    last: true,
                     title: AppLocalizations.of(context)!.profile_legal_terms,
                     onTap: () => Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => const SettingsPage(
@@ -164,7 +163,9 @@ class _ProfileState extends State<Profile> {
                   ),
                 ],
               ),
-              Text(version ?? ''),
+              const SizedBox(height: 8),
+              Text("Version ${version ?? ''}", style: body1(context)),
+              const SizedBox(height: 48),
             ],
           ),
         ),

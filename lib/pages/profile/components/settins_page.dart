@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:interval_timer/pages/profile/components/setings_page_contact.dart';
 import 'package:interval_timer/pages/profile/components/settings_page_about.dart';
 import 'package:interval_timer/pages/profile/components/settings_page_faq.dart';
-import 'package:interval_timer/pages/profile/components/settings_page_sound.dart';
 
 import 'settings_page_legal.dart';
 
@@ -18,8 +17,6 @@ class SettingsPage extends StatelessWidget {
         ),
         body: (() {
           switch (index) {
-            case 0:
-              return const SettingsPageSound();
             case 1:
               return const SettingsPageFAQ();
             case 2:

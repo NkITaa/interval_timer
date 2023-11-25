@@ -104,19 +104,27 @@ class _JumpInState extends State<JumpIn> {
               width: double.infinity,
               height: 48,
               child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => Preparation(
-                              time: [
-                                minutesTraining.inSeconds,
-                                minutesPause.inSeconds
-                              ],
-                              sets: sets,
-                              currentSet: 1,
-                              indexTime: 0,
-                            )));
-                  },
-                  child: Text(AppLocalizations.of(context)!.start_workout))),
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => Preparation(
+                            time: [
+                              minutesTraining.inSeconds,
+                              minutesPause.inSeconds
+                            ],
+                            sets: sets,
+                            currentSet: 1,
+                            indexTime: 0,
+                          )));
+                },
+                child: Text(
+                  AppLocalizations.of(context)!.start_workout,
+                  style: body1Bold(context).copyWith(
+                    color: MyApp.of(context).isDarkMode()
+                        ? darkNeutral50
+                        : lightNeutral50,
+                  ),
+                ),
+              )),
           const SizedBox(
             height: 12,
           ),
@@ -148,11 +156,7 @@ class _JumpInState extends State<JumpIn> {
                   },
                   child: Text(
                     AppLocalizations.of(context)!.jump_in_save_workout,
-                    style: TextStyle(
-                      color: MyApp.of(context).isDarkMode()
-                          ? darkNeutral900
-                          : lightNeutral900,
-                    ),
+                    style: body1Bold(context),
                   ))),
         ],
       ),
