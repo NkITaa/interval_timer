@@ -42,6 +42,15 @@ class _SettingsTileState extends State<SettingsTile> {
                 title: Text(widget.title, style: body1(context)),
                 trailing: widget.switching
                     ? Switch(
+                        inactiveThumbColor: MyApp.of(context).isDarkMode()
+                            ? darkNeutral50
+                            : lightNeutral50,
+                        inactiveTrackColor: MyApp.of(context).isDarkMode()
+                            ? darkNeutral500
+                            : lightNeutral300,
+                        activeColor: MyApp.of(context).isDarkMode()
+                            ? const Color(0xff5F8DEE)
+                            : const Color(0xff3772EE),
                         value: MyApp.of(context).isDarkMode(),
                         onChanged: (selected) {
                           selected

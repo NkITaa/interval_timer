@@ -132,7 +132,12 @@ class _RunState extends State<Run> {
                     builder: (BuildContext context) =>
                         Dialogs.buildExitDialog(context, controller, player));
               },
-              icon: const Icon(TablerIcons.x)),
+              icon: Icon(
+                TablerIcons.x,
+                color: MyApp.of(context).isDarkMode()
+                    ? lightNeutral100
+                    : lightNeutral50,
+              )),
           title: Text(
               AppLocalizations.of(context)!.run_set_from_one +
                   widget.currentSet.toString() +

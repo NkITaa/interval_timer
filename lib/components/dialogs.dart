@@ -90,18 +90,16 @@ class Dialogs {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(AppLocalizations.of(context)!.workouts_create,
-                      style: TextStyle(
-                        color: MyApp.of(context).isDarkMode()
-                            ? darkNeutral900
-                            : lightNeutral900,
-                        fontSize: 24,
-                      )),
+                      style: heading3Bold(context)),
                   IconButton(
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      icon: const Icon(
+                      icon: Icon(
                         TablerIcons.x,
+                        color: MyApp.of(context).isDarkMode()
+                            ? darkNeutral500
+                            : lightNeutral300,
                       )),
                 ],
               ),
@@ -119,7 +117,9 @@ class Dialogs {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 child: Text(
-                    "${AppLocalizations.of(context)!.workouts_duration} ${workoutTime.toString().substring(2, 7)}"),
+                  "${AppLocalizations.of(context)!.workouts_duration} ${workoutTime.toString().substring(2, 7)}",
+                  style: body1(context),
+                ),
               ),
               const SizedBox(
                 height: 8,
@@ -145,7 +145,10 @@ class Dialogs {
                     }
                   },
                   child: Text(AppLocalizations.of(context)!.save_workout,
-                      style: const TextStyle(fontSize: 16)),
+                      style: body1Bold(context).copyWith(
+                          color: MyApp.of(context).isDarkMode()
+                              ? darkNeutral50
+                              : lightNeutral50)),
                 ),
               )
             ]),
@@ -232,21 +235,17 @@ class Dialogs {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    AppLocalizations.of(context)!.workouts_edit,
-                    style: TextStyle(
-                      color: MyApp.of(context).isDarkMode()
-                          ? darkNeutral900
-                          : lightNeutral900,
-                      fontSize: 24,
-                    ),
-                  ),
+                  Text(AppLocalizations.of(context)!.workouts_edit,
+                      style: heading3Bold(context)),
                   IconButton(
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      icon: const Icon(
+                      icon: Icon(
                         TablerIcons.x,
+                        color: MyApp.of(context).isDarkMode()
+                            ? darkNeutral500
+                            : lightNeutral300,
                       )),
                 ],
               ),
@@ -264,7 +263,9 @@ class Dialogs {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 child: Text(
-                    "${AppLocalizations.of(context)!.workouts_duration} ${workoutTime.toString().substring(2, 7)}"),
+                  "${AppLocalizations.of(context)!.workouts_duration} ${workoutTime.toString().substring(2, 7)}",
+                  style: body1(context),
+                ),
               ),
               const SizedBox(
                 height: 12,
@@ -298,7 +299,10 @@ class Dialogs {
                     }
                   },
                   child: Text(AppLocalizations.of(context)!.save_workout,
-                      style: const TextStyle(fontSize: 16)),
+                      style: body1Bold(context).copyWith(
+                          color: MyApp.of(context).isDarkMode()
+                              ? darkNeutral50
+                              : lightNeutral50)),
                 ),
               ),
               const SizedBox(
@@ -338,8 +342,7 @@ class Dialogs {
                             ),
                             const SizedBox(width: 8),
                             Text(AppLocalizations.of(context)!.workouts_delete,
-                                style: TextStyle(
-                                    fontSize: 16,
+                                style: body1Bold(context).copyWith(
                                     color: MyApp.of(context).isDarkMode()
                                         ? lightError600
                                         : darkError600)),
@@ -365,14 +368,17 @@ class Dialogs {
     return AlertDialog(
         backgroundColor:
             MyApp.of(context).isDarkMode() ? darkNeutral0 : lightNeutral100,
+        surfaceTintColor: Colors.transparent,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
-        title: Text(type == "set"
-            ? AppLocalizations.of(context)!.workout_sets
-            : type == "pause"
-                ? AppLocalizations.of(context)!.workout_pause_time
-                : AppLocalizations.of(context)!.workout_training_time),
+        title: Text(
+            type == "set"
+                ? AppLocalizations.of(context)!.workout_sets
+                : type == "pause"
+                    ? AppLocalizations.of(context)!.workout_pause_time
+                    : AppLocalizations.of(context)!.workout_training_time,
+            style: heading3Bold(context)),
         content: StatefulBuilder(builder: (context, setState) {
           void updateTime(Duration minutes, Duration otherMinutes, int sets) {
             workoutTime = (minutes.inSeconds + otherMinutes.inSeconds) * sets;
@@ -394,8 +400,14 @@ class Dialogs {
             setState(() {});
           }
 
-          return SizedBox(
-            height: 327,
+          return Container(
+            decoration: BoxDecoration(
+              color: MyApp.of(context).isDarkMode()
+                  ? darkNeutral0
+                  : lightNeutral100,
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
+            ),
+            height: 336,
             width: MediaQuery.of(context).size.width,
             child: Column(
               children: [
@@ -441,7 +453,9 @@ class Dialogs {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                      "${AppLocalizations.of(context)!.workouts_duration} ${(workoutTime / 60).floor()}:${(workoutTime % 60).toString().padLeft(2, '0')}"),
+                    "${AppLocalizations.of(context)!.workouts_duration} ${(workoutTime / 60).floor()}:${(workoutTime % 60).toString().padLeft(2, '0')}",
+                    style: body1(context),
+                  ),
                 ),
                 SizedBox(
                   width: double.infinity,
@@ -450,13 +464,18 @@ class Dialogs {
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      child: Text(type == "set"
-                          ? AppLocalizations.of(context)!.workout_sets_save
-                          : type == "pause"
-                              ? AppLocalizations.of(context)!
-                                  .workout_pause_time_save
-                              : AppLocalizations.of(context)!
-                                  .workout_training_time_save)),
+                      child: Text(
+                          type == "set"
+                              ? AppLocalizations.of(context)!.workout_sets_save
+                              : type == "pause"
+                                  ? AppLocalizations.of(context)!
+                                      .workout_pause_time_save
+                                  : AppLocalizations.of(context)!
+                                      .workout_training_time_save,
+                          style: body1Bold(context).copyWith(
+                              color: MyApp.of(context).isDarkMode()
+                                  ? darkNeutral50
+                                  : lightNeutral50))),
                 ),
               ],
             ),
@@ -466,17 +485,20 @@ class Dialogs {
 
   static Widget buildDeleteDialog(context, index, setListState) {
     return AlertDialog(
+      surfaceTintColor: Colors.transparent,
       backgroundColor:
           MyApp.of(context).isDarkMode() ? darkNeutral0 : lightNeutral100,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
-      title: Text(AppLocalizations.of(context)!.workouts_delete),
+      title: Text(AppLocalizations.of(context)!.workouts_delete,
+          style: heading3Bold(context)),
       content: SizedBox(
         height: 208,
         child: Column(
           children: [
-            Text(AppLocalizations.of(context)!.workouts_delete_confirm),
+            Text(AppLocalizations.of(context)!.workouts_delete_confirm,
+                style: body1(context)),
             const SizedBox(
               height: 20,
             ),
@@ -509,8 +531,7 @@ class Dialogs {
                               : lightNeutral50),
                       const SizedBox(width: 8),
                       Text(AppLocalizations.of(context)!.workouts_delete,
-                          style: TextStyle(
-                              fontSize: 16,
+                          style: body1Bold(context).copyWith(
                               color: MyApp.of(context).isDarkMode()
                                   ? lightNeutral100
                                   : lightNeutral50)),
@@ -537,11 +558,7 @@ class Dialogs {
                     },
                     child: Text(
                         AppLocalizations.of(context)!.workouts_delete_cancel,
-                        style: TextStyle(
-                            fontSize: 16,
-                            color: MyApp.of(context).isDarkMode()
-                                ? darkNeutral900
-                                : lightNeutral900)))),
+                        style: body1Bold(context)))),
           ],
         ),
       ),
@@ -576,8 +593,11 @@ class Dialogs {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    icon: const Icon(
+                    icon: Icon(
                       TablerIcons.x,
+                      color: MyApp.of(context).isDarkMode()
+                          ? darkNeutral500
+                          : lightNeutral300,
                     )),
               ],
             ),
@@ -617,7 +637,13 @@ class Dialogs {
                     MyApp.of(context).setLocale(Locale(language));
                     Navigator.pop(context);
                   },
-                  child: Text(AppLocalizations.of(context)!.confirm)),
+                  child: Text(
+                    AppLocalizations.of(context)!.confirm,
+                    style: body1Bold(context).copyWith(
+                        color: MyApp.of(context).isDarkMode()
+                            ? darkNeutral50
+                            : lightNeutral50),
+                  )),
             )
           ],
         ),
@@ -659,8 +685,11 @@ class Dialogs {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    icon: const Icon(
+                    icon: Icon(
                       TablerIcons.x,
+                      color: MyApp.of(context).isDarkMode()
+                          ? darkNeutral500
+                          : lightNeutral300,
                     )),
               ],
             ),
@@ -679,11 +708,24 @@ class Dialogs {
                       : lightNeutral600,
                 ),
                 title: Text(AppLocalizations.of(context)!.countdown,
-                    style: TextStyle(
+                    style: body1(context).copyWith(
                         color: MyApp.of(context).isDarkMode()
                             ? darkNeutral900
                             : lightNeutral850)),
                 trailing: Switch(
+                    inactiveThumbColor: MyApp.of(context).isDarkMode()
+                        ? darkNeutral50
+                        : lightNeutral50,
+                    inactiveTrackColor: MyApp.of(context).isDarkMode()
+                        ? darkNeutral500
+                        : lightNeutral300,
+                    thumbColor: MaterialStateProperty.all<Color>(
+                        MyApp.of(context).isDarkMode()
+                            ? darkNeutral50
+                            : lightNeutral50),
+                    activeColor: MyApp.of(context).isDarkMode()
+                        ? const Color(0xff5F8DEE)
+                        : const Color(0xff3772EE),
                     value: sound != "off" ? true : false,
                     onChanged: (selected) {
                       if (selected) {
@@ -727,7 +769,7 @@ class Dialogs {
                           ),
                           title: Text(
                             'Sound ${soundIndexes[index]}',
-                            style: TextStyle(
+                            style: body1(context).copyWith(
                                 color: MyApp.of(context).isDarkMode()
                                     ? darkNeutral900
                                     : lightNeutral850),
@@ -757,10 +799,7 @@ class Dialogs {
             sound != "off"
                 ? const SizedBox()
                 : Text(AppLocalizations.of(context)!.countdown_description,
-                    style: TextStyle(
-                        color: MyApp.of(context).isDarkMode()
-                            ? darkNeutral900
-                            : lightNeutral850)),
+                    style: body3(context)),
             const SizedBox(
               height: 16,
             ),
@@ -772,7 +811,13 @@ class Dialogs {
                     Navigator.pop(context);
                     await Hive.box("settings").put("sound", sound);
                   },
-                  child: Text(AppLocalizations.of(context)!.confirm)),
+                  child: Text(
+                    AppLocalizations.of(context)!.confirm,
+                    style: body1Bold(context).copyWith(
+                        color: MyApp.of(context).isDarkMode()
+                            ? darkNeutral50
+                            : lightNeutral50),
+                  )),
             )
           ],
         ),
@@ -782,17 +827,20 @@ class Dialogs {
 
   static Widget buildExitDialog(context, controller, player) {
     return AlertDialog(
+      surfaceTintColor: Colors.transparent,
       backgroundColor:
           MyApp.of(context).isDarkMode() ? darkNeutral0 : lightNeutral100,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
-      title: Text(AppLocalizations.of(context)!.run_exit_workout),
+      title: Text(AppLocalizations.of(context)!.run_exit_workout,
+          style: heading3Bold(context)),
       content: SizedBox(
         height: 208,
         child: Column(
           children: [
-            Text(AppLocalizations.of(context)!.run_exit_workout_info),
+            Text(AppLocalizations.of(context)!.run_exit_workout_info,
+                style: body1(context)),
             const SizedBox(
               height: 20,
             ),
@@ -814,8 +862,7 @@ class Dialogs {
                         builder: (context) => const Home(screenIndex: 1)));
                   },
                   child: Text(AppLocalizations.of(context)!.run_exit_workout,
-                      style: TextStyle(
-                          fontSize: 16,
+                      style: body1Bold(context).copyWith(
                           color: MyApp.of(context).isDarkMode()
                               ? lightNeutral100
                               : lightNeutral50))),
@@ -841,11 +888,7 @@ class Dialogs {
                     },
                     child: Text(
                         AppLocalizations.of(context)!.run_resume_workout,
-                        style: TextStyle(
-                            fontSize: 16,
-                            color: MyApp.of(context).isDarkMode()
-                                ? darkNeutral900
-                                : lightNeutral900)))),
+                        style: body1Bold(context)))),
           ],
         ),
       ),

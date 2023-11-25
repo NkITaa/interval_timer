@@ -6,6 +6,8 @@ import 'package:interval_timer/workout.dart';
 import 'const.dart';
 import 'package:hive/hive.dart';
 
+late ThemeMode? _themeMode;
+
 void main() async {
   var path = "/Users/nikita/Desktop/interval_timer/db";
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +20,12 @@ void main() async {
   if (Hive.box("settings").get("language") == null) {
     await Hive.box("settings").put("language", "en");
   }
+  if (Hive.box("settings").get("darkmode") == null) {
+    await Hive.box("settings")
+        .put("darkmode", ThemeMode.system == ThemeMode.dark);
+  }
+  _themeMode =
+      Hive.box("settings").get("darkmode") ? ThemeMode.dark : ThemeMode.light;
   if (Hive.box("settings").get("sound") == null) {
     await Hive.box("settings").put("sound", "sounds/Countdown 1.mp3");
   }
@@ -37,7 +45,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  ThemeMode _themeMode = ThemeMode.system;
   Locale _locale = Locale(Hive.box("settings").get("language"));
 
   void setLocale(Locale value) {
@@ -74,6 +81,7 @@ class _MyAppState extends State<MyApp> {
         iconTheme: const IconThemeData(color: lightNeutral900),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
+            surfaceTintColor: Colors.transparent,
             backgroundColor: lightNeutral850,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
@@ -99,6 +107,7 @@ class _MyAppState extends State<MyApp> {
         iconTheme: const IconThemeData(color: darkNeutral900),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
+            surfaceTintColor: Colors.transparent,
             backgroundColor: darkNeutral850,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
@@ -116,6 +125,7 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       _themeMode = themeMode;
     });
+    Hive.box("settings").put("darkmode", themeMode == ThemeMode.dark);
   }
 
   bool isDarkMode() {
