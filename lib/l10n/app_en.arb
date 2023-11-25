@@ -43,6 +43,9 @@
     "run_finish_one": "Training successfully completed!",
     "run_finish_two": "Training Duration: ",
     "run_home": "to Homescreen",
+    "run_resume_workout": "Resume Workout",
+    "run_exit_workout": "End Workout",
+    "run_exit_workout_info": "Do you really want to end the workout? Your progress will not be saved.",
 
     "title_profile": "Profile",
     "profile_settings": "System Settings",

@@ -8,6 +8,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:hive/hive.dart';
 
+import '../../components/dialogs.dart';
 import '../home.dart';
 import 'circular_countdown/circular_countdown.dart';
 import 'congrats.dart';
@@ -124,10 +125,12 @@ class _RunState extends State<Run> {
           leading: IconButton(
               color: lightNeutral50,
               onPressed: () {
-                player.dispose();
-                timer.cancel();
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const Home(screenIndex: 1)));
+                controller.pause();
+                player.pause();
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) =>
+                        Dialogs.buildExitDialog(context, controller, player));
               },
               icon: const Icon(TablerIcons.x)),
           title: Text(

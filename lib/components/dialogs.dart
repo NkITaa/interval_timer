@@ -779,4 +779,76 @@ class Dialogs {
       );
     });
   }
+
+  static Widget buildExitDialog(context, controller, player) {
+    return AlertDialog(
+      backgroundColor:
+          MyApp.of(context).isDarkMode() ? darkNeutral0 : lightNeutral100,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      title: Text(AppLocalizations.of(context)!.run_exit_workout),
+      content: SizedBox(
+        height: 208,
+        child: Column(
+          children: [
+            Text(AppLocalizations.of(context)!.run_exit_workout_info),
+            const SizedBox(
+              height: 20,
+            ),
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: MyApp.of(context).isDarkMode()
+                        ? darkNeutral850
+                        : lightNeutral850,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        fullscreenDialog: true,
+                        builder: (context) => const Home(screenIndex: 1)));
+                  },
+                  child: Text(AppLocalizations.of(context)!.run_exit_workout,
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: MyApp.of(context).isDarkMode()
+                              ? lightNeutral100
+                              : lightNeutral50))),
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: MyApp.of(context).isDarkMode()
+                          ? darkNeutral100
+                          : lightNeutral0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      controller.resume();
+                    },
+                    child: Text(
+                        AppLocalizations.of(context)!.run_resume_workout,
+                        style: TextStyle(
+                            fontSize: 16,
+                            color: MyApp.of(context).isDarkMode()
+                                ? darkNeutral900
+                                : lightNeutral900)))),
+          ],
+        ),
+      ),
+    );
+  }
 }
