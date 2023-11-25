@@ -719,7 +719,7 @@ class Dialogs {
                       itemBuilder: (BuildContext context, int index) {
                         return ListTile(
                           leading: Padding(
-                            padding: EdgeInsets.only(left: 16.0),
+                            padding: const EdgeInsets.only(left: 16.0),
                             child: Icon(TablerIcons.player_play,
                                 color: MyApp.of(context).isDarkMode()
                                     ? darkNeutral600
@@ -755,7 +755,7 @@ class Dialogs {
                   )
                 : const SizedBox(),
             sound != "off"
-                ? SizedBox()
+                ? const SizedBox()
                 : Text(AppLocalizations.of(context)!.countdown_description,
                     style: TextStyle(
                         color: MyApp.of(context).isDarkMode()

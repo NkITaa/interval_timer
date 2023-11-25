@@ -80,7 +80,7 @@ class _PreparationState extends State<Preparation> {
           end: Alignment.bottomCenter,
           colors: isPaused
               ? [const Color(0xffA3A3A3), const Color(0xff7C7C7C)]
-              : [Color(0xffFFA24B), Color(0xffEABB2D)],
+              : [const Color(0xffFFA24B), const Color(0xffEABB2D)],
         ),
       ),
       child: Scaffold(

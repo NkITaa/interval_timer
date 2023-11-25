@@ -58,8 +58,8 @@ class _SettingsTileState extends State<SettingsTile> {
                 onTap: widget.onTap,
               ),
         widget.last
-            ? SizedBox()
-            : Divider(
+            ? const SizedBox()
+            : const Divider(
                 height: 0,
                 thickness: 1,
               )

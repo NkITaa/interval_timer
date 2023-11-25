@@ -123,7 +123,7 @@ class _RunState extends State<Run> {
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           leading: IconButton(
-              color: Color(0xffFADCE3),
+              color: const Color(0xffFADCE3),
               onPressed: () {
                 controller.pause();
                 player.pause();
