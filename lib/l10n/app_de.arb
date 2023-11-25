@@ -45,7 +45,7 @@
   "run_home": "zum Homecreen",
   "run_resume_workout": "Workout fortsetzen",
   "run_exit_workout": "Workout beenden",
-  "run_exit_workout_info": "Möchten Sie das Workout wirklich beenden? Ihr fortschritt wird nicht gespeichert.",
+  "run_exit_workout_info": "Möchtest du das Workout wirklich beenden? Dein fortschritt wird nicht gespeichert.",
 
   "title_profile": "Profil",
   "profile_settings": "Systemeinstellungen",

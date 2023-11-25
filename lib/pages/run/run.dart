@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:interval_timer/const.dart';
+import 'package:interval_timer/main.dart';
 import 'package:interval_timer/pages/run/preparation.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -9,7 +10,6 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:hive/hive.dart';
 
 import '../../components/dialogs.dart';
-import '../home.dart';
 import 'circular_countdown/circular_countdown.dart';
 import 'congrats.dart';
 
@@ -123,7 +123,7 @@ class _RunState extends State<Run> {
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           leading: IconButton(
-              color: lightNeutral50,
+              color: Color(0xffFADCE3),
               onPressed: () {
                 controller.pause();
                 player.pause();
@@ -134,16 +134,14 @@ class _RunState extends State<Run> {
               },
               icon: const Icon(TablerIcons.x)),
           title: Text(
-            AppLocalizations.of(context)!.run_set_from_one +
-                widget.currentSet.toString() +
-                AppLocalizations.of(context)!.run_set_from_two +
-                widget.sets.toString(),
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: lightNeutral50,
-            ),
-          ),
+              AppLocalizations.of(context)!.run_set_from_one +
+                  widget.currentSet.toString() +
+                  AppLocalizations.of(context)!.run_set_from_two +
+                  widget.sets.toString(),
+              style: heading2Bold(context).copyWith(
+                  color: MyApp.of(context).isDarkMode()
+                      ? lightNeutral100
+                      : lightNeutral50)),
         ),
         body: SizedBox(
           width: double.infinity,
@@ -174,7 +172,9 @@ class _RunState extends State<Run> {
                     height: 300,
                     strokeCap: StrokeCap.round,
                     ringColor: Colors.white.withOpacity(0.5),
-                    fillColor: Colors.white,
+                    fillColor: MyApp.of(context).isDarkMode()
+                        ? lightNeutral100
+                        : lightNeutral50,
                     strokeWidth: 16.0,
                     timeFormatterFunction:
                         (defaultFormatterFunction, duration) {
@@ -191,34 +191,38 @@ class _RunState extends State<Run> {
                           : widget.indexTime == 0
                               ? AppLocalizations.of(context)!.training
                               : AppLocalizations.of(context)!.pause,
-                      style:
-                          const TextStyle(fontSize: 30, color: lightNeutral50),
+                      style: heading1Bold(context).copyWith(
+                          color: MyApp.of(context).isDarkMode()
+                              ? lightNeutral100
+                              : lightNeutral50),
                     ),
-                    textStyle: const TextStyle(
-                        fontSize: 80,
-                        color: lightNeutral50,
-                        fontWeight: FontWeight.bold),
+                    textStyle: display2(context).copyWith(
+                        color: MyApp.of(context).isDarkMode()
+                            ? lightNeutral100
+                            : lightNeutral50),
                   ),
                   Column(
                     children: [
                       Text(
                           "${((remainingPlus + counter) / 60).floor()}:${((remainingPlus + counter) % 60).toString().padLeft(2, '0')}",
-                          style: const TextStyle(
-                              fontSize: 20,
-                              color: lightNeutral50,
-                              fontWeight: FontWeight.bold)),
+                          style: body0Bold(context).copyWith(
+                              color: MyApp.of(context).isDarkMode()
+                                  ? lightNeutral100
+                                  : lightNeutral50)),
                       Text(AppLocalizations.of(context)!.run_remaining,
-                          style: const TextStyle(
-                              fontSize: 20,
-                              color: lightNeutral50,
-                              fontWeight: FontWeight.bold)),
+                          style: body0Bold(context).copyWith(
+                              color: MyApp.of(context).isDarkMode()
+                                  ? lightNeutral100
+                                  : lightNeutral50)),
                     ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       IconButton(
-                          color: lightNeutral50,
+                          color: MyApp.of(context).isDarkMode()
+                              ? lightNeutral100
+                              : lightNeutral50,
                           onPressed: () {
                             back();
                           },
@@ -231,7 +235,9 @@ class _RunState extends State<Run> {
                       ),
                       CircleAvatar(
                         radius: 50,
-                        backgroundColor: Colors.white,
+                        backgroundColor: MyApp.of(context).isDarkMode()
+                            ? lightNeutral100
+                            : lightNeutral50,
                         child: IconButton(
                             iconSize: 60,
                             color: controller.isPaused
@@ -257,7 +263,9 @@ class _RunState extends State<Run> {
                         width: 20,
                       ),
                       IconButton(
-                          color: lightNeutral50,
+                          color: MyApp.of(context).isDarkMode()
+                              ? lightNeutral100
+                              : lightNeutral50,
                           onPressed: () {
                             next();
                           },

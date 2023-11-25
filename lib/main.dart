@@ -8,6 +8,7 @@ import 'package:hive/hive.dart';
 
 void main() async {
   var path = "/Users/nikita/Desktop/interval_timer/db";
+  WidgetsFlutterBinding.ensureInitialized();
   Hive
     ..init(path)
     ..registerAdapter(WorkoutAdapter());
@@ -55,6 +56,11 @@ class _MyAppState extends State<MyApp> {
       supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       theme: ThemeData(
+        textSelectionTheme: const TextSelectionThemeData(
+          cursorColor: lightNeutral900,
+          selectionColor: lightNeutral900,
+          selectionHandleColor: lightNeutral900,
+        ),
         scaffoldBackgroundColor: lightNeutral100,
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           backgroundColor: lightNeutral0,
@@ -77,6 +83,11 @@ class _MyAppState extends State<MyApp> {
         textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme),
       ),
       darkTheme: ThemeData(
+        textSelectionTheme: const TextSelectionThemeData(
+          cursorColor: darkNeutral900,
+          selectionColor: darkNeutral900,
+          selectionHandleColor: darkNeutral900,
+        ),
         scaffoldBackgroundColor: darkNeutral0,
         bottomNavigationBarTheme:
             const BottomNavigationBarThemeData(backgroundColor: darkNeutral100),

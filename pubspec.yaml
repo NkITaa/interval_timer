@@ -26,6 +26,7 @@ dev_dependencies:
   confetti: ^0.7.0
   hive_generator: ^2.0.1
   audioplayers: ^5.2.1
+  package_info_plus: ^5.0.1
 
 flutter:
   uses-material-design: true

@@ -570,7 +570,7 @@ class Dialogs {
               children: [
                 Text(
                   AppLocalizations.of(context)!.system_language,
-                  style: heading3Bold,
+                  style: heading3Bold(context),
                 ),
                 IconButton(
                     onPressed: () {
@@ -650,7 +650,7 @@ class Dialogs {
               children: [
                 Text(
                   AppLocalizations.of(context)!.system_language,
-                  style: heading3Bold.copyWith(
+                  style: heading3Bold(context).copyWith(
                       color: MyApp.of(context).isDarkMode()
                           ? darkNeutral900
                           : lightNeutral900),

@@ -32,14 +32,7 @@ class WorkoutTile extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                workout.name.toString(),
-                style: TextStyle(
-                  color: MyApp.of(context).isDarkMode()
-                      ? darkNeutral900
-                      : lightNeutral850,
-                ),
-              ),
+              Text(workout.name.toString(), style: body1Bold(context)),
               IconButton(
                 icon: Icon(
                   TablerIcons.dots,
@@ -65,53 +58,41 @@ class WorkoutTile extends StatelessWidget {
             children: [
               RichText(
                 text: TextSpan(
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    color: MyApp.of(context).isDarkMode()
-                        ? darkNeutral900
-                        : lightNeutral850,
-                  ),
                   children: <TextSpan>[
                     TextSpan(
                         text:
                             "${(workout.secondsTraining / 60).floor()}:${(workout.secondsTraining % 60).toString().padLeft(2, '0')} ",
-                        style: const TextStyle(fontWeight: FontWeight.bold)),
-                    TextSpan(text: AppLocalizations.of(context)!.training),
+                        style: body2Bold(context)),
+                    TextSpan(
+                        text: AppLocalizations.of(context)!.training,
+                        style: body2(context)),
                   ],
                 ),
               ),
               const SizedBox(width: 40),
               RichText(
                 text: TextSpan(
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    color: MyApp.of(context).isDarkMode()
-                        ? darkNeutral900
-                        : lightNeutral850,
-                  ),
                   children: <TextSpan>[
                     TextSpan(
                         text:
                             "${(workout.secondsPause / 60).floor()}:${(workout.secondsPause % 60).toString().padLeft(2, '0')} ",
-                        style: const TextStyle(fontWeight: FontWeight.bold)),
-                    TextSpan(text: AppLocalizations.of(context)!.pause),
+                        style: body2Bold(context)),
+                    TextSpan(
+                        text: AppLocalizations.of(context)!.pause,
+                        style: body2(context)),
                   ],
                 ),
               ),
               const SizedBox(width: 40),
               RichText(
                 text: TextSpan(
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    color: MyApp.of(context).isDarkMode()
-                        ? darkNeutral900
-                        : lightNeutral850,
-                  ),
                   children: <TextSpan>[
                     TextSpan(
                         text: workout.sets.toString() + ' ',
-                        style: const TextStyle(fontWeight: FontWeight.bold)),
-                    TextSpan(text: AppLocalizations.of(context)!.sets),
+                        style: body2Bold(context)),
+                    TextSpan(
+                        text: AppLocalizations.of(context)!.sets,
+                        style: body2(context)),
                   ],
                 ),
               ),
@@ -137,7 +118,11 @@ class WorkoutTile extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   maximumSize: const Size(300, 50),
                 ),
-                child: Text(AppLocalizations.of(context)!.start_workout)),
+                child: Text(AppLocalizations.of(context)!.start_workout,
+                    style: body1Bold(context).copyWith(
+                        color: MyApp.of(context).isDarkMode()
+                            ? darkNeutral50
+                            : lightNeutral50))),
           )
         ],
       ),

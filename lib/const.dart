@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'main.dart';
+
 // L - lightNeutral
 const lightNeutral0 = Color(0xffFCFCFC);
 const lightNeutral50 = Color(0xffF5F5F5);
@@ -101,44 +103,85 @@ const darkError800 = Color(0xff99423A);
 const darkError900 = Color(0xff7F3D37);
 
 // headingFonts
-const TextStyle heading1 = TextStyle(fontSize: 26);
-const TextStyle heading1Bold =
-    TextStyle(fontSize: 26, fontWeight: FontWeight.bold);
-const TextStyle heading2Bold =
-    TextStyle(fontSize: 24, fontWeight: FontWeight.bold);
-const TextStyle heading3Bold =
-    TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
+TextStyle heading1(context) => TextStyle(
+    fontSize: 26,
+    color: MyApp.of(context).isDarkMode() ? darkNeutral900 : lightNeutral900);
+TextStyle heading1Bold(context) => TextStyle(
+    fontSize: 26,
+    fontWeight: FontWeight.bold,
+    color: MyApp.of(context).isDarkMode() ? darkNeutral900 : lightNeutral900);
+TextStyle heading2Bold(context) => TextStyle(
+    fontSize: 24,
+    fontWeight: FontWeight.bold,
+    color: MyApp.of(context).isDarkMode() ? darkNeutral900 : lightNeutral900);
+TextStyle heading3Bold(context) => TextStyle(
+    fontSize: 22,
+    fontWeight: FontWeight.bold,
+    color: MyApp.of(context).isDarkMode() ? darkNeutral900 : lightNeutral900);
 
 // bodyFonts
-const TextStyle body0Bold =
-    TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
-const TextStyle body1 = TextStyle(fontSize: 16);
-const TextStyle body1Bold =
-    TextStyle(fontSize: 16, fontWeight: FontWeight.bold);
-const TextStyle body1Underlined =
-    TextStyle(fontSize: 16, decoration: TextDecoration.underline);
-const TextStyle body2 = TextStyle(
-  fontSize: 14,
-);
-const TextStyle body2Bold =
-    TextStyle(fontSize: 14, fontWeight: FontWeight.bold);
-const TextStyle body2Underlined =
-    TextStyle(fontSize: 14, decoration: TextDecoration.underline);
-const TextStyle body3 = TextStyle(
-  fontSize: 12,
-);
-const TextStyle body3Bold =
-    TextStyle(fontSize: 12, fontWeight: FontWeight.bold);
+TextStyle body0Bold(context) => TextStyle(
+    fontSize: 20,
+    color: MyApp.of(context).isDarkMode() ? darkNeutral900 : lightNeutral850,
+    fontWeight: FontWeight.bold);
+TextStyle body1(context) => TextStyle(
+      fontSize: 16,
+      color: MyApp.of(context).isDarkMode() ? darkNeutral900 : lightNeutral850,
+    );
+
+TextStyle body1Bold(context) => TextStyle(
+    fontSize: 16,
+    color: MyApp.of(context).isDarkMode() ? darkNeutral900 : lightNeutral850,
+    fontWeight: FontWeight.bold);
+TextStyle body1Underlined(context) => TextStyle(
+    fontSize: 16,
+    color: MyApp.of(context).isDarkMode() ? darkNeutral900 : lightNeutral850,
+    decoration: TextDecoration.underline);
+TextStyle body1BoldUnderlined(context) => const TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+    color: Color(0xff653200),
+    decoration: TextDecoration.underline);
+TextStyle body2(context) => TextStyle(
+      fontSize: 14,
+      color: MyApp.of(context).isDarkMode() ? darkNeutral900 : lightNeutral850,
+    );
+TextStyle body2Bold(context) => TextStyle(
+    fontSize: 14,
+    color: MyApp.of(context).isDarkMode() ? darkNeutral900 : lightNeutral850,
+    fontWeight: FontWeight.bold);
+TextStyle body2Underlined(context) => TextStyle(
+    fontSize: 14,
+    color: MyApp.of(context).isDarkMode() ? darkNeutral900 : lightNeutral850,
+    decoration: TextDecoration.underline);
+TextStyle body3(context) => TextStyle(
+      fontSize: 12,
+      color: MyApp.of(context).isDarkMode() ? darkNeutral900 : lightNeutral850,
+    );
+TextStyle body3Bold(context) => TextStyle(
+    fontSize: 12,
+    color: MyApp.of(context).isDarkMode() ? darkNeutral900 : lightNeutral850,
+    fontWeight: FontWeight.bold);
 
 // footerFonts
-const TextStyle footer = TextStyle(
-  fontSize: 12,
-);
-const TextStyle footerBold =
-    TextStyle(fontSize: 12, fontWeight: FontWeight.bold);
+TextStyle footer(context) => TextStyle(
+    fontSize: 12,
+    color: MyApp.of(context).isDarkMode() ? darkNeutral500 : lightNeutral300);
+TextStyle footerBold(context) => TextStyle(
+    fontSize: 12,
+    color: MyApp.of(context).isDarkMode() ? darkNeutral500 : lightNeutral300,
+    fontWeight: FontWeight.bold);
 
 // displayFonts
-const TextStyle display1 =
-    TextStyle(fontSize: 100, fontWeight: FontWeight.bold);
-const TextStyle display2 = TextStyle(fontSize: 80, fontWeight: FontWeight.bold);
-const TextStyle display3 = TextStyle(fontSize: 32, fontWeight: FontWeight.bold);
+TextStyle display1(context) => TextStyle(
+    fontSize: 100,
+    fontWeight: FontWeight.bold,
+    color: MyApp.of(context).isDarkMode() ? lightNeutral100 : lightNeutral50);
+TextStyle display2(context) => TextStyle(
+    fontSize: 80,
+    fontWeight: FontWeight.bold,
+    color: MyApp.of(context).isDarkMode() ? lightNeutral100 : lightNeutral50);
+TextStyle display3(context) => TextStyle(
+    fontSize: 32,
+    fontWeight: FontWeight.bold,
+    color: MyApp.of(context).isDarkMode() ? lightNeutral100 : lightNeutral50);

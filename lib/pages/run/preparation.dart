@@ -9,6 +9,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:hive/hive.dart';
 
+import '../../main.dart';
 import '../home.dart';
 
 class Preparation extends StatefulWidget {
@@ -86,7 +87,7 @@ class _PreparationState extends State<Preparation> {
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           leading: IconButton(
-              icon: const Icon(TablerIcons.x),
+              icon: const Icon(TablerIcons.x, color: Color(0xffFAEFDC)),
               onPressed: () {
                 player.dispose();
                 timer.cancel();
@@ -116,27 +117,19 @@ class _PreparationState extends State<Preparation> {
                   children: [
                     Text(
                       counter.toString(),
-                      style: const TextStyle(
-                          fontSize: 80,
-                          color: lightNeutral50,
-                          fontWeight: FontWeight.bold),
+                      style: display2(context),
                     ),
                     Text(AppLocalizations.of(context)!.run_preparing,
-                        style: const TextStyle(
-                            fontSize: 26,
-                            color: lightNeutral50,
-                            fontWeight: FontWeight.bold)),
+                        style: heading1Bold(context).copyWith(
+                            color: MyApp.of(context).isDarkMode()
+                                ? lightNeutral100
+                                : lightNeutral50)),
                   ],
                 ),
               ),
               RichText(
                 text: TextSpan(
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: Color(0xff653200),
-                      decoration: TextDecoration.underline,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: body1BoldUnderlined(context),
                     text: AppLocalizations.of(context)!.run_skip,
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {

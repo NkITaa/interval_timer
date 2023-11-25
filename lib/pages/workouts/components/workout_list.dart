@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:interval_timer/const.dart';
 import 'package:interval_timer/pages/workouts/components/workout_tile.dart';
 import 'package:hive/hive.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
 import '../../../components/dialogs.dart';
+import '../../../main.dart';
 
 class WorkoutList extends StatelessWidget {
   final Function setListState;
@@ -28,11 +30,8 @@ class WorkoutList extends StatelessWidget {
               const SizedBox(
                 height: 12,
               ),
-              Text(
-                AppLocalizations.of(context)!.workouts_search_no_results_one,
-                style:
-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
+              Text(AppLocalizations.of(context)!.workouts_search_no_results_one,
+                  style: body1Bold(context)),
               Padding(
                 padding: const EdgeInsets.only(
                   left: 24,
@@ -40,12 +39,10 @@ class WorkoutList extends StatelessWidget {
                   top: 8,
                 ),
                 child: Text(
-                  textAlign: TextAlign.center,
-                  AppLocalizations.of(context)!.workouts_search_no_results_two,
-                  style: const TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
+                    textAlign: TextAlign.center,
+                    AppLocalizations.of(context)!
+                        .workouts_search_no_results_two,
+                    style: body1(context)),
               ),
               const SizedBox(
                 height: 24,
@@ -64,7 +61,11 @@ class WorkoutList extends StatelessWidget {
                                 context, setListState),
                       );
                     },
-                    child: Text(AppLocalizations.of(context)!.workouts_create)),
+                    child: Text(AppLocalizations.of(context)!.workouts_create,
+                        style: body1Bold(context).copyWith(
+                            color: MyApp.of(context).isDarkMode()
+                                ? darkNeutral50
+                                : lightNeutral50))),
               )
             ],
           )

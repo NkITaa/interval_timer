@@ -28,21 +28,36 @@ class _WorkoutSearchBarState extends State<WorkoutSearchBar> {
     return Padding(
       padding: const EdgeInsets.only(top: 20.0, bottom: 32.0),
       child: SearchAnchor(
+        viewSurfaceTintColor: Colors.transparent,
         searchController: controller,
+        headerHintStyle: body2(context).copyWith(
+            color: MyApp.of(context).isDarkMode()
+                ? darkNeutral700
+                : lightNeutral700),
         viewHintText: AppLocalizations.of(context)!.workouts_search,
         viewBackgroundColor:
             MyApp.of(context).isDarkMode() ? darkNeutral0 : lightNeutral100,
         builder: (context, controller) {
           return SearchBar(
+            leading: Icon(
+              Icons.search,
+              color: MyApp.of(context).isDarkMode()
+                  ? darkNeutral850
+                  : lightNeutral700,
+            ),
             hintText: AppLocalizations.of(context)!.workouts_search,
+            hintStyle: MaterialStateProperty.all<TextStyle>(body2(context)
+                .copyWith(
+                    color: MyApp.of(context).isDarkMode()
+                        ? darkNeutral700
+                        : lightNeutral700)),
+            backgroundColor: MaterialStateProperty.all<Color>(
+                MyApp.of(context).isDarkMode()
+                    ? darkNeutral100
+                    : lightNeutral0),
+            surfaceTintColor:
+                MaterialStateProperty.all<Color>(Colors.transparent),
             controller: controller,
-            trailing: [
-              IconButton(
-                  onPressed: () {
-                    controller.clear();
-                  },
-                  icon: const Icon(Icons.close))
-            ],
             onTap: () {
               controller.openView();
             },

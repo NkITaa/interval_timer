@@ -8,6 +8,7 @@ import '../../components/dialogs.dart';
 import '../../const.dart';
 import '../../main.dart';
 import 'components/settins_page.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -17,6 +18,18 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  String? version;
+
+  @override
+  void initState() {
+    super.initState();
+    PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
+      setState(() {
+        version = packageInfo.version;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -151,6 +164,7 @@ class _ProfileState extends State<Profile> {
                   ),
                 ],
               ),
+              Text(version ?? ''),
             ],
           ),
         ),

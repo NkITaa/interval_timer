@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
 import 'package:interval_timer/const.dart';
+import 'package:interval_timer/main.dart';
 import 'package:interval_timer/pages/home.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
@@ -50,9 +51,11 @@ class _CongratsState extends State<Congrats> {
               IconButton(
                 onPressed: () => controller.play(),
                 iconSize: 64,
-                icon: const Icon(
+                icon: Icon(
                   TablerIcons.trophy,
-                  color: lightNeutral700,
+                  color: MyApp.of(context).isDarkMode()
+                      ? darkNeutral850
+                      : lightNeutral700,
                 ),
               ),
               const SizedBox(
@@ -60,12 +63,11 @@ class _CongratsState extends State<Congrats> {
               ),
               Text(
                 AppLocalizations.of(context)!.run_finish_one,
-                style:
-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: body1Bold(context),
               ),
               Text(
                 AppLocalizations.of(context)!.run_finish_two,
-                style: const TextStyle(fontSize: 16),
+                style: body1(context),
               ),
               const SizedBox(
                 height: 48,
@@ -78,7 +80,11 @@ class _CongratsState extends State<Congrats> {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => const Home(screenIndex: 1)));
                   },
-                  child: Text(AppLocalizations.of(context)!.run_home),
+                  child: Text(AppLocalizations.of(context)!.run_home,
+                      style: body1(context).copyWith(
+                          color: MyApp.of(context).isDarkMode()
+                              ? darkNeutral50
+                              : lightNeutral50)),
                 ),
               ),
             ],
