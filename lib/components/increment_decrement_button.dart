@@ -38,28 +38,20 @@ class IncrementDecrementButton extends StatelessWidget {
               onPressed: () {
                 update(type, false);
               },
-              icon: const Icon(TablerIcons.minus)),
+              icon: Icon(
+                TablerIcons.minus,
+                color: MyApp.of(context).isDarkMode()
+                    ? darkNeutral850
+                    : lightNeutral700,
+              )),
           SizedBox(
             width: 100,
             child: Column(
               children: [
-                Text(
-                  type,
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    color: MyApp.of(context).isDarkMode()
-                        ? darkNeutral900
-                        : lightNeutral900,
-                  ),
-                ),
+                Text(type, style: body1Bold(context)),
                 RichText(
                   text: TextSpan(
-                    style: TextStyle(
-                      fontSize: 14.0,
-                      color: MyApp.of(context).isDarkMode()
-                          ? darkNeutral900
-                          : lightNeutral900,
-                    ),
+                    style: heading3Bold(context),
                     text: type != "set"
                         ? minutes.toString().substring(2, 7)
                         : sets.toString(),
@@ -79,7 +71,12 @@ class IncrementDecrementButton extends StatelessWidget {
               onPressed: () {
                 update(type, true);
               },
-              icon: const Icon(TablerIcons.plus)),
+              icon: Icon(
+                TablerIcons.plus,
+                color: MyApp.of(context).isDarkMode()
+                    ? darkNeutral850
+                    : lightNeutral700,
+              )),
         ],
       ),
     );

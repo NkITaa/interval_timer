@@ -13,7 +13,10 @@ class CustomTextbox extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label),
+        Text(
+          label,
+          style: body1(context),
+        ),
         Padding(
           padding: const EdgeInsets.only(top: 8.0, bottom: 16.0),
           child: TextFormField(

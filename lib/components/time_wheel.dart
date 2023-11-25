@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:interval_timer/const.dart';
 // ignore: depend_on_referenced_packages
 import 'package:scroll_snap_list/scroll_snap_list.dart';
 
@@ -50,7 +51,7 @@ class TimeWheel extends StatelessWidget {
               alignment: Alignment.center,
               child: Text(
                 index.toString(),
-                style: const TextStyle(fontSize: 32),
+                style: heading3Bold(context).copyWith(fontSize: 32),
               ),
             ),
             initialIndex: value.toDouble(),

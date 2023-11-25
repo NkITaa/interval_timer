@@ -27,6 +27,12 @@ class _BottomNavBarState extends State<BottomNavBar> {
     return ScrollToHideWidget(
       controller: widget.controller,
       child: BottomNavigationBar(
+        onTap: (index) {
+          widget.onTabTapped(index);
+          setState(() {});
+        },
+        unselectedLabelStyle: footerBold(context),
+        selectedLabelStyle: footerBold(context),
         selectedIconTheme: MyApp.of(context).isDarkMode()
             ? const IconThemeData(color: darkNeutral850)
             : const IconThemeData(color: lightNeutral850),
@@ -40,31 +46,27 @@ class _BottomNavBarState extends State<BottomNavBar> {
         currentIndex: widget.screenIndex,
         items: [
           BottomNavigationBarItem(
-              icon: IconButton(
-                  visualDensity: VisualDensity.compact,
-                  onPressed: () => {widget.onTabTapped(0), setState(() {})},
-                  icon: const Icon(
-                    TablerIcons.stretching,
-                  )),
+              icon: const Padding(
+                padding: EdgeInsets.only(top: 12.0),
+                child: Icon(
+                  TablerIcons.stretching,
+                ),
+              ),
               label: AppLocalizations.of(context)!.title_workouts),
           BottomNavigationBarItem(
-              icon: IconButton(
-                  visualDensity: VisualDensity.compact,
-                  onPressed: () => {widget.onTabTapped(1), setState(() {})},
-                  icon: const Icon(
-                    TablerIcons.player_play,
-                  )),
+              icon: const Padding(
+                padding: EdgeInsets.only(top: 12.0),
+                child: Icon(
+                  TablerIcons.player_play,
+                ),
+              ),
               label: AppLocalizations.of(context)!.title_jump_in),
           BottomNavigationBarItem(
-            icon: Column(
-              children: [
-                IconButton(
-                    visualDensity: VisualDensity.compact,
-                    onPressed: () => widget.onTabTapped(2),
-                    icon: const Icon(
-                      TablerIcons.user_circle,
-                    )),
-              ],
+            icon: const Padding(
+              padding: EdgeInsets.only(top: 12.0),
+              child: Icon(
+                TablerIcons.user_circle,
+              ),
             ),
             label: AppLocalizations.of(context)!.title_profile,
           ),

@@ -29,7 +29,7 @@
     "workouts_delete_ok": "Delete",
     "workouts_add": "Add Workout",
     "workouts_duration": "Workout Duration",
-    "workouts_name": "Label",
+    "workouts_name": "Name",
 
     "title_jump_in": "Quick Start",
     "jump_in_total_time": "Total Time",
