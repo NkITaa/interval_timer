@@ -29,20 +29,21 @@ class Preparation extends StatefulWidget {
 
 class _PreparationState extends State<Preparation> {
   int counter = 9;
+  bool isPaused = false;
   final player = AudioPlayer();
-  bool isStoped = false;
+
   String sound = Hive.box("settings").get("sound");
 
   late Timer timer = Timer.periodic(const Duration(seconds: 1), (timer) {
     if (counter == 0) {
       next();
     }
-    if (counter > 0) {
+    if (counter > 0 && !isPaused) {
       setState(() {
         counter--;
       });
     }
-    if (counter == 3 && sound != "off") {
+    if (counter == 3 && sound != "off" && !isPaused) {
       playAudio();
     }
   });
@@ -72,11 +73,13 @@ class _PreparationState extends State<Preparation> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [Color(0xffFFA24B), Color(0xffEABB2D)],
+          colors: isPaused
+              ? [const Color(0xffA3A3A3), const Color(0xff7C7C7C)]
+              : [Color(0xffFFA24B), Color(0xffEABB2D)],
         ),
       ),
       child: Scaffold(
@@ -93,45 +96,55 @@ class _PreparationState extends State<Preparation> {
                         )));
               }),
         ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            SizedBox(
-              height: 180,
-              width: MediaQuery.of(context).size.width,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    counter.toString(),
-                    style: const TextStyle(
-                        fontSize: 80,
-                        color: lightNeutral50,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  Text(AppLocalizations.of(context)!.run_preparing,
+        body: InkWell(
+          onTap: () {
+            setState(() {
+              isPaused = !isPaused;
+            });
+            if (counter <= 3 && isPaused) {
+              player.pause();
+            }
+          },
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              SizedBox(
+                height: 180,
+                width: MediaQuery.of(context).size.width,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      counter.toString(),
                       style: const TextStyle(
-                          fontSize: 26,
+                          fontSize: 80,
                           color: lightNeutral50,
-                          fontWeight: FontWeight.bold)),
-                ],
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Text(AppLocalizations.of(context)!.run_preparing,
+                        style: const TextStyle(
+                            fontSize: 26,
+                            color: lightNeutral50,
+                            fontWeight: FontWeight.bold)),
+                  ],
+                ),
               ),
-            ),
-            RichText(
-              text: TextSpan(
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Color(0xff653200),
-                    decoration: TextDecoration.underline,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  text: AppLocalizations.of(context)!.run_skip,
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      next();
-                    }),
-            ),
-          ],
+              RichText(
+                text: TextSpan(
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Color(0xff653200),
+                      decoration: TextDecoration.underline,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    text: AppLocalizations.of(context)!.run_skip,
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        next();
+                      }),
+              ),
+            ],
+          ),
         ),
       ),
     );

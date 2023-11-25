@@ -145,115 +145,127 @@ class _RunState extends State<Run> {
         body: SizedBox(
           width: double.infinity,
           height: double.infinity,
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 82.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                CircularCountDownTimer(
-                  controller: controller,
-                  isReverse: true,
-                  duration: widget.time[widget.indexTime],
-                  initialDuration: 0,
-                  onComplete: () {
-                    next();
-                  },
-                  width: 320,
-                  height: 300,
-                  strokeCap: StrokeCap.round,
-                  ringColor: Colors.white.withOpacity(0.5),
-                  fillColor: Colors.white,
-                  strokeWidth: 16.0,
-                  timeFormatterFunction: (defaultFormatterFunction, duration) {
-                    if (duration.inSeconds < 60) {
-                      return "0:${duration.inSeconds.toString().padLeft(2, '0')}";
-                    } else {
-                      return Function.apply(
-                          defaultFormatterFunction, [duration]);
-                    }
-                  },
-                  subText: Text(
-                    controller.isPaused
-                        ? AppLocalizations.of(context)!.paused
-                        : widget.indexTime == 0
-                            ? AppLocalizations.of(context)!.training
-                            : AppLocalizations.of(context)!.pause,
-                    style: const TextStyle(fontSize: 30, color: lightNeutral50),
+          child: InkWell(
+            onTap: () {
+              if (controller.isPaused) {
+                controller.resume();
+              } else {
+                controller.pause();
+              }
+              setState(() {});
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 82.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  CircularCountDownTimer(
+                    controller: controller,
+                    isReverse: true,
+                    duration: widget.time[widget.indexTime],
+                    initialDuration: 0,
+                    onComplete: () {
+                      next();
+                    },
+                    width: 320,
+                    height: 300,
+                    strokeCap: StrokeCap.round,
+                    ringColor: Colors.white.withOpacity(0.5),
+                    fillColor: Colors.white,
+                    strokeWidth: 16.0,
+                    timeFormatterFunction:
+                        (defaultFormatterFunction, duration) {
+                      if (duration.inSeconds < 60) {
+                        return "0:${duration.inSeconds.toString().padLeft(2, '0')}";
+                      } else {
+                        return Function.apply(
+                            defaultFormatterFunction, [duration]);
+                      }
+                    },
+                    subText: Text(
+                      controller.isPaused
+                          ? AppLocalizations.of(context)!.paused
+                          : widget.indexTime == 0
+                              ? AppLocalizations.of(context)!.training
+                              : AppLocalizations.of(context)!.pause,
+                      style:
+                          const TextStyle(fontSize: 30, color: lightNeutral50),
+                    ),
+                    textStyle: const TextStyle(
+                        fontSize: 80,
+                        color: lightNeutral50,
+                        fontWeight: FontWeight.bold),
                   ),
-                  textStyle: const TextStyle(
-                      fontSize: 80,
-                      color: lightNeutral50,
-                      fontWeight: FontWeight.bold),
-                ),
-                Column(
-                  children: [
-                    Text(
-                        "${((remainingPlus + counter) / 60).floor()}:${((remainingPlus + counter) % 60).toString().padLeft(2, '0')}",
-                        style: const TextStyle(
-                            fontSize: 20,
-                            color: lightNeutral50,
-                            fontWeight: FontWeight.bold)),
-                    Text(AppLocalizations.of(context)!.run_remaining,
-                        style: const TextStyle(
-                            fontSize: 20,
-                            color: lightNeutral50,
-                            fontWeight: FontWeight.bold)),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    IconButton(
-                        color: lightNeutral50,
-                        onPressed: () {
-                          back();
-                        },
-                        iconSize: 50,
-                        icon: const Icon(
-                          TablerIcons.chevron_left,
-                        )),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    CircleAvatar(
-                      radius: 50,
-                      backgroundColor: Colors.white,
-                      child: IconButton(
-                          iconSize: 60,
-                          color: controller.isPaused
-                              ? const Color(0xff7C7C7C)
-                              : widget.indexTime == 0
-                                  ? const Color(0xffFA5F54)
-                                  : const Color(0xff7189E1),
+                  Column(
+                    children: [
+                      Text(
+                          "${((remainingPlus + counter) / 60).floor()}:${((remainingPlus + counter) % 60).toString().padLeft(2, '0')}",
+                          style: const TextStyle(
+                              fontSize: 20,
+                              color: lightNeutral50,
+                              fontWeight: FontWeight.bold)),
+                      Text(AppLocalizations.of(context)!.run_remaining,
+                          style: const TextStyle(
+                              fontSize: 20,
+                              color: lightNeutral50,
+                              fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                          color: lightNeutral50,
                           onPressed: () {
-                            if (controller.isPaused) {
-                              controller.resume();
-                            } else {
-                              controller.pause();
-                            }
-                            setState(() {});
+                            back();
                           },
-                          icon: Icon(
-                            controller.isPaused
-                                ? TablerIcons.player_play_filled
-                                : TablerIcons.player_pause_filled,
+                          iconSize: 50,
+                          icon: const Icon(
+                            TablerIcons.chevron_left,
                           )),
-                    ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    IconButton(
-                        color: lightNeutral50,
-                        onPressed: () {
-                          next();
-                        },
-                        iconSize: 50,
-                        icon: const Icon(
-                          TablerIcons.chevron_right,
-                        )),
-                  ],
-                ),
-              ],
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      CircleAvatar(
+                        radius: 50,
+                        backgroundColor: Colors.white,
+                        child: IconButton(
+                            iconSize: 60,
+                            color: controller.isPaused
+                                ? const Color(0xff7C7C7C)
+                                : widget.indexTime == 0
+                                    ? const Color(0xffFA5F54)
+                                    : const Color(0xff7189E1),
+                            onPressed: () {
+                              if (controller.isPaused) {
+                                controller.resume();
+                              } else {
+                                controller.pause();
+                              }
+                              setState(() {});
+                            },
+                            icon: Icon(
+                              controller.isPaused
+                                  ? TablerIcons.player_play_filled
+                                  : TablerIcons.player_pause_filled,
+                            )),
+                      ),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      IconButton(
+                          color: lightNeutral50,
+                          onPressed: () {
+                            next();
+                          },
+                          iconSize: 50,
+                          icon: const Icon(
+                            TablerIcons.chevron_right,
+                          )),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
