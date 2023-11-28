@@ -29,6 +29,7 @@ class CustomTextbox extends StatelessWidget {
             onTapOutside: (PointerDownEvent event) {
               FocusScope.of(context).unfocus();
             },
+            style: body1(context),
             cursorColor: lightNeutral300,
             controller: nameController,
             decoration: const InputDecoration(

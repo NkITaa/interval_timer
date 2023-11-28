@@ -117,7 +117,7 @@ class Dialogs {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 child: Text(
-                  "${AppLocalizations.of(context)!.workouts_duration} ${workoutTime.toString().substring(2, 7)}",
+                  "${AppLocalizations.of(context)!.workouts_duration} ${(workoutTime.inSeconds / 60).floor()}:${(workoutTime.inSeconds % 60).toString().padLeft(2, '0')}",
                   style: body1(context),
                 ),
               ),
@@ -263,7 +263,7 @@ class Dialogs {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 child: Text(
-                  "${AppLocalizations.of(context)!.workouts_duration} ${workoutTime.toString().substring(2, 7)}",
+                  "${AppLocalizations.of(context)!.workouts_duration} ${(workoutTime.inSeconds / 60).floor()}:${(workoutTime.inSeconds % 60).toString().padLeft(2, '0')}",
                   style: body1(context),
                 ),
               ),
@@ -602,7 +602,8 @@ class Dialogs {
               ],
             ),
             ListTile(
-              title: const Text('Deutsch'),
+              title: Text(AppLocalizations.of(context)!.german,
+                  style: body1(context)),
               trailing: Radio(
                 activeColor: MyApp.of(context).isDarkMode()
                     ? darkNeutral850
@@ -616,7 +617,8 @@ class Dialogs {
               ),
             ),
             ListTile(
-              title: const Text('English'),
+              title: Text(AppLocalizations.of(context)!.english,
+                  style: body1(context)),
               trailing: Radio(
                 activeColor: MyApp.of(context).isDarkMode()
                     ? darkNeutral850
