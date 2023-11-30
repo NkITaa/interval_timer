@@ -9,7 +9,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
 class Congrats extends StatefulWidget {
-  const Congrats({super.key});
+  final int duration;
+  const Congrats({super.key, required this.duration});
 
   @override
   State<Congrats> createState() => _CongratsState();
@@ -66,7 +67,7 @@ class _CongratsState extends State<Congrats> {
                 style: body1Bold(context),
               ),
               Text(
-                AppLocalizations.of(context)!.run_finish_two,
+                "${AppLocalizations.of(context)!.run_finish_two}${(widget.duration / 60).floor()}:${(widget.duration % 60).toString().padLeft(2, '0')} ",
                 style: body1(context),
               ),
               const SizedBox(

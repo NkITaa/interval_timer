@@ -18,6 +18,7 @@ class Run extends StatefulWidget {
   final int sets;
   final int currentSet;
   final int indexTime;
+  final int duration;
 
   const Run({
     super.key,
@@ -25,6 +26,7 @@ class Run extends StatefulWidget {
     required this.sets,
     required this.currentSet,
     required this.indexTime,
+    required this.duration,
   });
 
   @override
@@ -35,7 +37,9 @@ class _RunState extends State<Run> {
   final CountDownController controller = CountDownController();
   final player = AudioPlayer();
   String sound = Hive.box("settings").get("sound");
+  late int duration = widget.duration;
   late Timer timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+    duration++;
     if (counter > 0 && !controller.isPaused) {
       setState(() {
         counter--;
@@ -59,11 +63,14 @@ class _RunState extends State<Run> {
   next() {
     player.dispose();
     if (widget.indexTime == 1 && widget.sets == widget.currentSet) {
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => const Congrats()));
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => Congrats(
+                duration: duration,
+              )));
     } else {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => Run(
+                duration: duration,
                 time: widget.time,
                 sets: widget.sets,
                 currentSet: widget.indexTime == 1
@@ -85,6 +92,7 @@ class _RunState extends State<Run> {
     } else {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => Run(
+                duration: duration,
                 time: widget.time,
                 sets: widget.sets,
                 currentSet: widget.indexTime == 0
