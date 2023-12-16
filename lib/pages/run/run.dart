@@ -1,13 +1,11 @@
 import 'dart:async';
-
+import 'dart:isolate';
 import 'package:flutter/material.dart';
 import 'package:interval_timer/const.dart';
 import 'package:interval_timer/main.dart';
 import 'package:interval_timer/pages/run/preparation.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:audioplayers/audioplayers.dart';
-import 'package:hive/hive.dart';
 
 import '../../components/dialogs.dart';
 import 'circular_countdown/circular_countdown.dart';
@@ -19,9 +17,13 @@ class Run extends StatefulWidget {
   final int currentSet;
   final int indexTime;
   final int duration;
+  final ReceivePort receivePort;
+  final SendPort sendPort;
 
   const Run({
     super.key,
+    required this.receivePort,
+    required this.sendPort,
     required this.time,
     required this.sets,
     required this.currentSet,
@@ -33,20 +35,21 @@ class Run extends StatefulWidget {
   State<Run> createState() => _RunState();
 }
 
-class _RunState extends State<Run> {
+class _RunState extends State<Run> with WidgetsBindingObserver {
   final CountDownController controller = CountDownController();
-  final player = AudioPlayer();
-  String sound = Hive.box("settings").get("sound");
+
   late int duration = widget.duration;
+  late int currentSet = widget.currentSet;
+  late int indexTime = widget.indexTime;
+
   late Timer timer = Timer.periodic(const Duration(seconds: 1), (timer) {
     duration++;
     if (counter > 0 && !controller.isPaused) {
-      setState(() {
-        counter--;
-      });
+      counter--;
+      setState(() {});
     }
-    if (counter == 3 && sound != "off") {
-      playAudio();
+    if (counter == 0) {
+      next();
     }
   });
 
@@ -61,28 +64,40 @@ class _RunState extends State<Run> {
           widget.time[1]);
 
   next() {
-    player.dispose();
-    if (widget.indexTime == 1 && widget.sets == widget.currentSet) {
+    if (indexTime == 1 && widget.sets == currentSet) {
+      widget.sendPort.send({'stop': true});
+      timer.cancel();
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => Congrats(
                 duration: duration,
               )));
     } else {
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => Run(
-                duration: duration,
-                time: widget.time,
-                sets: widget.sets,
-                currentSet: widget.indexTime == 1
-                    ? widget.currentSet + 1
-                    : widget.currentSet,
-                indexTime: widget.indexTime == 1 ? 0 : 1,
-              )));
+      if (indexTime == 1) {
+        ++currentSet;
+      }
+      indexTime = indexTime == 1 ? 0 : 1;
+      counter = widget.time[indexTime] - 1;
+      widget.sendPort.send({
+        'indexTime': indexTime,
+        'counter': counter,
+        "currentSet": currentSet
+      });
+      controller.restart(duration: counter);
+      remainingPlus = indexTime == 0
+          ? (((widget.time[0] + widget.time[1]) *
+                  (widget.sets - currentSet + 1)) -
+              widget.time[0])
+          : (((widget.time[0] + widget.time[1]) *
+                  (widget.sets - currentSet + 1)) -
+              widget.time[0] -
+              widget.time[1]);
+      setState(() {});
     }
   }
 
   back() {
-    if (widget.indexTime == 0 && widget.currentSet == 1) {
+    if (indexTime == 0 && currentSet == 1) {
+      widget.sendPort.send({'stop': true});
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => Preparation(
               time: widget.time,
@@ -90,27 +105,80 @@ class _RunState extends State<Run> {
               currentSet: 1,
               indexTime: 0)));
     } else {
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => Run(
-                duration: duration,
-                time: widget.time,
-                sets: widget.sets,
-                currentSet: widget.indexTime == 0
-                    ? widget.currentSet - 1
-                    : widget.currentSet,
-                indexTime: widget.indexTime == 0 ? 1 : 0,
-              )));
+      if (indexTime == 0) {
+        --currentSet;
+      }
+      indexTime = indexTime == 0 ? 1 : 0;
+      counter = widget.time[indexTime] - 1;
+      widget.sendPort.send({
+        'indexTime': indexTime,
+        'counter': counter,
+        "currentSet": currentSet
+      });
+      controller.restart(duration: counter);
+      remainingPlus = indexTime == 0
+          ? (((widget.time[0] + widget.time[1]) *
+                  (widget.sets - currentSet + 1)) -
+              widget.time[0])
+          : (((widget.time[0] + widget.time[1]) *
+                  (widget.sets - currentSet + 1)) -
+              widget.time[0] -
+              widget.time[1]);
+      setState(() {});
     }
-  }
-
-  playAudio() async {
-    await player.play(AssetSource(sound));
   }
 
   @override
   void initState() {
     super.initState();
     timer;
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  dispose() {
+    timer.cancel();
+    widget.sendPort.send({'stop': true});
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print("AppLifecycleState: $state");
+
+    if (state == AppLifecycleState.paused) {
+      print("paused");
+    }
+
+    if (state == AppLifecycleState.inactive) {
+      print("inactive");
+    }
+
+    if (state == AppLifecycleState.resumed) {
+      print("object");
+
+      widget.sendPort.send({'resumed': true});
+
+      widget.receivePort.listen((message) {
+        if (message['duration'] != null) {
+          duration = message['duration'];
+          currentSet = message['currentSet'];
+          indexTime = message['indexTime'];
+          counter = message['counter'];
+          controller.restart(duration: counter);
+          remainingPlus = indexTime == 0
+              ? (((widget.time[0] + widget.time[1]) *
+                      (widget.sets - currentSet + 1)) -
+                  widget.time[0])
+              : (((widget.time[0] + widget.time[1]) *
+                      (widget.sets - currentSet + 1)) -
+                  widget.time[0] -
+                  widget.time[1]);
+          setState(() {});
+        }
+      });
+    }
   }
 
   @override
@@ -122,7 +190,7 @@ class _RunState extends State<Run> {
           end: Alignment.bottomCenter,
           colors: controller.isPaused
               ? [const Color(0xffA3A3A3), const Color(0xff7C7C7C)]
-              : widget.indexTime == 0
+              : indexTime == 0
                   ? [const Color(0xffF01D52), const Color(0xffFA5F54)]
                   : [const Color(0xff1373C8), const Color(0xff7189E1)],
         ),
@@ -134,11 +202,13 @@ class _RunState extends State<Run> {
               color: const Color(0xffFADCE3),
               onPressed: () {
                 controller.pause();
-                player.pause();
+                widget.sendPort.send({
+                  'isPaused': true,
+                });
                 showDialog(
                     context: context,
-                    builder: (BuildContext context) =>
-                        Dialogs.buildExitDialog(context, controller, player));
+                    builder: (BuildContext context) => Dialogs.buildExitDialog(
+                        context, timer, controller, widget.sendPort));
               },
               icon: Icon(
                 TablerIcons.x,
@@ -148,7 +218,7 @@ class _RunState extends State<Run> {
               )),
           title: Text(
               AppLocalizations.of(context)!.run_set_from_one +
-                  widget.currentSet.toString() +
+                  currentSet.toString() +
                   AppLocalizations.of(context)!.run_set_from_two +
                   widget.sets.toString(),
               style: heading2Bold(context).copyWith(
@@ -163,8 +233,15 @@ class _RunState extends State<Run> {
             onTap: () {
               if (controller.isPaused) {
                 controller.resume();
+                widget.sendPort.send({
+                  'isPaused': false,
+                });
               } else {
                 controller.pause();
+
+                widget.sendPort.send({
+                  'isPaused': true,
+                });
               }
               setState(() {});
             },
@@ -176,7 +253,7 @@ class _RunState extends State<Run> {
                   CircularCountDownTimer(
                     controller: controller,
                     isReverse: true,
-                    duration: widget.time[widget.indexTime],
+                    duration: widget.time[indexTime],
                     initialDuration: 0,
                     onComplete: () {
                       next();
@@ -201,7 +278,7 @@ class _RunState extends State<Run> {
                     subText: Text(
                       controller.isPaused
                           ? AppLocalizations.of(context)!.paused
-                          : widget.indexTime == 0
+                          : indexTime == 0
                               ? AppLocalizations.of(context)!.training
                               : AppLocalizations.of(context)!.pause,
                       style: heading1Bold(context).copyWith(
@@ -255,14 +332,21 @@ class _RunState extends State<Run> {
                             iconSize: 60,
                             color: controller.isPaused
                                 ? const Color(0xff7C7C7C)
-                                : widget.indexTime == 0
+                                : indexTime == 0
                                     ? const Color(0xffFA5F54)
                                     : const Color(0xff7189E1),
                             onPressed: () {
                               if (controller.isPaused) {
                                 controller.resume();
+
+                                widget.sendPort.send({
+                                  'isPaused': false,
+                                });
                               } else {
                                 controller.pause();
+                                widget.sendPort.send({
+                                  'isPaused': true,
+                                });
                               }
                               setState(() {});
                             },

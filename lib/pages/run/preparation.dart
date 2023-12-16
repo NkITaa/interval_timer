@@ -1,14 +1,18 @@
 import 'dart:async';
+import 'dart:isolate';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:interval_timer/const.dart';
 import 'package:interval_timer/pages/run/run.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:hive/hive.dart';
-
+import '../../lockscreen_controller/isolate.dart';
+import '../../lockscreen_controller/lockscreen_controller.dart';
+import '../../lockscreen_controller/lockscreen_data_model.dart';
 import '../../main.dart';
 import '../home.dart';
 
@@ -35,9 +39,9 @@ class _PreparationState extends State<Preparation> {
 
   String sound = Hive.box("settings").get("sound");
 
-  late Timer timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+  late Timer timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
     if (counter == 0) {
-      next();
+      await next();
     }
     if (counter > 0 && !isPaused) {
       setState(() {
@@ -55,16 +59,32 @@ class _PreparationState extends State<Preparation> {
     timer;
   }
 
+  @override
+  dispose() {
+    super.dispose();
+    player.dispose();
+    timer.cancel();
+  }
+
   playAudio() async {
     await player.play(AssetSource(sound));
   }
 
-  next() {
+  next() async {
     player.dispose();
     timer.cancel();
+    RootIsolateToken rootIsolateToken = RootIsolateToken.instance!;
+    ReceivePort receivePort = ReceivePort();
+    Isolate.spawn(
+        myIsolate, IsolateArgs(rootIsolateToken, receivePort.sendPort));
+
+    SendPort sendPort = await initializeSendPort(receivePort);
+    sendPort.send({'time': widget.time, 'sets': widget.sets});
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => Run(
               duration: 0,
+              receivePort: receivePort,
+              sendPort: sendPort,
               time: widget.time,
               sets: widget.sets,
               currentSet: widget.currentSet,
@@ -133,8 +153,8 @@ class _PreparationState extends State<Preparation> {
                     style: body1BoldUnderlined(context),
                     text: AppLocalizations.of(context)!.run_skip,
                     recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        next();
+                      ..onTap = () async {
+                        await next();
                       }),
               ),
             ],

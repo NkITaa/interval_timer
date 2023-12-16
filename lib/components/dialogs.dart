@@ -827,7 +827,7 @@ class Dialogs {
     });
   }
 
-  static Widget buildExitDialog(context, controller, player) {
+  static Widget buildExitDialog(context, timer, controller, sendPort) {
     return AlertDialog(
       surfaceTintColor: Colors.transparent,
       backgroundColor:
@@ -859,6 +859,8 @@ class Dialogs {
                     ),
                   ),
                   onPressed: () {
+                    timer.cancel();
+                    sendPort.send({'stop': true});
                     Navigator.of(context).push(MaterialPageRoute(
                         fullscreenDialog: true,
                         builder: (context) => const Home(screenIndex: 1)));
