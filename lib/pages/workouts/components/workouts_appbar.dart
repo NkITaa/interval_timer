@@ -15,6 +15,7 @@ class WorkoutsAppbar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      surfaceTintColor: Colors.transparent,
       title: Text(AppLocalizations.of(context)!.title_workouts,
           style: heading3Bold(context)),
       automaticallyImplyLeading: false,

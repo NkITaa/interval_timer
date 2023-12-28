@@ -23,7 +23,7 @@ class SettingsBlock extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             color:
-                MyApp.of(context).isDarkMode() ? darkNeutral50 : lightNeutral0,
+                MyApp.of(context).isDarkMode() ? darkNeutral50 : lightNeutral50,
             borderRadius: BorderRadius.circular(16),
           ),
           padding: const EdgeInsets.only(left: 24.0, right: 24),

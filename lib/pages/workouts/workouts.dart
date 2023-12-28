@@ -24,16 +24,18 @@ class _WorkoutsState extends State<Workouts> {
         ),
         body: Container(
             margin: const EdgeInsets.only(left: 20.0, right: 20.0),
-            child: SingleChildScrollView(
-              controller: widget.controller,
-              child: Column(
-                children: [
-                  const WorkoutSearchBar(),
-                  WorkoutList(
-                    setListState: setListState,
+            child: Column(
+              children: [
+                const WorkoutSearchBar(),
+                Expanded(
+                  child: SingleChildScrollView(
+                    controller: widget.controller,
+                    child: WorkoutList(
+                      setListState: setListState,
+                    ),
                   ),
-                ],
-              ),
+                ),
+              ],
             )));
   }
 }

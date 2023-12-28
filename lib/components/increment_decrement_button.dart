@@ -25,6 +25,7 @@ class IncrementDecrementButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 66,
       padding: const EdgeInsets.only(top: 8, bottom: 8, left: 12, right: 12),
       decoration: BoxDecoration(
         color: MyApp.of(context).isDarkMode() ? darkNeutral100 : lightNeutral0,
@@ -48,20 +49,22 @@ class IncrementDecrementButton extends StatelessWidget {
             width: 100,
             child: Column(
               children: [
-                Text(type, style: body1Bold(context)),
-                RichText(
-                  text: TextSpan(
-                    style: heading3Bold(context),
-                    text: type != "set"
-                        ? minutes.toString().substring(2, 7)
-                        : sets.toString(),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () => showDialog(
-                            context: context,
-                            builder: (BuildContext context) =>
-                                Dialogs.buildSetTimesDialog(context, type,
-                                    minutes, otherMinutes, sets, setValue),
-                          ),
+                Expanded(child: Text(type, style: body1Bold(context))),
+                Expanded(
+                  child: RichText(
+                    text: TextSpan(
+                      style: heading3Bold(context),
+                      text: type != "set"
+                          ? minutes.toString().substring(2, 7)
+                          : sets.toString(),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () => showDialog(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  Dialogs.buildSetTimesDialog(context, type,
+                                      minutes, otherMinutes, sets, setValue),
+                            ),
+                    ),
                   ),
                 ),
               ],

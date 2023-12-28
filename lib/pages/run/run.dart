@@ -145,6 +145,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
               color: const Color(0xffFADCE3),
               onPressed: () {
                 controller.pause();
+                setState(() {});
                 showDialog(
                     context: context,
                     builder: (BuildContext context) =>
@@ -166,6 +167,29 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
                       ? lightNeutral100
                       : lightNeutral50)),
           centerTitle: true,
+          actions: [
+            IconButton(
+                color: MyApp.of(context).isDarkMode()
+                    ? lightNeutral100
+                    : lightNeutral50,
+                onPressed: () {
+                  controller.pause();
+                  setState(() {});
+                  showModalBottomSheet(
+                    isScrollControlled: true,
+                    enableDrag: false,
+                    context: context,
+                    builder: (BuildContext context) =>
+                        Dialogs.buildChangeSoundDialog(context, setState),
+                  );
+                },
+                icon: Icon(
+                  TablerIcons.settings,
+                  color: MyApp.of(context).isDarkMode()
+                      ? lightNeutral100
+                      : lightNeutral50,
+                )),
+          ],
         ),
         body: SizedBox(
           width: double.infinity,
