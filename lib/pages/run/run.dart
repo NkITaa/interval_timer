@@ -66,7 +66,6 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
           widget.time[1]);
 
   next() {
-    player.dispose();
     if (indexTime == 1 && widget.sets == currentSet) {
       timer.cancel();
       Navigator.of(context).push(MaterialPageRoute(
