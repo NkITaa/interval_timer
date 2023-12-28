@@ -6,7 +6,8 @@ import 'package:interval_timer/main.dart';
 import 'package:interval_timer/pages/run/preparation.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
+import 'package:audioplayers/audioplayers.dart';
+import 'package:hive/hive.dart';
 import '../../components/dialogs.dart';
 import 'circular_countdown/circular_countdown.dart';
 import 'congrats.dart';
@@ -33,6 +34,8 @@ class Run extends StatefulWidget {
 
 class _RunState extends State<Run> with WidgetsBindingObserver {
   final CountDownController controller = CountDownController();
+  final player = AudioPlayer();
+  String sound = Hive.box("settings").get("sound");
 
   late int duration = widget.duration;
   late int currentSet = widget.currentSet;
@@ -47,6 +50,9 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
     if (counter == 0) {
       next();
     }
+    if (counter == 3) {
+      player.play(AssetSource(sound));
+    }
   });
 
   late int counter = widget.time[widget.indexTime] - 1;
@@ -60,6 +66,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
           widget.time[1]);
 
   next() {
+    player.dispose();
     if (indexTime == 1 && widget.sets == currentSet) {
       timer.cancel();
       Navigator.of(context).push(MaterialPageRoute(
