@@ -10,9 +10,6 @@ import 'package:interval_timer/pages/run/run.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:hive/hive.dart';
-import '../../lockscreen_controller/isolate.dart';
-import '../../lockscreen_controller/lockscreen_controller.dart';
-import '../../lockscreen_controller/lockscreen_data_model.dart';
 import '../../main.dart';
 import '../home.dart';
 
@@ -73,18 +70,9 @@ class _PreparationState extends State<Preparation> {
   next() async {
     player.dispose();
     timer.cancel();
-    RootIsolateToken rootIsolateToken = RootIsolateToken.instance!;
-    ReceivePort receivePort = ReceivePort();
-    Isolate.spawn(
-        myIsolate, IsolateArgs(rootIsolateToken, receivePort.sendPort));
-
-    SendPort sendPort = await initializeSendPort(receivePort);
-    sendPort.send({'time': widget.time, 'sets': widget.sets});
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => Run(
               duration: 0,
-              receivePort: receivePort,
-              sendPort: sendPort,
               time: widget.time,
               sets: widget.sets,
               currentSet: widget.currentSet,

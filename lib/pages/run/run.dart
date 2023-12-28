@@ -17,13 +17,9 @@ class Run extends StatefulWidget {
   final int currentSet;
   final int indexTime;
   final int duration;
-  final ReceivePort receivePort;
-  final SendPort sendPort;
 
   const Run({
     super.key,
-    required this.receivePort,
-    required this.sendPort,
     required this.time,
     required this.sets,
     required this.currentSet,
@@ -65,7 +61,6 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
 
   next() {
     if (indexTime == 1 && widget.sets == currentSet) {
-      widget.sendPort.send({'stop': true});
       timer.cancel();
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => Congrats(
@@ -77,11 +72,6 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
       }
       indexTime = indexTime == 1 ? 0 : 1;
       counter = widget.time[indexTime] - 1;
-      widget.sendPort.send({
-        'indexTime': indexTime,
-        'counter': counter,
-        "currentSet": currentSet
-      });
       controller.restart(duration: counter);
       remainingPlus = indexTime == 0
           ? (((widget.time[0] + widget.time[1]) *
@@ -97,7 +87,6 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
 
   back() {
     if (indexTime == 0 && currentSet == 1) {
-      widget.sendPort.send({'stop': true});
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => Preparation(
               time: widget.time,
@@ -110,11 +99,6 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
       }
       indexTime = indexTime == 0 ? 1 : 0;
       counter = widget.time[indexTime] - 1;
-      widget.sendPort.send({
-        'indexTime': indexTime,
-        'counter': counter,
-        "currentSet": currentSet
-      });
       controller.restart(duration: counter);
       remainingPlus = indexTime == 0
           ? (((widget.time[0] + widget.time[1]) *
@@ -132,53 +116,12 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     timer;
-    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   dispose() {
     timer.cancel();
-    widget.sendPort.send({'stop': true});
-    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    print("AppLifecycleState: $state");
-
-    if (state == AppLifecycleState.paused) {
-      print("paused");
-    }
-
-    if (state == AppLifecycleState.inactive) {
-      print("inactive");
-    }
-
-    if (state == AppLifecycleState.resumed) {
-      print("object");
-
-      widget.sendPort.send({'resumed': true});
-
-      widget.receivePort.listen((message) {
-        if (message['duration'] != null) {
-          duration = message['duration'];
-          currentSet = message['currentSet'];
-          indexTime = message['indexTime'];
-          counter = message['counter'];
-          controller.restart(duration: counter);
-          remainingPlus = indexTime == 0
-              ? (((widget.time[0] + widget.time[1]) *
-                      (widget.sets - currentSet + 1)) -
-                  widget.time[0])
-              : (((widget.time[0] + widget.time[1]) *
-                      (widget.sets - currentSet + 1)) -
-                  widget.time[0] -
-                  widget.time[1]);
-          setState(() {});
-        }
-      });
-    }
   }
 
   @override
@@ -202,13 +145,10 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
               color: const Color(0xffFADCE3),
               onPressed: () {
                 controller.pause();
-                widget.sendPort.send({
-                  'isPaused': true,
-                });
                 showDialog(
                     context: context,
-                    builder: (BuildContext context) => Dialogs.buildExitDialog(
-                        context, timer, controller, widget.sendPort));
+                    builder: (BuildContext context) =>
+                        Dialogs.buildExitDialog(context, timer, controller));
               },
               icon: Icon(
                 TablerIcons.x,
@@ -225,6 +165,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
                   color: MyApp.of(context).isDarkMode()
                       ? lightNeutral100
                       : lightNeutral50)),
+          centerTitle: true,
         ),
         body: SizedBox(
           width: double.infinity,
@@ -233,15 +174,8 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
             onTap: () {
               if (controller.isPaused) {
                 controller.resume();
-                widget.sendPort.send({
-                  'isPaused': false,
-                });
               } else {
                 controller.pause();
-
-                widget.sendPort.send({
-                  'isPaused': true,
-                });
               }
               setState(() {});
             },
@@ -338,15 +272,8 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
                             onPressed: () {
                               if (controller.isPaused) {
                                 controller.resume();
-
-                                widget.sendPort.send({
-                                  'isPaused': false,
-                                });
                               } else {
                                 controller.pause();
-                                widget.sendPort.send({
-                                  'isPaused': true,
-                                });
                               }
                               setState(() {});
                             },

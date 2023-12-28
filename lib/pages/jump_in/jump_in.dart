@@ -102,7 +102,7 @@ class _JumpInState extends State<JumpIn> {
           ),
           SizedBox(
               width: double.infinity,
-              height: 48,
+              height: 55,
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
@@ -130,7 +130,7 @@ class _JumpInState extends State<JumpIn> {
           ),
           SizedBox(
               width: double.infinity,
-              height: 48,
+              height: 55,
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: MyApp.of(context).isDarkMode()

@@ -22,7 +22,7 @@ class WorkoutTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(12.0),
+      padding: const EdgeInsets.only(left: 12.0, right: 12, bottom: 12),
       decoration: BoxDecoration(
         color: MyApp.of(context).isDarkMode() ? darkNeutral50 : lightNeutral0,
         borderRadius: BorderRadius.circular(12),
@@ -35,7 +35,7 @@ class WorkoutTile extends StatelessWidget {
               Text(workout.name.toString(), style: body1Bold(context)),
               IconButton(
                 icon: Icon(
-                  TablerIcons.dots,
+                  TablerIcons.writing,
                   color: MyApp.of(context).isDarkMode()
                       ? darkNeutral900
                       : lightNeutral850,

@@ -30,6 +30,7 @@ class _SettingsTileState extends State<SettingsTile> {
       children: [
         widget.icon == null
             ? ListTile(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                 title: Text(widget.title, style: body1(context)),
                 trailing: Icon(TablerIcons.chevron_right,
                     color: MyApp.of(context).isDarkMode()
@@ -38,13 +39,15 @@ class _SettingsTileState extends State<SettingsTile> {
                 onTap: widget.onTap,
               )
             : ListTile(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                 leading: widget.icon,
                 title: Text(widget.title, style: body1(context)),
                 trailing: widget.switching
                     ? Switch(
-                        inactiveThumbColor: MyApp.of(context).isDarkMode()
-                            ? darkNeutral50
-                            : lightNeutral50,
+                        inactiveThumbColor: Colors.white,
+                        thumbColor: MaterialStateProperty.all<Color>(
+                          Colors.white,
+                        ),
                         inactiveTrackColor: MyApp.of(context).isDarkMode()
                             ? darkNeutral500
                             : lightNeutral300,

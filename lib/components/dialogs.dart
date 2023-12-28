@@ -579,7 +579,7 @@ class Dialogs {
         ),
         padding:
             const EdgeInsets.only(left: 24, right: 24, bottom: 24, top: 12),
-        height: 258,
+        height: 232,
         child: Column(
           children: [
             Row(
@@ -601,35 +601,58 @@ class Dialogs {
                     )),
               ],
             ),
-            ListTile(
-              title: Text(AppLocalizations.of(context)!.german,
-                  style: body1(context)),
-              trailing: Radio(
-                activeColor: MyApp.of(context).isDarkMode()
-                    ? darkNeutral850
-                    : lightNeutral700,
-                value: "de",
-                groupValue: language,
-                onChanged: (value) {
-                  language = value.toString();
-                  setState(() {});
-                },
+            SizedBox(
+              width: double.infinity,
+              height: 35,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 2.0),
+                    child: Text(AppLocalizations.of(context)!.german,
+                        style: body1(context)),
+                  ),
+                  Radio(
+                    activeColor: MyApp.of(context).isDarkMode()
+                        ? darkNeutral850
+                        : lightNeutral700,
+                    value: "de",
+                    groupValue: language,
+                    onChanged: (value) {
+                      language = value.toString();
+                      setState(() {});
+                    },
+                  ),
+                ],
               ),
             ),
-            ListTile(
-              title: Text(AppLocalizations.of(context)!.english,
-                  style: body1(context)),
-              trailing: Radio(
-                activeColor: MyApp.of(context).isDarkMode()
-                    ? darkNeutral850
-                    : lightNeutral700,
-                value: "en",
-                groupValue: language,
-                onChanged: (value) {
-                  language = value.toString();
-                  setState(() {});
-                },
+            SizedBox(
+              width: double.infinity,
+              height: 35,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 2.0),
+                    child: Text(AppLocalizations.of(context)!.english,
+                        style: body1(context)),
+                  ),
+                  Radio(
+                    activeColor: MyApp.of(context).isDarkMode()
+                        ? darkNeutral850
+                        : lightNeutral700,
+                    value: "en",
+                    groupValue: language,
+                    onChanged: (value) {
+                      language = value.toString();
+                      setState(() {});
+                    },
+                  )
+                ],
               ),
+            ),
+            SizedBox(
+              height: 18,
             ),
             SizedBox(
               width: double.infinity,
@@ -677,7 +700,7 @@ class Dialogs {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  AppLocalizations.of(context)!.system_language,
+                  AppLocalizations.of(context)!.profile_settings_sound_dialog,
                   style: heading3Bold(context).copyWith(
                       color: MyApp.of(context).isDarkMode()
                           ? darkNeutral900
@@ -703,6 +726,8 @@ class Dialogs {
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
               ),
               child: ListTile(
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
                 leading: Icon(
                   TablerIcons.music,
                   color: MyApp.of(context).isDarkMode()
@@ -715,16 +740,13 @@ class Dialogs {
                             ? darkNeutral900
                             : lightNeutral850)),
                 trailing: Switch(
-                    inactiveThumbColor: MyApp.of(context).isDarkMode()
-                        ? darkNeutral50
-                        : lightNeutral50,
+                    inactiveThumbColor: Colors.white,
+                    thumbColor: MaterialStateProperty.all<Color>(
+                      Colors.white,
+                    ),
                     inactiveTrackColor: MyApp.of(context).isDarkMode()
                         ? darkNeutral500
                         : lightNeutral300,
-                    thumbColor: MaterialStateProperty.all<Color>(
-                        MyApp.of(context).isDarkMode()
-                            ? darkNeutral50
-                            : lightNeutral50),
                     activeColor: MyApp.of(context).isDarkMode()
                         ? const Color(0xff5F8DEE)
                         : const Color(0xff3772EE),
@@ -762,13 +784,10 @@ class Dialogs {
                       shrinkWrap: true,
                       itemBuilder: (BuildContext context, int index) {
                         return ListTile(
-                          leading: Padding(
-                            padding: const EdgeInsets.only(left: 16.0),
-                            child: Icon(TablerIcons.player_play,
-                                color: MyApp.of(context).isDarkMode()
-                                    ? darkNeutral600
-                                    : lightNeutral600),
-                          ),
+                          leading: Icon(TablerIcons.player_play,
+                              color: MyApp.of(context).isDarkMode()
+                                  ? darkNeutral600
+                                  : lightNeutral600),
                           title: Text(
                             'Sound ${soundIndexes[index]}',
                             style: body1(context).copyWith(
@@ -776,6 +795,8 @@ class Dialogs {
                                     ? darkNeutral900
                                     : lightNeutral850),
                           ),
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 0),
                           trailing: Radio(
                             activeColor: MyApp.of(context).isDarkMode()
                                 ? darkNeutral850
@@ -827,7 +848,7 @@ class Dialogs {
     });
   }
 
-  static Widget buildExitDialog(context, timer, controller, sendPort) {
+  static Widget buildExitDialog(context, timer, controller) {
     return AlertDialog(
       surfaceTintColor: Colors.transparent,
       backgroundColor:
@@ -860,7 +881,6 @@ class Dialogs {
                   ),
                   onPressed: () {
                     timer.cancel();
-                    sendPort.send({'stop': true});
                     Navigator.of(context).push(MaterialPageRoute(
                         fullscreenDialog: true,
                         builder: (context) => const Home(screenIndex: 1)));

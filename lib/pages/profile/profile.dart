@@ -98,45 +98,6 @@ class _ProfileState extends State<Profile> {
                 ],
               ),
               SettingsBlock(
-                title: AppLocalizations.of(context)!.profile_help,
-                tiles: [
-                  SettingsTile(
-                    title: AppLocalizations.of(context)!.profile_help_faq,
-                    icon: Icon(TablerIcons.help,
-                        color: MyApp.of(context).isDarkMode()
-                            ? darkNeutral900
-                            : lightNeutral850),
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const SettingsPage(
-                              index: 1,
-                            ))),
-                  ),
-                  SettingsTile(
-                    title: AppLocalizations.of(context)!.profile_help_feedback,
-                    icon: Icon(TablerIcons.message_circle,
-                        color: MyApp.of(context).isDarkMode()
-                            ? darkNeutral900
-                            : lightNeutral850),
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const SettingsPage(
-                              index: 2,
-                            ))),
-                  ),
-                  SettingsTile(
-                    title: AppLocalizations.of(context)!.profile_help_info,
-                    icon: Icon(TablerIcons.info_circle,
-                        color: MyApp.of(context).isDarkMode()
-                            ? darkNeutral900
-                            : lightNeutral850),
-                    last: true,
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const SettingsPage(
-                              index: 3,
-                            ))),
-                  ),
-                ],
-              ),
-              SettingsBlock(
                 title: AppLocalizations.of(context)!.profile_legal,
                 tiles: [
                   SettingsTile(

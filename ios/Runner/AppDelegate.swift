@@ -31,7 +31,7 @@ import Flutter
                           break
                           
                       case "stopLiveActivity":
-                          self?.liveActivityManager.stopLiveActivity(result: result)
+                          self?.liveActivityManager.stopLiveActivity()
                           break
                           
                       default:
