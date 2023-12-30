@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:interval_timer/pages/profile/components/setings_page_contact.dart';
-import 'package:interval_timer/pages/profile/components/settings_page_about.dart';
-import 'package:interval_timer/pages/profile/components/settings_page_faq.dart';
-
 import 'settings_page_legal.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -18,16 +14,10 @@ class SettingsPage extends StatelessWidget {
         body: (() {
           switch (index) {
             case 1:
-              return const SettingsPageFAQ();
+              return const SettingsPageLegal();
             case 2:
-              return const SettingsPageContact();
+              return const SettingsPageLegal();
             case 3:
-              return const SettingsPageAbout();
-            case 4:
-              return const SettingsPageLegal();
-            case 5:
-              return const SettingsPageLegal();
-            case 6:
               return const SettingsPageLegal();
           }
         }()));
