@@ -333,6 +333,11 @@ class Dialogs {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
+                            side: BorderSide(
+                                width: 1,
+                                color: MyApp.of(context).isDarkMode()
+                                    ? darkNeutral300
+                                    : Colors.transparent),
                           ),
                           onPressed: () {
                             showDialog(
@@ -765,6 +770,8 @@ class Dialogs {
                 trailing: Padding(
                   padding: const EdgeInsets.only(right: 4.0),
                   child: Switch(
+                      trackOutlineColor:
+                          MaterialStateProperty.all<Color>(Colors.transparent),
                       inactiveThumbColor: Colors.white,
                       thumbColor: MaterialStateProperty.all<Color>(
                         Colors.white,
@@ -810,7 +817,7 @@ class Dialogs {
                       shrinkWrap: true,
                       itemBuilder: (BuildContext context, int index) {
                         return ListTile(
-                          leading: Icon(TablerIcons.player_play_filled,
+                          leading: Icon(TablerIcons.player_play,
                               color: MyApp.of(context).isDarkMode()
                                   ? darkNeutral600
                                   : lightNeutral600),
@@ -925,7 +932,7 @@ class Dialogs {
                   child: Text(AppLocalizations.of(context)!.run_exit_workout,
                       style: body1Bold(context).copyWith(
                           color: MyApp.of(context).isDarkMode()
-                              ? lightNeutral100
+                              ? darkNeutral50
                               : lightNeutral50))),
             ),
             const SizedBox(
@@ -942,6 +949,11 @@ class Dialogs {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
+                      side: BorderSide(
+                          width: 1,
+                          color: MyApp.of(context).isDarkMode()
+                              ? darkNeutral300
+                              : Colors.transparent),
                     ),
                     onPressed: () {
                       Navigator.pop(context);

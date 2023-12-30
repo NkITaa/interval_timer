@@ -39,6 +39,7 @@ class CustomTextbox extends StatelessWidget {
               cursorColor: lightNeutral300,
               controller: nameController,
               decoration: const InputDecoration(
+                contentPadding: EdgeInsets.all(10.0),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: lightNeutral300),
                   borderRadius: BorderRadius.all(Radius.circular(12.0)),

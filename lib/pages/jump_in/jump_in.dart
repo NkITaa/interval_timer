@@ -133,16 +133,14 @@ class _JumpInState extends State<JumpIn> {
               height: 55,
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    elevation: 0,
                     backgroundColor: MyApp.of(context).isDarkMode()
                         ? darkNeutral100
                         : lightNeutral0,
                     side: BorderSide(
-                      color: MyApp.of(context).isDarkMode()
-                          ? Colors.transparent
-                          : lightNeutral300,
-                      width: 1,
-                    ),
+                        width: 1,
+                        color: MyApp.of(context).isDarkMode()
+                            ? darkNeutral300
+                            : Colors.transparent),
                   ),
                   onPressed: () {
                     showModalBottomSheet(

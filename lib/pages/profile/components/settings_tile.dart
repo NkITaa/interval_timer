@@ -48,6 +48,8 @@ class _SettingsTileState extends State<SettingsTile> {
                         thumbColor: MaterialStateProperty.all<Color>(
                           Colors.white,
                         ),
+                        trackOutlineColor: MaterialStateProperty.all<Color>(
+                            Colors.transparent),
                         inactiveTrackColor: MyApp.of(context).isDarkMode()
                             ? darkNeutral500
                             : lightNeutral300,
