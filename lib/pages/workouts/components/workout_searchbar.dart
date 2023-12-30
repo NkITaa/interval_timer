@@ -46,6 +46,10 @@ class _WorkoutSearchBarState extends State<WorkoutSearchBar> {
           color:
               MyApp.of(context).isDarkMode() ? darkNeutral700 : lightNeutral700,
         ),
+        headerTextStyle: body2(context).copyWith(
+          color:
+              MyApp.of(context).isDarkMode() ? darkNeutral850 : lightNeutral850,
+        ),
         viewHintText: AppLocalizations.of(context)!.workouts_search,
         viewBackgroundColor:
             MyApp.of(context).isDarkMode() ? darkNeutral0 : lightNeutral100,
@@ -60,11 +64,14 @@ class _WorkoutSearchBarState extends State<WorkoutSearchBar> {
                 );
               },
             ),
-            leading: Icon(
-              Icons.search,
-              color: MyApp.of(context).isDarkMode()
-                  ? darkNeutral850
-                  : lightNeutral700,
+            leading: Padding(
+              padding: const EdgeInsets.only(left: 4.0),
+              child: Icon(
+                Icons.search,
+                color: MyApp.of(context).isDarkMode()
+                    ? darkNeutral850
+                    : lightNeutral700,
+              ),
             ),
             hintText: AppLocalizations.of(context)!.workouts_search,
             hintStyle: MaterialStateProperty.all<TextStyle>(
@@ -72,6 +79,12 @@ class _WorkoutSearchBarState extends State<WorkoutSearchBar> {
                   color: MyApp.of(context).isDarkMode()
                       ? darkNeutral700
                       : lightNeutral700),
+            ),
+            textStyle: MaterialStateProperty.all<TextStyle>(
+              body2(context).copyWith(
+                  color: MyApp.of(context).isDarkMode()
+                      ? darkNeutral850
+                      : lightNeutral850),
             ),
             backgroundColor: MaterialStateProperty.all<Color>(
                 MyApp.of(context).isDarkMode()

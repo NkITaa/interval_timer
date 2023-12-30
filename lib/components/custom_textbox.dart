@@ -5,8 +5,11 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class CustomTextbox extends StatelessWidget {
   final String label;
   final TextEditingController nameController;
-  const CustomTextbox(
-      {super.key, required this.label, required this.nameController});
+  const CustomTextbox({
+    super.key,
+    required this.label,
+    required this.nameController,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +21,9 @@ class CustomTextbox extends StatelessWidget {
           style: body1(context),
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 8.0, bottom: 16.0),
+          padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
           child: SizedBox(
-            height: 55,
+            height: 71,
             child: TextFormField(
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -40,6 +43,7 @@ class CustomTextbox extends StatelessWidget {
                   borderSide: BorderSide(color: lightNeutral300),
                   borderRadius: BorderRadius.all(Radius.circular(12.0)),
                 ),
+                helperText: ' ',
                 border: OutlineInputBorder(
                   borderSide: BorderSide(color: lightNeutral300),
                   borderRadius: BorderRadius.all(Radius.circular(12.0)),

@@ -26,7 +26,7 @@ class WorkoutTimesContainer extends StatelessWidget {
         decoration: BoxDecoration(
           color:
               MyApp.of(context).isDarkMode() ? darkNeutral100 : lightNeutral0,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(16),
         ),
         child: Wrap(spacing: 12, runSpacing: 12, children: [
           IncrementDecrementButton(

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:interval_timer/pages/home.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -5,15 +7,14 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:interval_timer/workout.dart';
 import 'const.dart';
 import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 late ThemeMode? _themeMode;
 
 void main() async {
-  var path = "/Users/nikita/Desktop/interval_timer/db";
   WidgetsFlutterBinding.ensureInitialized();
-  Hive
-    ..init(path)
-    ..registerAdapter(WorkoutAdapter());
+  Hive.registerAdapter(WorkoutAdapter());
+  await Hive.initFlutter();
   await Hive.openBox("workouts");
   await Hive.openBox("settings");
 

@@ -137,10 +137,10 @@ TextStyle body1Underlined(context) => TextStyle(
     fontSize: 16,
     color: MyApp.of(context).isDarkMode() ? darkNeutral900 : lightNeutral850,
     decoration: TextDecoration.underline);
-TextStyle body1BoldUnderlined(context) => const TextStyle(
+TextStyle body1BoldUnderlined(context) => TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.bold,
-    color: Color(0xff653200),
+    color: MyApp.of(context).isDarkMode() ? lightNeutral100 : lightNeutral50,
     decoration: TextDecoration.underline);
 TextStyle body2(context) => TextStyle(
       fontSize: 14,

@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../const.dart';
 import '../main.dart';
@@ -49,7 +50,14 @@ class IncrementDecrementButton extends StatelessWidget {
             width: 100,
             child: Column(
               children: [
-                Expanded(child: Text(type, style: body1Bold(context))),
+                Expanded(
+                    child: Text(
+                        type == "training"
+                            ? AppLocalizations.of(context)!.training
+                            : type == "pause"
+                                ? AppLocalizations.of(context)!.pause
+                                : AppLocalizations.of(context)!.sets,
+                        style: body1Bold(context))),
                 Expanded(
                   child: RichText(
                     text: TextSpan(

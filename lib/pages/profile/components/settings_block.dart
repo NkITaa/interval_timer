@@ -22,6 +22,23 @@ class SettingsBlock extends StatelessWidget {
         ),
         Container(
           decoration: BoxDecoration(
+            boxShadow: [
+              MyApp.of(context).isDarkMode()
+                  ? const BoxShadow(
+                      color: Colors.transparent,
+                      spreadRadius: 0,
+                      blurRadius: 0,
+                      offset: Offset(0, 4), // changes position of shadow
+                    )
+                  : BoxShadow(
+                      color: MyApp.of(context).isDarkMode()
+                          ? darkNeutral900.withOpacity(0.2)
+                          : lightNeutral850.withOpacity(0.2),
+                      spreadRadius: 0,
+                      blurRadius: 16,
+                      offset: const Offset(0, 1), // changes position of shadow
+                    ),
+            ],
             color:
                 MyApp.of(context).isDarkMode() ? darkNeutral50 : lightNeutral50,
             borderRadius: BorderRadius.circular(16),

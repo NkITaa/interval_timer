@@ -7,7 +7,7 @@
     "countdown": "Countdown",
     "countdown_description": "The countdown beeps before a new interval.",
     "system_language": "System Language",
-    "dialog_required_field": "The field must not be empty!",
+    "dialog_required_field": "Please enter a name!",
     "start_workout": "Start Workout",
     "save_workout": "Save Workout",
     "workout_training_time": "Set Training Time",

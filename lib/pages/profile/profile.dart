@@ -57,8 +57,8 @@ class _ProfileState extends State<Profile> {
                         AppLocalizations.of(context)!.profile_settings_darkmode,
                     icon: Icon(TablerIcons.moon,
                         color: MyApp.of(context).isDarkMode()
-                            ? darkNeutral900
-                            : lightNeutral850),
+                            ? darkNeutral700
+                            : lightNeutral600),
                     switching: true,
                     onTap: () {
                       setState(() {});
@@ -69,8 +69,8 @@ class _ProfileState extends State<Profile> {
                           .profile_settings_language,
                       icon: Icon(TablerIcons.language,
                           color: MyApp.of(context).isDarkMode()
-                              ? darkNeutral900
-                              : lightNeutral850),
+                              ? darkNeutral700
+                              : lightNeutral600),
                       onTap: () => showModalBottomSheet(
                             isScrollControlled: true,
                             enableDrag: false,
@@ -84,8 +84,8 @@ class _ProfileState extends State<Profile> {
                           AppLocalizations.of(context)!.profile_settings_sound,
                       icon: Icon(TablerIcons.volume,
                           color: MyApp.of(context).isDarkMode()
-                              ? darkNeutral900
-                              : lightNeutral850),
+                              ? darkNeutral700
+                              : lightNeutral600),
                       last: true,
                       onTap: () => showModalBottomSheet(
                             isScrollControlled: true,

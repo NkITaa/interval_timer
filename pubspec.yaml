@@ -1,7 +1,7 @@
 name: interval_timer
 description: Interval Timer for all kinds of sports
 publish_to: 'none'
-version: 1.0.1+2
+version: 1.0.6+7
 
 environment:
   sdk: '>=3.0.5 <4.0.0'

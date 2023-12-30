@@ -16,26 +16,32 @@ class WorkoutsAppbar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       surfaceTintColor: Colors.transparent,
-      title: Text(AppLocalizations.of(context)!.title_workouts,
-          style: heading3Bold(context)),
+      title: Padding(
+        padding: const EdgeInsets.only(left: 8.0),
+        child: Text(AppLocalizations.of(context)!.title_workouts,
+            style: heading3Bold(context)),
+      ),
       automaticallyImplyLeading: false,
       actions: [
-        IconButton(
-          icon: Icon(
-            TablerIcons.circle_plus,
-            color: MyApp.of(context).isDarkMode()
-                ? darkNeutral850
-                : lightNeutral700,
+        Padding(
+          padding: const EdgeInsets.only(right: 8.0),
+          child: IconButton(
+            icon: Icon(
+              TablerIcons.circle_plus,
+              color: MyApp.of(context).isDarkMode()
+                  ? darkNeutral850
+                  : lightNeutral700,
+            ),
+            onPressed: () {
+              showModalBottomSheet(
+                isScrollControlled: true,
+                enableDrag: false,
+                context: context,
+                builder: (BuildContext context) =>
+                    Dialogs.buildAddWorkoutDialog(context, setListState),
+              );
+            },
           ),
-          onPressed: () {
-            showModalBottomSheet(
-              isScrollControlled: true,
-              enableDrag: false,
-              context: context,
-              builder: (BuildContext context) =>
-                  Dialogs.buildAddWorkoutDialog(context, setListState),
-            );
-          },
         ),
       ],
     );
