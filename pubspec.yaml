@@ -1,7 +1,7 @@
 name: interval_timer
 description: Interval Timer for all kinds of sports
 publish_to: 'none'
-version: 1.0.7+8
+version: 1.0.8+9
 
 environment:
   sdk: '>=3.0.5 <4.0.0'
@@ -28,6 +28,7 @@ dev_dependencies:
   audioplayers: ^5.2.1
   package_info_plus: ^5.0.1
   flutter_markdown: ^0.6.18+2
+  url_launcher: ^6.2.2
 
 flutter:
   uses-material-design: true

@@ -2,16 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../const.dart';
 import '../../../main.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class RateApp extends StatelessWidget {
   final String? version;
-  const RateApp({required this.version, super.key});
+  RateApp({required this.version, super.key});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        print("print");
+      onTap: () async {
+        if (!await launchUrl(Uri.parse('https://flutter.dev'))) {
+          throw Exception('Could not launch');
+        }
       },
       child: Container(
         height: 68,
@@ -61,7 +64,11 @@ class RateApp extends StatelessWidget {
                 ]),
             const Spacer(),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () async {
+                if (!await launchUrl(Uri.parse('https://flutter.dev'))) {
+                  throw Exception('Could not launch');
+                }
+              },
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.only(
                     left: 12.0, right: 12.0, top: 6.0, bottom: 6.0),
