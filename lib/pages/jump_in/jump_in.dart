@@ -136,11 +136,12 @@ class _JumpInState extends State<JumpIn> {
                     backgroundColor: MyApp.of(context).isDarkMode()
                         ? darkNeutral100
                         : lightNeutral0,
+                    elevation: 0,
                     side: BorderSide(
                         width: 1,
                         color: MyApp.of(context).isDarkMode()
                             ? darkNeutral300
-                            : Colors.transparent),
+                            : lightNeutral300),
                   ),
                   onPressed: () {
                     showModalBottomSheet(

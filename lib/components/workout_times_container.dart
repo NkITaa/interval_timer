@@ -24,6 +24,21 @@ class WorkoutTimesContainer extends StatelessWidget {
     return Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
+          boxShadow: [
+            MyApp.of(context).isDarkMode()
+                ? const BoxShadow(
+                    color: Colors.transparent,
+                    spreadRadius: 0,
+                    blurRadius: 0,
+                    offset: Offset(0, 0),
+                  )
+                : BoxShadow(
+                    color: const Color(0xff1D1D1D).withOpacity(0.08),
+                    spreadRadius: 0,
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+          ],
           color:
               MyApp.of(context).isDarkMode() ? darkNeutral100 : lightNeutral0,
           borderRadius: BorderRadius.circular(16),

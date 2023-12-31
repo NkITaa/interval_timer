@@ -105,14 +105,14 @@ class _ProfileState extends State<Profile> {
                     title: AppLocalizations.of(context)!.profile_legal_imprint,
                     onTap: () => Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => const SettingsPage(
-                              index: 4,
+                              index: 1,
                             ))),
                   ),
                   SettingsTile(
                     title: AppLocalizations.of(context)!.profile_legal_privacy,
                     onTap: () => Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => const SettingsPage(
-                              index: 5,
+                              index: 2,
                             ))),
                   ),
                   SettingsTile(
@@ -120,7 +120,7 @@ class _ProfileState extends State<Profile> {
                     title: AppLocalizations.of(context)!.profile_legal_terms,
                     onTap: () => Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => const SettingsPage(
-                              index: 6,
+                              index: 3,
                             ))),
                   ),
                 ],

@@ -31,7 +31,7 @@ class _WorkoutSearchBarState extends State<WorkoutSearchBar> {
       child: SearchAnchor(
         viewLeading: IconButton(
           icon: Icon(
-            TablerIcons.chevron_left, // Replace with the icon you want to use
+            TablerIcons.chevron_left,
             color: MyApp.of(context).isDarkMode()
                 ? darkNeutral850
                 : lightNeutral700,

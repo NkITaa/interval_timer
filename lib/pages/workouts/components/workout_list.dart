@@ -23,9 +23,11 @@ class WorkoutList extends StatelessWidget {
             results != null && results!.isEmpty
         ? Column(
             children: [
-              const Icon(
-                TablerIcons.stretching,
-                size: 52,
+              const SizedBox(
+                width: 200,
+                child: Image(
+                  image: AssetImage('assets/images/no_workout.png'),
+                ),
               ),
               const SizedBox(
                 height: 12,
