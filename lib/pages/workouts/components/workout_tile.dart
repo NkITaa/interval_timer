@@ -41,13 +41,15 @@ class WorkoutTile extends StatelessWidget {
                       : lightNeutral850,
                 ),
                 onPressed: () {
+                  TextEditingController nameController =
+                      TextEditingController(text: workout.name);
                   showModalBottomSheet(
                     isScrollControlled: true,
                     enableDrag: false,
                     context: context,
                     builder: (BuildContext context) =>
-                        Dialogs.buildEditWorkoutDialog(
-                            context, workout, index, setListState),
+                        Dialogs.buildEditWorkoutDialog(nameController, context,
+                            workout, index, setListState),
                   );
                 },
               )

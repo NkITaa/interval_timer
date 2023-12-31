@@ -24,30 +24,33 @@ class CustomTextbox extends StatelessWidget {
           padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
           child: SizedBox(
             height: 71,
-            child: TextFormField(
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return AppLocalizations.of(context)!.dialog_required_field;
-                }
-                return null;
-              },
-              onTapOutside: (PointerDownEvent event) {
-                FocusScope.of(context).unfocus();
-              },
-              textAlignVertical: TextAlignVertical.center,
-              style: body1(context),
-              cursorColor: lightNeutral300,
-              controller: nameController,
-              decoration: const InputDecoration(
-                contentPadding: EdgeInsets.all(10.0),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: lightNeutral300),
-                  borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                ),
-                helperText: ' ',
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(color: lightNeutral300),
-                  borderRadius: BorderRadius.all(Radius.circular(12.0)),
+            child: Form(
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              child: TextFormField(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return AppLocalizations.of(context)!.dialog_required_field;
+                  }
+                  return null;
+                },
+                onTapOutside: (PointerDownEvent event) {
+                  FocusScope.of(context).unfocus();
+                },
+                textAlignVertical: TextAlignVertical.center,
+                style: body1(context),
+                cursorColor: lightNeutral300,
+                controller: nameController,
+                decoration: const InputDecoration(
+                  contentPadding: EdgeInsets.all(10.0),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: lightNeutral300),
+                    borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                  ),
+                  helperText: ' ',
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: lightNeutral300),
+                    borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                  ),
                 ),
               ),
             ),

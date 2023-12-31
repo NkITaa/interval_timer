@@ -12,15 +12,12 @@ import '../main.dart';
 import '../pages/home.dart';
 
 class Dialogs {
-  static Widget buildAddWorkoutDialog(
-      BuildContext context, Function setListState) {
+  static Widget buildAddWorkoutDialog(BuildContext context,
+      Function setListState, TextEditingController nameController) {
     Duration workoutTime = const Duration(minutes: 4, seconds: 30);
     Duration minutesTraining = const Duration(minutes: 1, seconds: 15);
     Duration minutesPause = const Duration(seconds: 15);
-    TextEditingController nameController = TextEditingController();
     int sets = 3;
-    final formKey = GlobalKey<FormState>();
-
     return StatefulBuilder(builder: (context, setState) {
       void updateTime(Duration pause, Duration training, int sets) {
         workoutTime = (pause + training) * sets;
@@ -75,105 +72,98 @@ class Dialogs {
         setState(() {});
       }
 
-      return Padding(
-        padding:
-            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-        child: Container(
-            padding: const EdgeInsets.all(24),
-            height: 584,
-            decoration: BoxDecoration(
-              color: MyApp.of(context).isDarkMode()
-                  ? darkNeutral0
-                  : lightNeutral100,
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
-            ),
-            child: Form(
-              key: formKey,
-              child: Column(mainAxisSize: MainAxisSize.min, children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(AppLocalizations.of(context)!.workouts_create,
-                        style: heading3Bold(context)),
-                    IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: Icon(
-                          TablerIcons.x,
-                          color: MyApp.of(context).isDarkMode()
-                              ? darkNeutral500
-                              : lightNeutral300,
-                        )),
-                  ],
-                ),
-                CustomTextbox(
-                  label: AppLocalizations.of(context)!.workouts_name,
-                  nameController: nameController,
-                ),
-                WorkoutTimesContainer(
-                  update: update,
-                  setValue: setValue,
-                  minutesTraining: minutesTraining,
-                  minutesPause: minutesPause,
-                  sets: sets,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  child: Text(
-                    "${AppLocalizations.of(context)!.workouts_duration} ${(workoutTime.inSeconds / 60).floor()}:${(workoutTime.inSeconds % 60).toString().padLeft(2, '0')}",
-                    style: body1(context),
-                  ),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    onPressed: () {
-                      if (formKey.currentState!.validate()) {
-                        Hive.box("workouts").add(Workout(
-                            name: nameController.text.trim(),
-                            secondsTraining: minutesTraining.inSeconds,
-                            secondsPause: minutesPause.inSeconds,
-                            sets: sets));
+      return Container(
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color:
+                MyApp.of(context).isDarkMode() ? darkNeutral0 : lightNeutral100,
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
+          ),
+          child: SingleChildScrollView(
+            child: Column(mainAxisSize: MainAxisSize.min, children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(AppLocalizations.of(context)!.workouts_create,
+                      style: heading3Bold(context)),
+                  IconButton(
+                      onPressed: () {
                         Navigator.pop(context);
-                        setListState();
-                      }
-                    },
-                    child: Text(AppLocalizations.of(context)!.save_workout,
-                        style: body1Bold(context).copyWith(
-                            color: MyApp.of(context).isDarkMode()
-                                ? darkNeutral50
-                                : lightNeutral50)),
+                      },
+                      icon: Icon(
+                        TablerIcons.x,
+                        color: MyApp.of(context).isDarkMode()
+                            ? darkNeutral500
+                            : lightNeutral300,
+                      )),
+                ],
+              ),
+              CustomTextbox(
+                label: AppLocalizations.of(context)!.workouts_name,
+                nameController: nameController,
+              ),
+              WorkoutTimesContainer(
+                update: update,
+                setValue: setValue,
+                minutesTraining: minutesTraining,
+                minutesPause: minutesPause,
+                sets: sets,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                child: Text(
+                  "${AppLocalizations.of(context)!.workouts_duration} ${(workoutTime.inSeconds / 60).floor()}:${(workoutTime.inSeconds % 60).toString().padLeft(2, '0')}",
+                  style: body1(context),
+                ),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
-                )
-              ]),
-            )),
-      );
+                  onPressed: () {
+                    if (nameController.text.trim().isNotEmpty) {
+                      Hive.box("workouts").add(Workout(
+                          name: nameController.text.trim(),
+                          secondsTraining: minutesTraining.inSeconds,
+                          secondsPause: minutesPause.inSeconds,
+                          sets: sets));
+                      Navigator.pop(context);
+                      setListState();
+                    }
+                  },
+                  child: Text(AppLocalizations.of(context)!.save_workout,
+                      style: body1Bold(context).copyWith(
+                          color: MyApp.of(context).isDarkMode()
+                              ? darkNeutral50
+                              : lightNeutral50)),
+                ),
+              )
+            ]),
+          ));
     });
   }
 
-  static Widget buildEditWorkoutDialog(BuildContext context, Workout workout,
-      int? index, Function? setListState) {
+  static Widget buildEditWorkoutDialog(
+      TextEditingController nameController,
+      BuildContext context,
+      Workout workout,
+      int? index,
+      Function? setListState) {
     Duration minutesTraining = Duration(seconds: workout.secondsTraining);
     Duration minutesPause = Duration(seconds: workout.secondsPause);
-    TextEditingController nameController =
-        TextEditingController(text: workout.name);
     int sets = workout.sets;
     Duration workoutTime = Duration(
             seconds:
                 (minutesTraining.inSeconds + minutesPause.inSeconds) * sets) -
         Duration(seconds: minutesPause.inSeconds);
-    final formKey = GlobalKey<FormState>();
-
     return StatefulBuilder(builder: (context, setState) {
       void updateTime(Duration pause, Duration training, int sets) {
         workoutTime = (pause + training) * sets;
@@ -227,152 +217,141 @@ class Dialogs {
         setState(() {});
       }
 
-      return Padding(
-        padding:
-            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-        child: Form(
-          key: formKey,
-          autovalidateMode:
-              AutovalidateMode.onUserInteraction, // This line is important
-
-          child: Container(
-              padding: const EdgeInsets.all(24),
-              height: 626,
-              decoration: BoxDecoration(
-                color: MyApp.of(context).isDarkMode()
-                    ? darkNeutral0
-                    : lightNeutral100,
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
-              ),
-              child: Column(mainAxisSize: MainAxisSize.min, children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(AppLocalizations.of(context)!.workouts_edit,
-                        style: heading3Bold(context)),
-                    IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: Icon(
-                          TablerIcons.x,
-                          color: MyApp.of(context).isDarkMode()
-                              ? darkNeutral500
-                              : lightNeutral300,
-                        )),
-                  ],
-                ),
-                CustomTextbox(
-                  label: AppLocalizations.of(context)!.workouts_name,
-                  nameController: nameController,
-                ),
-                WorkoutTimesContainer(
-                  update: update,
-                  setValue: setValue,
-                  minutesTraining: minutesTraining,
-                  minutesPause: minutesPause,
-                  sets: sets,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  child: Text(
-                    "${AppLocalizations.of(context)!.workouts_duration} ${(workoutTime.inSeconds / 60).floor()}:${(workoutTime.inSeconds % 60).toString().padLeft(2, '0')}",
-                    style: body1(context),
-                  ),
-                ),
-                const SizedBox(
-                  height: 12,
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    onPressed: () {
-                      if (formKey.currentState!.validate()) {
-                        index != null
-                            ? Hive.box("workouts").putAt(
-                                index,
-                                Workout(
-                                    name: nameController.text.trim(),
-                                    secondsTraining: minutesTraining.inSeconds,
-                                    secondsPause: minutesPause.inSeconds,
-                                    sets: sets))
-                            : Hive.box("workouts").add(Workout(
-                                name: nameController.text.trim(),
-                                secondsTraining: minutesTraining.inSeconds,
-                                secondsPause: minutesPause.inSeconds,
-                                sets: sets));
-                        setListState != null ? setListState() : null;
+      return Container(
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color:
+                MyApp.of(context).isDarkMode() ? darkNeutral0 : lightNeutral100,
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
+          ),
+          child: SingleChildScrollView(
+            child: Column(mainAxisSize: MainAxisSize.min, children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(AppLocalizations.of(context)!.workouts_edit,
+                      style: heading3Bold(context)),
+                  IconButton(
+                      onPressed: () {
                         Navigator.pop(context);
-                      }
-                    },
-                    child: Text(AppLocalizations.of(context)!.save_workout,
-                        style: body1Bold(context).copyWith(
-                            color: MyApp.of(context).isDarkMode()
-                                ? darkNeutral50
-                                : lightNeutral50)),
+                      },
+                      icon: Icon(
+                        TablerIcons.x,
+                        color: MyApp.of(context).isDarkMode()
+                            ? darkNeutral500
+                            : lightNeutral300,
+                      )),
+                ],
+              ),
+              CustomTextbox(
+                label: AppLocalizations.of(context)!.workouts_name,
+                nameController: nameController,
+              ),
+              WorkoutTimesContainer(
+                update: update,
+                setValue: setValue,
+                minutesTraining: minutesTraining,
+                minutesPause: minutesPause,
+                sets: sets,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                child: Text(
+                  "${AppLocalizations.of(context)!.workouts_duration} ${(workoutTime.inSeconds / 60).floor()}:${(workoutTime.inSeconds % 60).toString().padLeft(2, '0')}",
+                  style: body1(context),
+                ),
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
+                  onPressed: () {
+                    if (nameController.text.trim().isNotEmpty) {
+                      index != null
+                          ? Hive.box("workouts").putAt(
+                              index,
+                              Workout(
+                                  name: nameController.text.trim(),
+                                  secondsTraining: minutesTraining.inSeconds,
+                                  secondsPause: minutesPause.inSeconds,
+                                  sets: sets))
+                          : Hive.box("workouts").add(Workout(
+                              name: nameController.text.trim(),
+                              secondsTraining: minutesTraining.inSeconds,
+                              secondsPause: minutesPause.inSeconds,
+                              sets: sets));
+                      setListState != null ? setListState() : null;
+                      Navigator.pop(context);
+                    }
+                  },
+                  child: Text(AppLocalizations.of(context)!.save_workout,
+                      style: body1Bold(context).copyWith(
+                          color: MyApp.of(context).isDarkMode()
+                              ? darkNeutral50
+                              : lightNeutral50)),
                 ),
-                const SizedBox(
-                  height: 8,
-                ),
-                index != null && setListState != null
-                    ? SizedBox(
-                        width: double.infinity,
-                        height: 50,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: MyApp.of(context).isDarkMode()
-                                ? darkNeutral100
-                                : lightNeutral0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            side: BorderSide(
-                                width: 1,
-                                color: MyApp.of(context).isDarkMode()
-                                    ? darkNeutral300
-                                    : lightNeutral300),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              index != null && setListState != null
+                  ? SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: MyApp.of(context).isDarkMode()
+                              ? darkNeutral100
+                              : lightNeutral0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return buildDeleteDialog(
-                                    context, index, setListState);
-                              },
-                            );
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                TablerIcons.trash,
-                                size: 24,
-                                color: MyApp.of(context).isDarkMode()
-                                    ? lightError600
-                                    : darkError600,
-                              ),
-                              const SizedBox(width: 8),
-                              Text(
-                                  AppLocalizations.of(context)!.workouts_delete,
-                                  style: body1Bold(context).copyWith(
-                                      color: MyApp.of(context).isDarkMode()
-                                          ? lightError600
-                                          : darkError600)),
-                            ],
-                          ),
+                          side: BorderSide(
+                              width: 1,
+                              color: MyApp.of(context).isDarkMode()
+                                  ? darkNeutral300
+                                  : lightNeutral300),
                         ),
-                      )
-                    : const SizedBox(),
-              ])),
-        ),
-      );
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return buildDeleteDialog(
+                                  context, index, setListState);
+                            },
+                          );
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              TablerIcons.trash,
+                              size: 24,
+                              color: MyApp.of(context).isDarkMode()
+                                  ? lightError600
+                                  : darkError600,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(AppLocalizations.of(context)!.workouts_delete,
+                                style: body1Bold(context).copyWith(
+                                    color: MyApp.of(context).isDarkMode()
+                                        ? lightError600
+                                        : darkError600)),
+                          ],
+                        ),
+                      ),
+                    )
+                  : const SizedBox(),
+            ]),
+          ));
     });
   }
 

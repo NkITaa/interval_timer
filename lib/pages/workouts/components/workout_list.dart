@@ -3,7 +3,6 @@ import 'package:interval_timer/const.dart';
 import 'package:interval_timer/pages/workouts/components/workout_tile.dart';
 import 'package:hive/hive.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
 import '../../../components/dialogs.dart';
 import '../../../main.dart';
@@ -54,13 +53,15 @@ class WorkoutList extends StatelessWidget {
                 height: 50,
                 child: ElevatedButton(
                     onPressed: () {
+                      TextEditingController nameController =
+                          TextEditingController();
                       showModalBottomSheet(
                         isScrollControlled: true,
                         enableDrag: false,
                         context: context,
                         builder: (BuildContext context) =>
                             Dialogs.buildAddWorkoutDialog(
-                                context, setListState),
+                                context, setListState, nameController),
                       );
                     },
                     child: Text(AppLocalizations.of(context)!.workouts_create,

@@ -143,12 +143,15 @@ class _JumpInState extends State<JumpIn> {
                             : lightNeutral300),
                   ),
                   onPressed: () {
+                    TextEditingController nameController =
+                        TextEditingController(text: "");
                     showModalBottomSheet(
                       isScrollControlled: true,
                       enableDrag: false,
                       context: context,
                       builder: (BuildContext context) =>
                           Dialogs.buildEditWorkoutDialog(
+                              nameController,
                               context,
                               Workout(
                                   secondsTraining: minutesTraining.inSeconds,
