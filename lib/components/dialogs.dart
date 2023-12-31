@@ -337,7 +337,7 @@ class Dialogs {
                                 width: 1,
                                 color: MyApp.of(context).isDarkMode()
                                     ? darkNeutral300
-                                    : Colors.transparent),
+                                    : lightNeutral300),
                           ),
                           onPressed: () {
                             showDialog(
@@ -574,6 +574,11 @@ class Dialogs {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
+                      side: BorderSide(
+                          width: 1,
+                          color: MyApp.of(context).isDarkMode()
+                              ? darkNeutral300
+                              : lightNeutral300),
                     ),
                     onPressed: () {
                       Navigator.pop(context);

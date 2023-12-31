@@ -82,6 +82,7 @@ class _MyAppState extends State<MyApp> {
         iconTheme: const IconThemeData(color: lightNeutral900),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
+            elevation: 0,
             surfaceTintColor: Colors.transparent,
             backgroundColor: lightNeutral850,
             shape: RoundedRectangleBorder(
@@ -108,6 +109,7 @@ class _MyAppState extends State<MyApp> {
         iconTheme: const IconThemeData(color: darkNeutral900),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
+            elevation: 0,
             surfaceTintColor: Colors.transparent,
             backgroundColor: darkNeutral850,
             shape: RoundedRectangleBorder(

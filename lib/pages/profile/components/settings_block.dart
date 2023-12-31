@@ -28,15 +28,13 @@ class SettingsBlock extends StatelessWidget {
                       color: Colors.transparent,
                       spreadRadius: 0,
                       blurRadius: 0,
-                      offset: Offset(0, 4), // changes position of shadow
+                      offset: Offset(0, 0), // changes position of shadow
                     )
                   : BoxShadow(
-                      color: MyApp.of(context).isDarkMode()
-                          ? darkNeutral900.withOpacity(0.2)
-                          : lightNeutral850.withOpacity(0.2),
+                      color: const Color(0xff1D1D1D).withOpacity(0.16),
                       spreadRadius: 0,
-                      blurRadius: 16,
-                      offset: const Offset(0, 1), // changes position of shadow
+                      blurRadius: 24,
+                      offset: const Offset(0, 6), // changes position of shadow
                     ),
             ],
             color:
