@@ -5,7 +5,6 @@ import 'package:interval_timer/main.dart';
 import 'package:scroll_snap_list/scroll_snap_list.dart';
 
 class TimeWheel extends StatelessWidget {
-  final List<int> data = List.generate(60, (index) => index);
   final Function(String type, int newValue, bool? minute) setValue;
   final Function(String type, int newValue, bool? minute) setValueLocal;
 
@@ -64,7 +63,7 @@ class TimeWheel extends StatelessWidget {
               ),
             ),
             initialIndex: value.toDouble(),
-            itemCount: data.length,
+            itemCount: 60,
             focusOnItemTap: true,
             scrollDirection: Axis.vertical,
           ),

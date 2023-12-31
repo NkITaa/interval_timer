@@ -372,13 +372,30 @@ class Dialogs {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
-        title: Text(
-            type == "set"
-                ? AppLocalizations.of(context)!.workout_sets
-                : type == "pause"
-                    ? AppLocalizations.of(context)!.workout_pause_time
-                    : AppLocalizations.of(context)!.workout_training_time,
-            style: heading3Bold(context)),
+        titlePadding:
+            const EdgeInsets.only(left: 24, right: 12, bottom: 4, top: 12),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+                type == "set"
+                    ? AppLocalizations.of(context)!.workout_sets
+                    : type == "pause"
+                        ? AppLocalizations.of(context)!.workout_pause_time
+                        : AppLocalizations.of(context)!.workout_training_time,
+                style: heading3Bold(context)),
+            IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: Icon(
+                  TablerIcons.x,
+                  color: MyApp.of(context).isDarkMode()
+                      ? darkNeutral500
+                      : lightNeutral300,
+                )),
+          ],
+        ),
         content: StatefulBuilder(builder: (context, setState) {
           void updateTime(Duration minutes, Duration otherMinutes, int sets) {
             workoutTime = (minutes.inSeconds + otherMinutes.inSeconds) * sets;
@@ -431,7 +448,12 @@ class Dialogs {
                               setValueLocal: setValueLocal,
                             ),
                             const SizedBox(width: 18),
-                            const Text(":", style: TextStyle(fontSize: 32)),
+                            Text(":",
+                                style: TextStyle(
+                                    fontSize: 32,
+                                    color: MyApp.of(context).isDarkMode()
+                                        ? darkNeutral900
+                                        : lightNeutral900)),
                             const SizedBox(width: 18),
                             TimeWheel(
                               type: type,
@@ -449,14 +471,12 @@ class Dialogs {
                         setValue: setValue,
                         setValueLocal: setValueLocal,
                       ),
-                const SizedBox(height: 18),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "${AppLocalizations.of(context)!.workouts_duration} ${(workoutTime / 60).floor()}:${(workoutTime % 60).toString().padLeft(2, '0')}",
-                    style: body1(context),
-                  ),
+                const SizedBox(height: 12),
+                Text(
+                  "${AppLocalizations.of(context)!.workouts_duration} ${(workoutTime / 60).floor()}:${(workoutTime % 60).toString().padLeft(2, '0')}",
+                  style: body1(context),
                 ),
+                const SizedBox(height: 24),
                 SizedBox(
                   width: double.infinity,
                   height: 50,
@@ -686,9 +706,8 @@ class Dialogs {
   }
 
   static Widget buildChangeSoundDialog(
-      BuildContext context, Function setStateParent) {
+      AudioPlayer player, BuildContext context, Function setStateParent) {
     String sound = Hive.box("settings").get("sound");
-    final player = AudioPlayer();
     final List<int> soundIndexes = List.generate(7, (index) => index + 1);
 
     return StatefulBuilder(
@@ -726,6 +745,9 @@ class Dialogs {
                           : lightNeutral300,
                     )),
               ],
+            ),
+            const SizedBox(
+              height: 16,
             ),
             Container(
               decoration: BoxDecoration(
@@ -884,8 +906,24 @@ class Dialogs {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
-      title: Text(AppLocalizations.of(context)!.run_exit_workout,
-          style: heading3Bold(context)),
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(AppLocalizations.of(context)!.run_exit_workout,
+              style: heading3Bold(context)),
+          IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: Icon(
+                TablerIcons.x,
+                color: MyApp.of(context).isDarkMode()
+                    ? darkNeutral500
+                    : lightNeutral300,
+              )),
+        ],
+      ),
+      titlePadding: const EdgeInsets.only(top: 24, left: 24, right: 12),
       content: SizedBox(
         height: 208,
         child: Column(
@@ -893,7 +931,7 @@ class Dialogs {
             Text(AppLocalizations.of(context)!.run_exit_workout_info,
                 style: body1(context)),
             const SizedBox(
-              height: 20,
+              height: 24,
             ),
             SizedBox(
               width: double.infinity,

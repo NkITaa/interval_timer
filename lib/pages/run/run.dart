@@ -186,8 +186,13 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
                     enableDrag: false,
                     context: context,
                     builder: (BuildContext context) =>
-                        Dialogs.buildChangeSoundDialog(context, setState),
-                  );
+                        Dialogs.buildChangeSoundDialog(
+                            player, context, setState),
+                  ).whenComplete(() {
+                    controller.resume();
+                    setState(() {});
+                    player.stop();
+                  });
                 },
                 icon: Icon(
                   TablerIcons.settings,

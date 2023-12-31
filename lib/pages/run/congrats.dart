@@ -82,7 +82,7 @@ class _CongratsState extends State<Congrats> {
                         builder: (context) => const Home(screenIndex: 1)));
                   },
                   child: Text(AppLocalizations.of(context)!.run_home,
-                      style: body1(context).copyWith(
+                      style: body1Bold(context).copyWith(
                           color: MyApp.of(context).isDarkMode()
                               ? darkNeutral50
                               : lightNeutral50)),

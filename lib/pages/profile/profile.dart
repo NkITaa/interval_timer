@@ -10,6 +10,7 @@ import '../../const.dart';
 import '../../main.dart';
 import 'components/settins_page.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -88,14 +89,17 @@ class _ProfileState extends State<Profile> {
                               ? darkNeutral700
                               : lightNeutral600),
                       last: true,
-                      onTap: () => showModalBottomSheet(
-                            isScrollControlled: true,
-                            enableDrag: false,
-                            context: context,
-                            builder: (BuildContext context) =>
-                                Dialogs.buildChangeSoundDialog(
-                                    context, setState),
-                          )),
+                      onTap: () {
+                        final player = AudioPlayer();
+                        showModalBottomSheet(
+                          isScrollControlled: true,
+                          enableDrag: false,
+                          context: context,
+                          builder: (BuildContext context) =>
+                              Dialogs.buildChangeSoundDialog(
+                                  player, context, setState),
+                        ).whenComplete(() => player.dispose());
+                      }),
                 ],
               ),
               SettingsBlock(
