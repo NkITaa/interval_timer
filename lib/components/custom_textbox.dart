@@ -21,9 +21,9 @@ class CustomTextbox extends StatelessWidget {
           style: body1(context),
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+          padding: const EdgeInsets.only(top: 12.0, bottom: 8.0),
           child: SizedBox(
-            height: 71,
+            height: 72,
             child: Form(
               autovalidateMode: AutovalidateMode.onUserInteraction,
               child: TextFormField(
@@ -41,7 +41,7 @@ class CustomTextbox extends StatelessWidget {
                 cursorColor: lightNeutral300,
                 controller: nameController,
                 decoration: const InputDecoration(
-                  contentPadding: EdgeInsets.all(10.0),
+                  contentPadding: EdgeInsets.all(14.0),
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: lightNeutral300),
                     borderRadius: BorderRadius.all(Radius.circular(12.0)),

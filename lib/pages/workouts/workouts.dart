@@ -28,10 +28,16 @@ class _WorkoutsState extends State<Workouts> {
               children: [
                 const WorkoutSearchBar(),
                 Expanded(
-                  child: SingleChildScrollView(
-                    controller: widget.controller,
-                    child: WorkoutList(
-                      setListState: setListState,
+                  child: InkWell(
+                    splashColor: Colors.transparent,
+                    onTap: () {
+                      FocusScope.of(context).unfocus();
+                    },
+                    child: SingleChildScrollView(
+                      controller: widget.controller,
+                      child: WorkoutList(
+                        setListState: setListState,
+                      ),
                     ),
                   ),
                 ),

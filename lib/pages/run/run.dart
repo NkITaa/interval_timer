@@ -43,19 +43,19 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
 
   late Timer timer = Timer.periodic(const Duration(seconds: 1), (timer) {
     duration++;
+    if (counter == 0) {
+      next();
+    }
     if (counter > 0 && !controller.isPaused) {
       counter--;
       setState(() {});
-    }
-    if (counter == 0) {
-      next();
     }
     if (counter == 3) {
       player.play(AssetSource(sound));
     }
   });
 
-  late int counter = widget.time[widget.indexTime] - 1;
+  late int counter = widget.time[widget.indexTime];
   late int remainingPlus = widget.indexTime == 0
       ? (((widget.time[0] + widget.time[1]) *
               (widget.sets - widget.currentSet + 1)) -
@@ -73,11 +73,13 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
                 duration: duration,
               )));
     } else {
-      if (indexTime == 1) {
+      if (indexTime == 1 || widget.time[1] == 0) {
         ++currentSet;
       }
-      indexTime = indexTime == 1 ? 0 : 1;
-      counter = widget.time[indexTime] - 1;
+      if (widget.time[1] != 0) {
+        indexTime = indexTime == 1 ? 0 : 1;
+      }
+      counter = widget.time[indexTime];
       controller.restart(duration: counter);
       remainingPlus = indexTime == 0
           ? (((widget.time[0] + widget.time[1]) *
@@ -190,6 +192,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
                             player, context, setState),
                   ).whenComplete(() {
                     controller.resume();
+                    sound = Hive.box("settings").get("sound");
                     setState(() {});
                     player.stop();
                   });
@@ -206,6 +209,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
           width: double.infinity,
           height: double.infinity,
           child: InkWell(
+            splashColor: Colors.transparent,
             onTap: () {
               if (controller.isPaused) {
                 controller.resume();
@@ -222,7 +226,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
                   CircularCountDownTimer(
                     controller: controller,
                     isReverse: true,
-                    duration: widget.time[indexTime],
+                    duration: widget.time[indexTime] + 1,
                     initialDuration: 0,
                     onComplete: () {
                       next();

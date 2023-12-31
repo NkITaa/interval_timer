@@ -107,6 +107,7 @@ class _PreparationState extends State<Preparation> {
               }),
         ),
         body: InkWell(
+          splashColor: Colors.transparent,
           onTap: () {
             setState(() {
               isPaused = !isPaused;

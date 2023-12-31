@@ -108,12 +108,18 @@ class _WorkoutSearchBarState extends State<WorkoutSearchBar> {
                       .contains(controller.text.trim().toLowerCase()))
                   .toList();
           return [
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
-              child: WorkoutList(
-                setListState: setListState,
-                results: results,
+            InkWell(
+              onTap: () {
+                FocusScope.of(context).unfocus();
+              },
+              splashColor: Colors.transparent,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 12.0, horizontal: 24.0),
+                child: WorkoutList(
+                  setListState: setListState,
+                  results: results,
+                ),
               ),
             )
           ];

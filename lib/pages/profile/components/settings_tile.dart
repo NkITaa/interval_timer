@@ -73,9 +73,12 @@ class _SettingsTileState extends State<SettingsTile> {
               ),
         widget.last
             ? const SizedBox()
-            : const Divider(
+            : Divider(
                 height: 0,
                 thickness: 1,
+                color: MyApp.of(context).isDarkMode()
+                    ? darkNeutral200
+                    : lightNeutral200,
               )
       ],
     );

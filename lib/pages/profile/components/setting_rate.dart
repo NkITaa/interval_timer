@@ -11,6 +11,7 @@ class RateApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      splashColor: Colors.transparent,
       onTap: () async {
         if (!await launchUrl(Uri.parse('https://flutter.dev'))) {
           throw Exception('Could not launch');

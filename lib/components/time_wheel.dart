@@ -44,10 +44,13 @@ class TimeWheel extends StatelessWidget {
           ),
           ScrollSnapList(
             onItemFocus: (int index) {
-              if (index == 0 && minute == false ||
-                  index == 0 && type == 'set') {
+              if (index == 0 && minute == false && type == 'training') {
                 return;
               } else {
+                if (type == 'set' && index == 0) {
+                  index = 1;
+                }
+
                 setValueLocal(type, index, minute);
                 setValue(type, index, minute);
               }
@@ -58,7 +61,7 @@ class TimeWheel extends StatelessWidget {
               height: 76,
               alignment: Alignment.center,
               child: Text(
-                index.toString(),
+                type == 'set' ? (index + 1).toString() : index.toString(),
                 style: heading3Bold(context).copyWith(fontSize: 32),
               ),
             ),

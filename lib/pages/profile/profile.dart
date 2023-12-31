@@ -37,7 +37,7 @@ class _ProfileState extends State<Profile> {
     return Scaffold(
       appBar: AppBar(
         title: Padding(
-          padding: const EdgeInsets.only(left: 8.0),
+          padding: const EdgeInsets.only(left: 8.0, bottom: 24),
           child: Text(
             AppLocalizations.of(context)!.title_profile,
             style: heading2Bold(context),
@@ -129,7 +129,7 @@ class _ProfileState extends State<Profile> {
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 12),
               Text("Version ${version ?? ''}", style: body1(context)),
               const SizedBox(height: 48),
             ],
