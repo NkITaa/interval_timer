@@ -15,6 +15,7 @@ class WorkoutsAppbar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      highlightColor: Colors.transparent,
       splashColor: Colors.transparent,
       onTap: () {
         FocusScope.of(context).unfocus();

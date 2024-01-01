@@ -85,7 +85,7 @@ class Dialogs {
               color: MyApp.of(context).isDarkMode()
                   ? darkNeutral0
                   : lightNeutral100,
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
+              borderRadius: const BorderRadius.all(Radius.circular(16)),
             ),
             child: SingleChildScrollView(
               child: Column(mainAxisSize: MainAxisSize.min, children: [
@@ -128,7 +128,7 @@ class Dialogs {
                   ),
                 ),
                 const SizedBox(
-                  height: 8,
+                  height: 12,
                 ),
                 SizedBox(
                   width: double.infinity,
@@ -240,7 +240,7 @@ class Dialogs {
               color: MyApp.of(context).isDarkMode()
                   ? darkNeutral0
                   : lightNeutral100,
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
+              borderRadius: const BorderRadius.all(Radius.circular(16)),
             ),
             child: SingleChildScrollView(
               child: Column(mainAxisSize: MainAxisSize.min, children: [
@@ -321,7 +321,7 @@ class Dialogs {
                   ),
                 ),
                 const SizedBox(
-                  height: 8,
+                  height: 12,
                 ),
                 index != null && setListState != null
                     ? SizedBox(
@@ -357,16 +357,16 @@ class Dialogs {
                                 TablerIcons.trash,
                                 size: 24,
                                 color: MyApp.of(context).isDarkMode()
-                                    ? lightError600
-                                    : darkError600,
+                                    ? darkError600
+                                    : lightError600,
                               ),
                               const SizedBox(width: 8),
                               Text(
                                   AppLocalizations.of(context)!.workouts_delete,
                                   style: body1Bold(context).copyWith(
                                       color: MyApp.of(context).isDarkMode()
-                                          ? lightError600
-                                          : darkError600)),
+                                          ? darkError600
+                                          : lightError600)),
                             ],
                           ),
                         ),
@@ -447,7 +447,7 @@ class Dialogs {
                 color: MyApp.of(context).isDarkMode()
                     ? darkNeutral0
                     : lightNeutral100,
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                borderRadius: const BorderRadius.all(Radius.circular(16)),
               ),
               height: 336,
               width: MediaQuery.of(context).size.width,
@@ -460,7 +460,7 @@ class Dialogs {
                                 ? darkNeutral100
                                 : lightNeutral0,
                             borderRadius:
-                                const BorderRadius.all(Radius.circular(10)),
+                                const BorderRadius.all(Radius.circular(16)),
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -648,7 +648,7 @@ class Dialogs {
           decoration: BoxDecoration(
             color:
                 MyApp.of(context).isDarkMode() ? darkNeutral100 : lightNeutral0,
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
+            borderRadius: const BorderRadius.all(Radius.circular(16)),
           ),
           padding:
               const EdgeInsets.only(left: 24, right: 24, bottom: 24, top: 12),
@@ -703,7 +703,7 @@ class Dialogs {
                 ),
               ),
               const SizedBox(
-                height: 16,
+                height: 10,
               ),
               SizedBox(
                 width: double.infinity,
@@ -807,7 +807,7 @@ class Dialogs {
                   color: MyApp.of(context).isDarkMode()
                       ? darkNeutral100
                       : lightNeutral0,
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  borderRadius: const BorderRadius.all(Radius.circular(16)),
                 ),
                 child: ListTile(
                   contentPadding:
@@ -835,18 +835,25 @@ class Dialogs {
                         thumbColor: MaterialStateProperty.all<Color>(
                           Colors.white,
                         ),
+                        trackColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.selected)) {
+                              return MyApp.of(context).isDarkMode()
+                                  ? const Color(0xff5F8DEE)
+                                  : const Color(0xff3772EE);
+                            }
+                            return null;
+                          },
+                        ),
                         inactiveTrackColor: MyApp.of(context).isDarkMode()
                             ? darkNeutral500
                             : lightNeutral300,
-                        activeColor: MyApp.of(context).isDarkMode()
-                            ? const Color(0xff5F8DEE)
-                            : const Color(0xff3772EE),
                         value: sound != "off" ? true : false,
                         onChanged: (selected) {
                           if (selected) {
                             sound = "sounds/Countdown 1.mp3";
                           } else {
-                            player.dispose();
+                            player.stop();
                             sound = "off";
                           }
                           Hive.box("settings").put("sound", sound);
@@ -855,69 +862,73 @@ class Dialogs {
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 16,
-              ),
               sound != "off"
-                  ? Container(
-                      decoration: BoxDecoration(
-                          color: MyApp.of(context).isDarkMode()
-                              ? darkNeutral100
-                              : lightNeutral0,
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(16),
-                          )),
-                      child: ListView.builder(
-                        itemCount: soundIndexes.length,
-                        padding: const EdgeInsets.all(0),
-                        shrinkWrap: true,
-                        itemBuilder: (BuildContext context, int index) {
-                          return ListTile(
-                            leading: Icon(TablerIcons.player_play,
-                                color: MyApp.of(context).isDarkMode()
-                                    ? darkNeutral600
-                                    : lightNeutral600),
-                            title: Text(
-                              'Sound ${soundIndexes[index]}',
-                              style: body1(context).copyWith(
-                                  color: MyApp.of(context).isDarkMode()
-                                      ? darkNeutral900
-                                      : lightNeutral850),
-                            ),
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 0),
-                            trailing: Radio(
-                              activeColor: MyApp.of(context).isDarkMode()
-                                  ? darkNeutral850
-                                  : lightNeutral700,
-                              fillColor: MaterialStateProperty.all(
-                                  MyApp.of(context).isDarkMode()
+                  ? Column(
+                      children: [
+                        const SizedBox(
+                          height: 12,
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                              color: MyApp.of(context).isDarkMode()
+                                  ? darkNeutral100
+                                  : lightNeutral0,
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(16),
+                              )),
+                          child: ListView.builder(
+                            itemCount: soundIndexes.length,
+                            padding: const EdgeInsets.all(0),
+                            shrinkWrap: true,
+                            itemBuilder: (BuildContext context, int index) {
+                              return ListTile(
+                                leading: Icon(TablerIcons.player_play,
+                                    color: MyApp.of(context).isDarkMode()
+                                        ? darkNeutral600
+                                        : lightNeutral600),
+                                title: Text(
+                                  'Sound ${soundIndexes[index]}',
+                                  style: body1(context).copyWith(
+                                      color: MyApp.of(context).isDarkMode()
+                                          ? darkNeutral900
+                                          : lightNeutral850),
+                                ),
+                                contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 0),
+                                trailing: Radio(
+                                  activeColor: MyApp.of(context).isDarkMode()
                                       ? darkNeutral850
-                                      : lightNeutral700),
-                              value:
-                                  "sounds/Countdown ${soundIndexes[index]}.mp3",
-                              groupValue: sound,
-                              onChanged: (value) async {
-                                sound = value.toString();
-                                await player.play(AssetSource(sound));
-                                setState(() {});
-                              },
-                            ),
-                            onTap: () async {
-                              sound =
-                                  "sounds/Countdown ${soundIndexes[index]}.mp3";
-                              await player.play(AssetSource(sound));
-                              setState(() {});
+                                      : lightNeutral700,
+                                  fillColor: MaterialStateProperty.all(
+                                      MyApp.of(context).isDarkMode()
+                                          ? darkNeutral850
+                                          : lightNeutral700),
+                                  value:
+                                      "sounds/Countdown ${soundIndexes[index]}.mp3",
+                                  groupValue: sound,
+                                  onChanged: (value) async {
+                                    sound = value.toString();
+                                    await player.play(AssetSource(sound));
+                                    setState(() {});
+                                  },
+                                ),
+                                onTap: () async {
+                                  sound =
+                                      "sounds/Countdown ${soundIndexes[index]}.mp3";
+                                  await player.play(AssetSource(sound));
+                                  setState(() {});
+                                },
+                              );
                             },
-                          );
-                        },
-                      ),
+                          ),
+                        ),
+                      ],
                     )
                   : const SizedBox(),
               sound != "off"
                   ? const SizedBox()
                   : Padding(
-                      padding: const EdgeInsets.only(top: 4.0),
+                      padding: const EdgeInsets.only(top: 8.0),
                       child: Text(
                           AppLocalizations.of(context)!.countdown_description,
                           style: body3(context)),
@@ -962,13 +973,14 @@ class Dialogs {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(AppLocalizations.of(context)!.run_exit_workout,
-                style: heading3Bold(context)),
+            Text(AppLocalizations.of(context)!.run_exit_workout),
             IconButton(
+                padding: const EdgeInsets.all(0),
                 onPressed: () {
                   Navigator.pop(context);
                 },
                 icon: Icon(
+                  size: 24,
                   TablerIcons.x,
                   color: MyApp.of(context).isDarkMode()
                       ? darkNeutral500
@@ -976,10 +988,11 @@ class Dialogs {
                 )),
           ],
         ),
+        titleTextStyle: heading3Bold(context),
         titlePadding: const EdgeInsets.only(top: 8, left: 24, right: 12),
         content: SizedBox(
-          height: 208,
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Text(AppLocalizations.of(context)!.run_exit_workout_info,
                   style: body1(context)),

@@ -52,7 +52,7 @@ class RateApp extends StatelessWidget {
                 image: AssetImage('assets/images/logo.png'),
               ),
             ),
-            const SizedBox(width: 16),
+            const SizedBox(width: 12),
             Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,

@@ -23,13 +23,16 @@ class WorkoutList extends StatelessWidget {
         ? Column(
             children: [
               const SizedBox(
+                height: 16,
+              ),
+              const SizedBox(
                 width: 200,
                 child: Image(
                   image: AssetImage('assets/images/no_workout.png'),
                 ),
               ),
               const SizedBox(
-                height: 12,
+                height: 8,
               ),
               Text(AppLocalizations.of(context)!.workouts_search_no_results_one,
                   style: body1Bold(context)),

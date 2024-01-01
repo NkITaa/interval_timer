@@ -29,6 +29,8 @@ class _WorkoutSearchBarState extends State<WorkoutSearchBar> {
     return Padding(
       padding: const EdgeInsets.only(top: 20.0, bottom: 32.0),
       child: SearchAnchor(
+        dividerColor:
+            MyApp.of(context).isDarkMode() ? darkNeutral200 : lightNeutral200,
         viewLeading: IconButton(
           icon: Icon(
             TablerIcons.chevron_left,
@@ -112,10 +114,11 @@ class _WorkoutSearchBarState extends State<WorkoutSearchBar> {
               onTap: () {
                 FocusScope.of(context).unfocus();
               },
+              highlightColor: Colors.transparent,
               splashColor: Colors.transparent,
               child: Padding(
                 padding: const EdgeInsets.symmetric(
-                    vertical: 12.0, horizontal: 24.0),
+                    vertical: 32.0, horizontal: 24.0),
                 child: WorkoutList(
                   setListState: setListState,
                   results: results,

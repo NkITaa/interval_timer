@@ -209,6 +209,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
           width: double.infinity,
           height: double.infinity,
           child: InkWell(
+            highlightColor: Colors.transparent,
             splashColor: Colors.transparent,
             onTap: () {
               if (controller.isPaused) {

@@ -107,6 +107,7 @@ class _PreparationState extends State<Preparation> {
               }),
         ),
         body: InkWell(
+          highlightColor: Colors.transparent,
           splashColor: Colors.transparent,
           onTap: () {
             setState(() {

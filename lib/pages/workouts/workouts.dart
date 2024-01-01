@@ -29,6 +29,7 @@ class _WorkoutsState extends State<Workouts> {
                 const WorkoutSearchBar(),
                 Expanded(
                   child: InkWell(
+                    highlightColor: Colors.transparent,
                     splashColor: Colors.transparent,
                     onTap: () {
                       FocusScope.of(context).unfocus();

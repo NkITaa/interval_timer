@@ -53,9 +53,16 @@ class _SettingsTileState extends State<SettingsTile> {
                         inactiveTrackColor: MyApp.of(context).isDarkMode()
                             ? darkNeutral500
                             : lightNeutral300,
-                        activeColor: MyApp.of(context).isDarkMode()
-                            ? const Color(0xff5F8DEE)
-                            : const Color(0xff3772EE),
+                        trackColor: MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.selected)) {
+                              return MyApp.of(context).isDarkMode()
+                                  ? const Color(0xff5F8DEE)
+                                  : const Color(0xff3772EE);
+                            }
+                            return null;
+                          },
+                        ),
                         value: MyApp.of(context).isDarkMode(),
                         onChanged: (selected) {
                           selected

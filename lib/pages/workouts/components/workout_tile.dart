@@ -34,6 +34,7 @@ class WorkoutTile extends StatelessWidget {
         );
       },
       splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
       child: Container(
         padding: const EdgeInsets.only(left: 12.0, right: 12, bottom: 12),
         decoration: BoxDecoration(

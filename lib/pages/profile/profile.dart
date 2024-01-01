@@ -21,6 +21,7 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   String? version;
+  final player = AudioPlayer();
 
   @override
   void initState() {
@@ -90,7 +91,6 @@ class _ProfileState extends State<Profile> {
                               : lightNeutral600),
                       last: true,
                       onTap: () {
-                        final player = AudioPlayer();
                         showModalBottomSheet(
                           isScrollControlled: true,
                           enableDrag: false,
@@ -98,7 +98,7 @@ class _ProfileState extends State<Profile> {
                           builder: (BuildContext context) =>
                               Dialogs.buildChangeSoundDialog(
                                   player, context, setState),
-                        ).whenComplete(() => player.dispose());
+                        ).whenComplete(() => player.stop());
                       }),
                 ],
               ),

@@ -66,6 +66,9 @@ class _CongratsState extends State<Congrats> {
                 AppLocalizations.of(context)!.run_finish_one,
                 style: body1Bold(context),
               ),
+              const SizedBox(
+                height: 4,
+              ),
               Text(
                 "${AppLocalizations.of(context)!.run_finish_two}${(widget.duration / 60).floor()}:${(widget.duration % 60).toString().padLeft(2, '0')} ",
                 style: body1(context),
