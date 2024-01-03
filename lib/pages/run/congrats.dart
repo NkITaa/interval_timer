@@ -8,9 +8,18 @@ import 'package:interval_timer/pages/home.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
+import '../../components/dialogs.dart';
+import '../../workout.dart';
+
 class Congrats extends StatefulWidget {
   final int duration;
-  const Congrats({super.key, required this.duration});
+  final List<int> time;
+  final int sets;
+  const Congrats(
+      {super.key,
+      required this.time,
+      required this.sets,
+      required this.duration});
 
   @override
   State<Congrats> createState() => _CongratsState();
@@ -91,6 +100,47 @@ class _CongratsState extends State<Congrats> {
                               : lightNeutral50)),
                 ),
               ),
+              SizedBox(
+                height: 8,
+              ),
+              SizedBox(
+                  width: double.infinity,
+                  height: 55,
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: MyApp.of(context).isDarkMode()
+                            ? darkNeutral100
+                            : lightNeutral0,
+                        side: BorderSide(
+                            width: 1,
+                            color: MyApp.of(context).isDarkMode()
+                                ? darkNeutral300
+                                : lightNeutral300),
+                      ),
+                      onPressed: () {
+                        TextEditingController nameController =
+                            TextEditingController(text: "");
+                        showModalBottomSheet(
+                          isScrollControlled: true,
+                          enableDrag: false,
+                          context: context,
+                          builder: (BuildContext context) =>
+                              Dialogs.buildEditWorkoutDialog(
+                                  nameController,
+                                  context,
+                                  Workout(
+                                      secondsTraining: widget.time[0],
+                                      secondsPause: widget.time[1],
+                                      sets: widget.sets,
+                                      name: ""),
+                                  null,
+                                  null),
+                        );
+                      },
+                      child: Text(
+                        AppLocalizations.of(context)!.jump_in_save_workout,
+                        style: body1Bold(context),
+                      ))),
             ],
           ),
         ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-
 import '../../../const.dart';
 import '../../../main.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TotalTime extends StatelessWidget {
   final Duration totalTime;
@@ -14,7 +14,8 @@ class TotalTime extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Text('Gesamtzeit', style: heading1(context)),
+          Text(AppLocalizations.of(context)!.jump_in_total_time,
+              style: heading1(context)),
           Text(
               "${(totalTime.inSeconds / 60).floor()}:${(totalTime.inSeconds % 60).toString().padLeft(2, '0')}",
               style: display1(context).copyWith(

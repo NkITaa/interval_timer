@@ -70,6 +70,8 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
       timer.cancel();
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => Congrats(
+                time: widget.time,
+                sets: widget.sets,
                 duration: duration,
               )));
     } else {

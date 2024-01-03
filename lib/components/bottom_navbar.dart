@@ -26,51 +26,57 @@ class _BottomNavBarState extends State<BottomNavBar> {
   Widget build(BuildContext context) {
     return ScrollToHideWidget(
       controller: widget.controller,
-      child: BottomNavigationBar(
-        onTap: (index) {
-          widget.onTabTapped(index);
-          setState(() {});
-        },
-        unselectedLabelStyle: footerBold(context),
-        selectedLabelStyle: footerBold(context),
-        selectedIconTheme: MyApp.of(context).isDarkMode()
-            ? const IconThemeData(color: darkNeutral850)
-            : const IconThemeData(color: lightNeutral850),
-        unselectedIconTheme: MyApp.of(context).isDarkMode()
-            ? const IconThemeData(color: darkNeutral500)
-            : const IconThemeData(color: lightNeutral300),
-        selectedItemColor:
-            MyApp.of(context).isDarkMode() ? darkNeutral850 : lightNeutral850,
-        unselectedItemColor:
-            MyApp.of(context).isDarkMode() ? darkNeutral500 : lightNeutral300,
-        currentIndex: widget.screenIndex,
-        items: [
-          BottomNavigationBarItem(
+      child: ClipRRect(
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(16.0),
+          topRight: Radius.circular(16.0),
+        ),
+        child: BottomNavigationBar(
+          onTap: (index) {
+            widget.onTabTapped(index);
+            setState(() {});
+          },
+          unselectedLabelStyle: footerBold(context),
+          selectedLabelStyle: footerBold(context),
+          selectedIconTheme: MyApp.of(context).isDarkMode()
+              ? const IconThemeData(color: darkNeutral850)
+              : const IconThemeData(color: lightNeutral850),
+          unselectedIconTheme: MyApp.of(context).isDarkMode()
+              ? const IconThemeData(color: darkNeutral500)
+              : const IconThemeData(color: lightNeutral300),
+          selectedItemColor:
+              MyApp.of(context).isDarkMode() ? darkNeutral850 : lightNeutral850,
+          unselectedItemColor:
+              MyApp.of(context).isDarkMode() ? darkNeutral500 : lightNeutral300,
+          currentIndex: widget.screenIndex,
+          items: [
+            BottomNavigationBarItem(
+                icon: const Padding(
+                  padding: EdgeInsets.only(top: 12.0),
+                  child: Icon(
+                    TablerIcons.stretching,
+                  ),
+                ),
+                label: AppLocalizations.of(context)!.title_workouts),
+            BottomNavigationBarItem(
+                icon: const Padding(
+                  padding: EdgeInsets.only(top: 12.0),
+                  child: Icon(
+                    TablerIcons.player_play,
+                  ),
+                ),
+                label: AppLocalizations.of(context)!.title_jump_in),
+            BottomNavigationBarItem(
               icon: const Padding(
                 padding: EdgeInsets.only(top: 12.0),
                 child: Icon(
-                  TablerIcons.stretching,
+                  TablerIcons.user_circle,
                 ),
               ),
-              label: AppLocalizations.of(context)!.title_workouts),
-          BottomNavigationBarItem(
-              icon: const Padding(
-                padding: EdgeInsets.only(top: 12.0),
-                child: Icon(
-                  TablerIcons.player_play,
-                ),
-              ),
-              label: AppLocalizations.of(context)!.title_jump_in),
-          BottomNavigationBarItem(
-            icon: const Padding(
-              padding: EdgeInsets.only(top: 12.0),
-              child: Icon(
-                TablerIcons.user_circle,
-              ),
+              label: AppLocalizations.of(context)!.title_profile,
             ),
-            label: AppLocalizations.of(context)!.title_profile,
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

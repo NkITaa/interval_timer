@@ -1,5 +1,6 @@
 {
     "training": "Training",
+    "processed": "Processed",
     "pause": "Pause",
     "paused": "Paused",
     "sets": "Sets",
@@ -26,6 +27,7 @@
     "workouts_edit": "Edit Workout",
     "workouts_create": "Create Workout",
     "workouts_delete": "Delete Workout",
+    "workouts_save": "Save Workout",
     "workouts_delete_confirm": "Are you sure you want to delete this workout? This action cannot be undone.",
     "workouts_delete_cancel": "Cancel",
     "workouts_delete_ok": "Delete",
@@ -44,7 +46,7 @@
     "run_set_from_two": " of ",
     "run_finish_one": "Training successfully completed!",
     "run_finish_two": "Training Duration: ",
-    "run_home": "to Homescreen",
+    "run_home": "Back Home",
     "run_resume_workout": "Resume Workout",
     "run_exit_workout": "End Workout",
     "run_exit_workout_info": "Do you really want to end the workout? Your progress will not be saved.",

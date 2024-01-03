@@ -12,6 +12,8 @@ import 'package:audioplayers/audioplayers.dart';
 import '../const.dart';
 import '../main.dart';
 import '../pages/home.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class Dialogs {
   static Widget buildAddWorkoutDialog(BuildContext context,
@@ -247,7 +249,10 @@ class Dialogs {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(AppLocalizations.of(context)!.workouts_edit,
+                    Text(
+                        index != null && setListState != null
+                            ? AppLocalizations.of(context)!.workouts_edit
+                            : AppLocalizations.of(context)!.workouts_save,
                         style: heading3Bold(context)),
                     IconButton(
                         onPressed: () {
@@ -294,7 +299,7 @@ class Dialogs {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    onPressed: () {
+                    onPressed: () async {
                       if (nameController.text.trim().isNotEmpty) {
                         index != null
                             ? Hive.box("workouts").putAt(
@@ -310,6 +315,14 @@ class Dialogs {
                                 secondsPause: minutesPause.inSeconds,
                                 sets: sets));
                         setListState != null ? setListState() : null;
+                        showTopSnackBar(
+                          Overlay.of(context),
+                          CustomSnackBar.success(
+                            icon: SizedBox(),
+                            maxLines: 1,
+                            message: AppLocalizations.of(context)!.processed,
+                          ),
+                        );
                         Navigator.pop(context);
                       }
                     },
@@ -677,57 +690,63 @@ class Dialogs {
               const SizedBox(
                 height: 8,
               ),
-              SizedBox(
-                width: double.infinity,
-                height: 24,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 2.0),
-                      child: Text(AppLocalizations.of(context)!.german,
-                          style: body1(context)),
-                    ),
-                    Radio(
-                      activeColor: MyApp.of(context).isDarkMode()
-                          ? darkNeutral850
-                          : lightNeutral700,
-                      value: "de",
-                      groupValue: language,
-                      onChanged: (value) {
-                        language = value.toString();
-                        setState(() {});
-                      },
-                    ),
-                  ],
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 24,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 2.0),
+                        child: Text(AppLocalizations.of(context)!.german,
+                            style: body1(context)),
+                      ),
+                      Radio(
+                        activeColor: MyApp.of(context).isDarkMode()
+                            ? darkNeutral850
+                            : lightNeutral700,
+                        value: "de",
+                        groupValue: language,
+                        onChanged: (value) {
+                          language = value.toString();
+                          setState(() {});
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(
                 height: 10,
               ),
-              SizedBox(
-                width: double.infinity,
-                height: 24,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 2.0),
-                      child: Text(AppLocalizations.of(context)!.english,
-                          style: body1(context)),
-                    ),
-                    Radio(
-                      activeColor: MyApp.of(context).isDarkMode()
-                          ? darkNeutral850
-                          : lightNeutral700,
-                      value: "en",
-                      groupValue: language,
-                      onChanged: (value) {
-                        language = value.toString();
-                        setState(() {});
-                      },
-                    )
-                  ],
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 24,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 2.0),
+                        child: Text(AppLocalizations.of(context)!.english,
+                            style: body1(context)),
+                      ),
+                      Radio(
+                        activeColor: MyApp.of(context).isDarkMode()
+                            ? darkNeutral850
+                            : lightNeutral700,
+                        value: "en",
+                        groupValue: language,
+                        onChanged: (value) {
+                          language = value.toString();
+                          setState(() {});
+                        },
+                      )
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(
@@ -760,6 +779,8 @@ class Dialogs {
       AudioPlayer player, BuildContext context, Function setStateParent) {
     String sound = Hive.box("settings").get("sound");
     final List<int> soundIndexes = List.generate(7, (index) => index + 1);
+    int selectedIndex =
+        sound.length > 3 ? int.parse(sound.substring(17, 18)) - 1 : 0;
 
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
@@ -857,6 +878,7 @@ class Dialogs {
                             sound = "off";
                           }
                           Hive.box("settings").put("sound", sound);
+                          selectedIndex = 0;
                           setState(() {});
                         }),
                   ),
@@ -888,10 +910,15 @@ class Dialogs {
                                         : lightNeutral600),
                                 title: Text(
                                   'Sound ${soundIndexes[index]}',
-                                  style: body1(context).copyWith(
-                                      color: MyApp.of(context).isDarkMode()
-                                          ? darkNeutral900
-                                          : lightNeutral850),
+                                  style: selectedIndex == index
+                                      ? body1Bold(context).copyWith(
+                                          color: MyApp.of(context).isDarkMode()
+                                              ? darkNeutral900
+                                              : lightNeutral850)
+                                      : body1(context).copyWith(
+                                          color: MyApp.of(context).isDarkMode()
+                                              ? darkNeutral900
+                                              : lightNeutral850),
                                 ),
                                 contentPadding: const EdgeInsets.symmetric(
                                     horizontal: 8, vertical: 0),
@@ -909,6 +936,7 @@ class Dialogs {
                                   onChanged: (value) async {
                                     sound = value.toString();
                                     await player.play(AssetSource(sound));
+                                    selectedIndex = index;
                                     setState(() {});
                                   },
                                 ),
@@ -916,6 +944,7 @@ class Dialogs {
                                   sound =
                                       "sounds/Countdown ${soundIndexes[index]}.mp3";
                                   await player.play(AssetSource(sound));
+                                  selectedIndex = index;
                                   setState(() {});
                                 },
                               );
