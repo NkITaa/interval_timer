@@ -48,7 +48,12 @@ class TimeWheel extends StatelessWidget {
                 return;
               } else {
                 setValueLocal(type, index, minute);
-                setValue(type, index + 1, minute);
+
+                if (type == 'set') {
+                  setValue(type, index + 1, minute);
+                } else {
+                  setValue(type, index, minute);
+                }
               }
             },
             itemSize: 76,
@@ -61,7 +66,8 @@ class TimeWheel extends StatelessWidget {
                 style: heading3Bold(context).copyWith(fontSize: 32),
               ),
             ),
-            initialIndex: value.toDouble() - 1,
+            initialIndex:
+                type == 'set' ? value.toDouble() - 1 : value.toDouble(),
             itemCount: 60,
             focusOnItemTap: true,
             scrollDirection: Axis.vertical,

@@ -105,8 +105,7 @@ class WorkoutTile extends StatelessWidget {
                   text: TextSpan(
                     children: <TextSpan>[
                       TextSpan(
-                          text: workout.sets.toString() + ' ',
-                          style: body2Bold(context)),
+                          text: '${workout.sets} ', style: body2Bold(context)),
                       TextSpan(
                           text: AppLocalizations.of(context)!.sets,
                           style: body2(context)),

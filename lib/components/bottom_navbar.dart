@@ -52,7 +52,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
           items: [
             BottomNavigationBarItem(
                 icon: const Padding(
-                  padding: EdgeInsets.only(top: 12.0),
+                  padding: EdgeInsets.only(top: 12.0, bottom: 2),
                   child: Icon(
                     TablerIcons.stretching,
                   ),
@@ -60,7 +60,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 label: AppLocalizations.of(context)!.title_workouts),
             BottomNavigationBarItem(
                 icon: const Padding(
-                  padding: EdgeInsets.only(top: 12.0),
+                  padding: EdgeInsets.only(top: 12.0, bottom: 2),
                   child: Icon(
                     TablerIcons.player_play,
                   ),
@@ -68,7 +68,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 label: AppLocalizations.of(context)!.title_jump_in),
             BottomNavigationBarItem(
               icon: const Padding(
-                padding: EdgeInsets.only(top: 12.0),
+                padding: EdgeInsets.only(top: 12.0, bottom: 2),
                 child: Icon(
                   TablerIcons.user_circle,
                 ),

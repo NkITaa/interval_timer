@@ -100,12 +100,12 @@ class _CongratsState extends State<Congrats> {
                               : lightNeutral50)),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 8,
               ),
               SizedBox(
                   width: double.infinity,
-                  height: 55,
+                  height: 50,
                   child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: MyApp.of(context).isDarkMode()

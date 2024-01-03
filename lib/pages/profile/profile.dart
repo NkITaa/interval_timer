@@ -11,6 +11,7 @@ import '../../main.dart';
 import 'components/settins_page.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:hive/hive.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -108,14 +109,16 @@ class _ProfileState extends State<Profile> {
                   SettingsTile(
                     title: AppLocalizations.of(context)!.profile_legal_imprint,
                     onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const SettingsPage(
+                        builder: (context) => SettingsPage(
+                              language: Hive.box("settings").get("language"),
                               index: 1,
                             ))),
                   ),
                   SettingsTile(
                     title: AppLocalizations.of(context)!.profile_legal_privacy,
                     onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const SettingsPage(
+                        builder: (context) => SettingsPage(
+                              language: Hive.box("settings").get("language"),
                               index: 2,
                             ))),
                   ),
@@ -123,7 +126,8 @@ class _ProfileState extends State<Profile> {
                     last: true,
                     title: AppLocalizations.of(context)!.profile_legal_terms,
                     onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const SettingsPage(
+                        builder: (context) => SettingsPage(
+                              language: Hive.box("settings").get("language"),
                               index: 3,
                             ))),
                   ),
