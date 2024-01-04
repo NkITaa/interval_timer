@@ -329,7 +329,12 @@ class Dialogs {
                                 sets: sets));
                         setListState != null ? setListState() : null;
 
-                        workout.name != nameController.text.trim()
+                        workout.name != nameController.text.trim() ||
+                                workout.secondsTraining !=
+                                    minutesTraining.inSeconds ||
+                                workout.secondsPause !=
+                                    minutesPause.inSeconds ||
+                                workout.sets != sets
                             ? showTopSnackBar(
                                 Overlay.of(context),
                                 CustomSnackBar.success(

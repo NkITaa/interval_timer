@@ -101,7 +101,7 @@ class _CongratsState extends State<Congrats> {
                 ),
               ),
               const SizedBox(
-                height: 8,
+                height: 12,
               ),
               SizedBox(
                   width: double.infinity,
