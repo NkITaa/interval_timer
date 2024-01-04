@@ -1,6 +1,5 @@
 {
     "training": "Training",
-    "processed": "Processed",
     "pause": "Pause",
     "paused": "Paused",
     "sets": "Sets",
@@ -13,6 +12,8 @@
     "save_workout": "Save Workout",
     "workout_training_time": "Set Training Time",
     "workout_training_time_save": "Save Training Time",
+    "workout_edited": "Workout bearbeitet",
+    "workout_added": "Workout hinzugefügt",
     "workout_pause_time": "Set Pause Time",
     "workout_pause_time_save": "Save Pause Time",
     "workout_sets": "Set Number",

@@ -1,6 +1,5 @@
 {
   "training": "Training",
-  "processed": "Verarbeitet",
   "pause": "Pause",
   "paused": "Pausiert",
   "sets": "Sätze",
@@ -12,6 +11,8 @@
   "start_workout": "Workout starten",
   "save_workout": "Workout speichern",
   "workout_training_time": "Trainingszeit festlegen",
+  "workout_edited": "Workout bearbeitet",
+  "workout_added": "Workout hinzugefügt",
   "workout_training_time_save": "Trainingszeit speichern",
   "workout_pause_time": "Pausenzeit festlegen",
   "workout_pause_time_save": "Pausenzeit speichern",

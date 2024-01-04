@@ -149,6 +149,19 @@ class Dialogs {
                             secondsPause: minutesPause.inSeconds,
                             sets: sets));
                         Navigator.pop(context);
+                        showTopSnackBar(
+                          Overlay.of(context),
+                          CustomSnackBar.success(
+                            backgroundColor: MyApp.of(context).isDarkMode()
+                                ? const Color(0xff239670)
+                                : const Color(0xff059666),
+                            icon: const SizedBox(),
+                            maxLines: 1,
+                            message:
+                                AppLocalizations.of(context)!.workout_added,
+                          ),
+                          dismissType: DismissType.onSwipe,
+                        );
                         setListState();
                       }
                     },
@@ -315,14 +328,26 @@ class Dialogs {
                                 secondsPause: minutesPause.inSeconds,
                                 sets: sets));
                         setListState != null ? setListState() : null;
-                        showTopSnackBar(
-                          Overlay.of(context),
-                          CustomSnackBar.success(
-                            icon: SizedBox(),
-                            maxLines: 1,
-                            message: AppLocalizations.of(context)!.processed,
-                          ),
-                        );
+
+                        workout.name != nameController.text.trim()
+                            ? showTopSnackBar(
+                                Overlay.of(context),
+                                CustomSnackBar.success(
+                                  backgroundColor:
+                                      MyApp.of(context).isDarkMode()
+                                          ? const Color(0xff239670)
+                                          : const Color(0xff059666),
+                                  icon: const SizedBox(),
+                                  maxLines: 1,
+                                  message: index != null
+                                      ? AppLocalizations.of(context)!
+                                          .workout_edited
+                                      : AppLocalizations.of(context)!
+                                          .workout_added,
+                                ),
+                                dismissType: DismissType.onSwipe,
+                              )
+                            : null;
                         Navigator.pop(context);
                       }
                     },
@@ -595,7 +620,6 @@ class Dialogs {
                   ),
                   onPressed: () {
                     Hive.box("workouts").deleteAt(index);
-
                     Navigator.of(context).push(MaterialPageRoute(
                         fullscreenDialog: true,
                         builder: (context) => const Home(screenIndex: 0)));
@@ -1066,11 +1090,12 @@ class Dialogs {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
+                        elevation: 0,
                         side: BorderSide(
                             width: 1,
                             color: MyApp.of(context).isDarkMode()
                                 ? darkNeutral300
-                                : Colors.transparent),
+                                : lightNeutral300),
                       ),
                       onPressed: () {
                         Navigator.pop(context);
