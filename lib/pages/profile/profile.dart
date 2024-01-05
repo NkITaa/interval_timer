@@ -76,6 +76,7 @@ class _ProfileState extends State<Profile> {
                               ? darkNeutral700
                               : lightNeutral600),
                       onTap: () => showModalBottomSheet(
+                            backgroundColor: Colors.transparent,
                             isScrollControlled: true,
                             enableDrag: false,
                             context: context,
@@ -93,6 +94,7 @@ class _ProfileState extends State<Profile> {
                       last: true,
                       onTap: () {
                         showModalBottomSheet(
+                          backgroundColor: Colors.transparent,
                           isScrollControlled: true,
                           enableDrag: false,
                           context: context,

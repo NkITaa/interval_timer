@@ -59,6 +59,7 @@ class WorkoutList extends StatelessWidget {
                       TextEditingController nameController =
                           TextEditingController();
                       showModalBottomSheet(
+                        backgroundColor: Colors.transparent,
                         isScrollControlled: true,
                         enableDrag: false,
                         context: context,

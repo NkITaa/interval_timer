@@ -87,7 +87,8 @@ class Dialogs {
               color: MyApp.of(context).isDarkMode()
                   ? darkNeutral0
                   : lightNeutral100,
-              borderRadius: const BorderRadius.all(Radius.circular(16)),
+              borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(16), topRight: Radius.circular(16)),
             ),
             child: SingleChildScrollView(
               child: Column(mainAxisSize: MainAxisSize.min, children: [
@@ -255,7 +256,8 @@ class Dialogs {
               color: MyApp.of(context).isDarkMode()
                   ? darkNeutral0
                   : lightNeutral100,
-              borderRadius: const BorderRadius.all(Radius.circular(16)),
+              borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(16), topRight: Radius.circular(16)),
             ),
             child: SingleChildScrollView(
               child: Column(mainAxisSize: MainAxisSize.min, children: [
@@ -490,7 +492,9 @@ class Dialogs {
                 color: MyApp.of(context).isDarkMode()
                     ? darkNeutral0
                     : lightNeutral100,
-                borderRadius: const BorderRadius.all(Radius.circular(16)),
+                borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(16),
+                    topRight: Radius.circular(16)),
               ),
               height: 336,
               width: MediaQuery.of(context).size.width,
@@ -690,7 +694,8 @@ class Dialogs {
           decoration: BoxDecoration(
             color:
                 MyApp.of(context).isDarkMode() ? darkNeutral100 : lightNeutral0,
-            borderRadius: const BorderRadius.all(Radius.circular(16)),
+            borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(16), topRight: Radius.circular(16)),
           ),
           padding:
               const EdgeInsets.only(left: 24, right: 24, bottom: 24, top: 12),
@@ -819,7 +824,8 @@ class Dialogs {
           decoration: BoxDecoration(
             color:
                 MyApp.of(context).isDarkMode() ? darkNeutral50 : lightNeutral50,
-            borderRadius: const BorderRadius.all(Radius.circular(16)),
+            borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(16), topRight: Radius.circular(16)),
           ),
           padding:
               const EdgeInsets.only(left: 24, right: 24, bottom: 24, top: 12),
@@ -1026,7 +1032,8 @@ class Dialogs {
         backgroundColor:
             MyApp.of(context).isDarkMode() ? darkNeutral0 : lightNeutral100,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(16), topRight: Radius.circular(16)),
         ),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

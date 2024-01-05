@@ -121,6 +121,7 @@ class _CongratsState extends State<Congrats> {
                         TextEditingController nameController =
                             TextEditingController(text: "");
                         showModalBottomSheet(
+                          backgroundColor: Colors.transparent,
                           isScrollControlled: true,
                           enableDrag: false,
                           context: context,

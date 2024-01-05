@@ -26,6 +26,7 @@ class WorkoutTile extends StatelessWidget {
         TextEditingController nameController =
             TextEditingController(text: workout.name);
         showModalBottomSheet(
+          backgroundColor: Colors.transparent,
           isScrollControlled: true,
           enableDrag: false,
           context: context,
@@ -59,6 +60,7 @@ class WorkoutTile extends StatelessWidget {
                     TextEditingController nameController =
                         TextEditingController(text: workout.name);
                     showModalBottomSheet(
+                      backgroundColor: Colors.transparent,
                       isScrollControlled: true,
                       enableDrag: false,
                       context: context,

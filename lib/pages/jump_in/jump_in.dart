@@ -77,96 +77,99 @@ class _JumpInState extends State<JumpIn> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(left: 20.0, right: 20.0),
-      child: Column(
-        children: [
-          const SizedBox(
-            height: 48,
-          ),
-          TotalTime(
-            totalTime: workoutTime - minutesPause,
-          ),
-          const SizedBox(
-            height: 48,
-          ),
-          WorkoutTimesContainer(
-            update: update,
-            setValue: setValue,
-            minutesTraining: minutesTraining,
-            minutesPause: minutesPause,
-            sets: sets,
-          ),
-          const SizedBox(
-            height: 24,
-          ),
-          SizedBox(
-              width: double.infinity,
-              height: 55,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => Preparation(
-                            time: [
-                              minutesTraining.inSeconds,
-                              minutesPause.inSeconds
-                            ],
-                            sets: sets,
-                            currentSet: 1,
-                            indexTime: 0,
-                          )));
-                },
-                child: Text(
-                  AppLocalizations.of(context)!.start_workout,
-                  style: body1Bold(context).copyWith(
-                    color: MyApp.of(context).isDarkMode()
-                        ? darkNeutral50
-                        : lightNeutral50,
-                  ),
-                ),
-              )),
-          const SizedBox(
-            height: 12,
-          ),
-          SizedBox(
-              width: double.infinity,
-              height: 55,
-              child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: MyApp.of(context).isDarkMode()
-                        ? darkNeutral100
-                        : lightNeutral0,
-                    side: BorderSide(
-                        width: 1,
-                        color: MyApp.of(context).isDarkMode()
-                            ? darkNeutral300
-                            : lightNeutral300),
-                  ),
+    return SingleChildScrollView(
+      child: Container(
+        margin: const EdgeInsets.only(left: 20.0, right: 20.0),
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 48,
+            ),
+            TotalTime(
+              totalTime: workoutTime - minutesPause,
+            ),
+            const SizedBox(
+              height: 48,
+            ),
+            WorkoutTimesContainer(
+              update: update,
+              setValue: setValue,
+              minutesTraining: minutesTraining,
+              minutesPause: minutesPause,
+              sets: sets,
+            ),
+            const SizedBox(
+              height: 24,
+            ),
+            SizedBox(
+                width: double.infinity,
+                height: 55,
+                child: ElevatedButton(
                   onPressed: () {
-                    TextEditingController nameController =
-                        TextEditingController(text: "");
-                    showModalBottomSheet(
-                      isScrollControlled: true,
-                      enableDrag: false,
-                      context: context,
-                      builder: (BuildContext context) =>
-                          Dialogs.buildEditWorkoutDialog(
-                              nameController,
-                              context,
-                              Workout(
-                                  secondsTraining: minutesTraining.inSeconds,
-                                  secondsPause: minutesPause.inSeconds,
-                                  sets: sets,
-                                  name: ""),
-                              null,
-                              null),
-                    );
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => Preparation(
+                              time: [
+                                minutesTraining.inSeconds,
+                                minutesPause.inSeconds
+                              ],
+                              sets: sets,
+                              currentSet: 1,
+                              indexTime: 0,
+                            )));
                   },
                   child: Text(
-                    AppLocalizations.of(context)!.jump_in_save_workout,
-                    style: body1Bold(context),
-                  ))),
-        ],
+                    AppLocalizations.of(context)!.start_workout,
+                    style: body1Bold(context).copyWith(
+                      color: MyApp.of(context).isDarkMode()
+                          ? darkNeutral50
+                          : lightNeutral50,
+                    ),
+                  ),
+                )),
+            const SizedBox(
+              height: 12,
+            ),
+            SizedBox(
+                width: double.infinity,
+                height: 55,
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: MyApp.of(context).isDarkMode()
+                          ? darkNeutral100
+                          : lightNeutral0,
+                      side: BorderSide(
+                          width: 1,
+                          color: MyApp.of(context).isDarkMode()
+                              ? darkNeutral300
+                              : lightNeutral300),
+                    ),
+                    onPressed: () {
+                      TextEditingController nameController =
+                          TextEditingController(text: "");
+                      showModalBottomSheet(
+                        backgroundColor: Colors.transparent,
+                        isScrollControlled: true,
+                        enableDrag: false,
+                        context: context,
+                        builder: (BuildContext context) =>
+                            Dialogs.buildEditWorkoutDialog(
+                                nameController,
+                                context,
+                                Workout(
+                                    secondsTraining: minutesTraining.inSeconds,
+                                    secondsPause: minutesPause.inSeconds,
+                                    sets: sets,
+                                    name: ""),
+                                null,
+                                null),
+                      );
+                    },
+                    child: Text(
+                      AppLocalizations.of(context)!.jump_in_save_workout,
+                      style: body1Bold(context),
+                    ))),
+          ],
+        ),
       ),
     );
   }

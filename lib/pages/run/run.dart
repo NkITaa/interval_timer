@@ -185,6 +185,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
                   controller.pause();
                   setState(() {});
                   showModalBottomSheet(
+                    backgroundColor: Colors.transparent,
                     isScrollControlled: true,
                     enableDrag: false,
                     context: context,

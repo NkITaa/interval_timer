@@ -19,17 +19,6 @@
               android:name="io.flutter.embedding.android.NormalTheme"
               android:resource="@style/NormalTheme"
               />
-            <queries>
-                <!-- If your app checks for HTTPS support -->
-                <intent>
-                    <action android:name="android.support.customtabs.action.CustomTabsService" />
-                </intent>
-                <!-- If your app checks for mailto support -->
-                <intent>
-                    <action android:name="android.intent.action.VIEW" />
-                    <data android:scheme="mailto" />
-                </intent>
-            </queries>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -41,4 +30,15 @@
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
+    <queries>
+        <!-- If your app checks for HTTPS support -->
+        <intent>
+            <action android:name="android.support.customtabs.action.CustomTabsService" />
+        </intent>
+        <!-- If your app checks for mailto support -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="mailto" />
+        </intent>
+    </queries>
 </manifest>
