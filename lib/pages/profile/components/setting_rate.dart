@@ -15,9 +15,12 @@ class RateApp extends StatelessWidget {
     return InkWell(
       splashColor: Colors.transparent,
       onTap: () async {
-        if (!await launchUrl(Uri.parse(Platform.isAndroid
-            ? 'https://simplytimer.com/'
-            : 'https://apps.apple.com/de/app/simplytimer-interval-timer-app/id6475160260?l=en-GB'))) {
+        if (!await launchUrl(
+          Uri.parse(Platform.isAndroid
+              ? 'https://simplytimer.com/'
+              : 'https://apps.apple.com/app/id6475160260'),
+          mode: LaunchMode.externalApplication,
+        )) {
           throw Exception('Could not launch');
         }
       },
@@ -70,7 +73,10 @@ class RateApp extends StatelessWidget {
             const Spacer(),
             ElevatedButton(
               onPressed: () async {
-                if (!await launchUrl(Uri.parse('https://flutter.dev'))) {
+                if (!await launchUrl(
+                  Uri.parse('https://apps.apple.com/app/id6475160260'),
+                  mode: LaunchMode.externalApplication,
+                )) {
                   throw Exception('Could not launch');
                 }
               },

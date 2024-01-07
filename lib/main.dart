@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:interval_timer/pages/home.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -19,9 +20,12 @@ void main() async {
   if (Hive.box("settings").get("language") == null) {
     await Hive.box("settings").put("language", "en");
   }
+
   if (Hive.box("settings").get("darkmode") == null) {
-    await Hive.box("settings")
-        .put("darkmode", ThemeMode.system == ThemeMode.dark);
+    await Hive.box("settings").put(
+        "darkmode",
+        SchedulerBinding.instance.platformDispatcher.platformBrightness ==
+            Brightness.dark);
   }
   _themeMode =
       Hive.box("settings").get("darkmode") ? ThemeMode.dark : ThemeMode.light;

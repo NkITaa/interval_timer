@@ -10,6 +10,7 @@ import 'package:hive/hive.dart';
 import '../../components/dialogs.dart';
 import 'circular_countdown/circular_countdown.dart';
 import 'congrats.dart';
+import 'package:wakelock/wakelock.dart';
 
 class Run extends StatefulWidget {
   final List<int> time;
@@ -67,6 +68,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
   next() {
     if (indexTime == 0 && widget.sets == currentSet) {
       timer.cancel();
+      Wakelock.disable();
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => Congrats(
                 time: widget.time,
@@ -125,11 +127,13 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     timer;
+    Wakelock.enable();
   }
 
   @override
   dispose() {
     timer.cancel();
+    Wakelock.disable();
     super.dispose();
   }
 

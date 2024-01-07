@@ -9,7 +9,6 @@ import '../../components/dialogs.dart';
 import '../../const.dart';
 import '../../main.dart';
 import 'components/settins_page.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:hive/hive.dart';
 
@@ -21,17 +20,11 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  String? version;
   final player = AudioPlayer();
 
   @override
   void initState() {
     super.initState();
-    PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
-      setState(() {
-        version = packageInfo.version;
-      });
-    });
   }
 
   @override
@@ -52,7 +45,7 @@ class _ProfileState extends State<Profile> {
           padding: const EdgeInsets.only(left: 24.0, right: 24),
           child: Column(
             children: [
-              RateApp(version: version),
+              RateApp(version: '1.0.20'),
               SettingsBlock(
                 title: AppLocalizations.of(context)!.profile_settings,
                 tiles: [
@@ -136,7 +129,7 @@ class _ProfileState extends State<Profile> {
                 ],
               ),
               const SizedBox(height: 12),
-              Text("Version ${version ?? ''}", style: body1(context)),
+              Text("Version 1.0.20", style: body1(context)),
               const SizedBox(height: 48),
             ],
           ),

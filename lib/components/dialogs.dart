@@ -16,8 +16,11 @@ import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class Dialogs {
-  static Widget buildAddWorkoutDialog(BuildContext context,
-      Function setListState, TextEditingController nameController) {
+  static Widget buildAddWorkoutDialog(
+    BuildContext context,
+    Function setListState,
+    TextEditingController nameController,
+  ) {
     Duration workoutTime = const Duration(minutes: 4, seconds: 30);
     Duration minutesTraining = const Duration(minutes: 1, seconds: 15);
     Duration minutesPause = const Duration(seconds: 15);

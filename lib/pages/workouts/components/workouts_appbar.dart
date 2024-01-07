@@ -47,7 +47,10 @@ class WorkoutsAppbar extends StatelessWidget implements PreferredSizeWidget {
                   context: context,
                   builder: (BuildContext context) =>
                       Dialogs.buildAddWorkoutDialog(
-                          context, setListState, nameController),
+                    context,
+                    setListState,
+                    nameController,
+                  ),
                 );
               },
             ),
