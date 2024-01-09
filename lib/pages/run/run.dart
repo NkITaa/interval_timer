@@ -2,13 +2,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:interval_timer/const.dart';
 import 'package:interval_timer/main.dart';
+import 'package:interval_timer/pages/run/custom_timer.dart';
 import 'package:interval_timer/pages/run/preparation.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:hive/hive.dart';
 import '../../components/dialogs.dart';
-import 'circular_countdown/circular_countdown.dart';
 import 'congrats.dart';
 import 'package:wakelock/wakelock.dart';
 
@@ -17,7 +17,7 @@ class Run extends StatefulWidget {
   final int sets;
   final int currentSet;
   final int indexTime;
-  final int duration;
+  final DateTime startTime;
 
   const Run({
     super.key,
@@ -25,7 +25,7 @@ class Run extends StatefulWidget {
     required this.sets,
     required this.currentSet,
     required this.indexTime,
-    required this.duration,
+    required this.startTime,
   });
 
   @override
@@ -33,27 +33,26 @@ class Run extends StatefulWidget {
 }
 
 class _RunState extends State<Run> with WidgetsBindingObserver {
-  final CountDownController controller = CountDownController();
+  bool isRunning = true;
   final player = AudioPlayer();
   String sound = Hive.box("settings").get("sound");
-
-  late int duration = widget.duration;
-  late int currentSet = widget.currentSet;
-  late int indexTime = widget.indexTime;
+  DateTime? timeLeft;
 
   late Timer timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-    duration++;
     if (counter == 0) {
       next();
     }
-    if (counter > 0 && !controller.isPaused) {
+    if (counter > 0 && isRunning) {
       counter--;
       setState(() {});
     }
-    if (counter == 3) {
+    if (counter == 3 && isRunning) {
       player.play(AssetSource(sound));
     }
   });
+
+  late int currentSet = widget.currentSet;
+  late int indexTime = widget.indexTime;
 
   late int counter = widget.time[widget.indexTime];
   late int remainingPlus = widget.indexTime == 0
@@ -68,12 +67,14 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
   next() {
     if (indexTime == 0 && widget.sets == currentSet) {
       timer.cancel();
+      WidgetsBinding.instance.removeObserver(this);
+
       Wakelock.disable();
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => Congrats(
                 time: widget.time,
                 sets: widget.sets,
-                duration: duration,
+                duration: DateTime.now().difference(widget.startTime).inSeconds,
               )));
     } else {
       if (indexTime == 1 || widget.time[1] == 0) {
@@ -83,7 +84,6 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
         indexTime = indexTime == 1 ? 0 : 1;
       }
       counter = widget.time[indexTime];
-      controller.restart(duration: counter);
       remainingPlus = indexTime == 0
           ? (((widget.time[0] + widget.time[1]) *
                   (widget.sets - currentSet + 1)) -
@@ -109,8 +109,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
         --currentSet;
       }
       indexTime = indexTime == 0 ? 1 : 0;
-      counter = widget.time[indexTime] - 1;
-      controller.restart(duration: counter);
+      counter = widget.time[indexTime];
       remainingPlus = indexTime == 0
           ? (((widget.time[0] + widget.time[1]) *
                   (widget.sets - currentSet + 1)) -
@@ -128,13 +127,74 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
     super.initState();
     timer;
     Wakelock.enable();
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   dispose() {
-    timer.cancel();
     Wakelock.disable();
+    timer.cancel();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.resumed:
+        if (timeLeft != null) {
+          int passedTime = DateTime.now().difference(timeLeft!).inSeconds;
+          int rest = remainingPlus + counter - widget.time[1] - passedTime;
+          if (rest < 0) {
+            timer.cancel();
+            WidgetsBinding.instance.removeObserver(this);
+            Wakelock.disable();
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => Congrats(
+                      time: widget.time,
+                      sets: widget.sets,
+                      duration:
+                          DateTime.now().difference(widget.startTime).inSeconds,
+                    )));
+          } else {
+            int index = 0;
+            int todoSets = 0;
+
+            while (rest > 0) {
+              rest -= widget.time[index];
+              if (rest > 0) {
+                index = 1 - index;
+                if (index == 1) {
+                  todoSets++;
+                }
+              }
+            }
+
+            indexTime = index;
+            currentSet = widget.sets - todoSets;
+            counter = widget.time[indexTime] - rest.abs();
+            remainingPlus = indexTime == 0
+                ? (((widget.time[0] + widget.time[1]) *
+                        (widget.sets - currentSet + 1)) -
+                    widget.time[0])
+                : (((widget.time[0] + widget.time[1]) *
+                        (widget.sets - currentSet + 1)) -
+                    widget.time[0] -
+                    widget.time[1]);
+            isRunning = true;
+            timeLeft = null;
+            setState(() {});
+          }
+        }
+        break;
+      case AppLifecycleState.paused:
+        if (isRunning) {
+          timeLeft = DateTime.now();
+          isRunning = false;
+        }
+        break;
+      default:
+    }
   }
 
   @override
@@ -144,7 +204,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: controller.isPaused
+          colors: !isRunning
               ? [const Color(0xffA3A3A3), const Color(0xff7C7C7C)]
               : indexTime == 0
                   ? [const Color(0xffF01D52), const Color(0xffFA5F54)]
@@ -157,12 +217,13 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
           leading: IconButton(
               color: const Color(0xffFADCE3),
               onPressed: () {
-                controller.pause();
+                isRunning = false;
                 setState(() {});
                 showDialog(
-                    context: context,
-                    builder: (BuildContext context) =>
-                        Dialogs.buildExitDialog(context, timer, controller));
+                        context: context,
+                        builder: (BuildContext context) =>
+                            Dialogs.buildExitDialog(context, timer))
+                    .whenComplete(() => isRunning = true);
               },
               icon: Icon(
                 TablerIcons.x,
@@ -186,7 +247,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
                     ? lightNeutral100
                     : lightNeutral50,
                 onPressed: () {
-                  controller.pause();
+                  isRunning = false;
                   setState(() {});
                   showModalBottomSheet(
                     backgroundColor: Colors.transparent,
@@ -197,7 +258,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
                         Dialogs.buildChangeSoundDialog(
                             player, context, setState),
                   ).whenComplete(() {
-                    controller.resume();
+                    isRunning = true;
                     sound = Hive.box("settings").get("sound");
                     setState(() {});
                     player.stop();
@@ -218,10 +279,12 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
             highlightColor: Colors.transparent,
             splashColor: Colors.transparent,
             onTap: () {
-              if (controller.isPaused) {
-                controller.resume();
+              if (!isRunning) {
+                isRunning = true;
+                setState(() {});
               } else {
-                controller.pause();
+                isRunning = false;
+                setState(() {});
               }
               setState(() {});
             },
@@ -230,51 +293,15 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  CircularCountDownTimer(
-                    controller: controller,
-                    isReverse: true,
-                    duration: widget.time[indexTime] + 1,
-                    initialDuration: 0,
-                    onComplete: () {
-                      next();
-                    },
-                    width: 320,
-                    height: 300,
-                    strokeCap: StrokeCap.round,
-                    ringColor: Colors.white.withOpacity(0.5),
-                    fillColor: MyApp.of(context).isDarkMode()
-                        ? lightNeutral100
-                        : lightNeutral50,
-                    strokeWidth: 16.0,
-                    timeFormatterFunction:
-                        (defaultFormatterFunction, duration) {
-                      if (duration.inSeconds < 60) {
-                        return "0:${duration.inSeconds.toString().padLeft(2, '0')}";
-                      } else {
-                        return Function.apply(
-                            defaultFormatterFunction, [duration]);
-                      }
-                    },
-                    subText: Text(
-                      controller.isPaused
-                          ? AppLocalizations.of(context)!.paused
-                          : indexTime == 0
-                              ? AppLocalizations.of(context)!.training
-                              : AppLocalizations.of(context)!.pause,
-                      style: heading1Bold(context).copyWith(
-                          color: MyApp.of(context).isDarkMode()
-                              ? lightNeutral100
-                              : lightNeutral50),
-                    ),
-                    textStyle: display2(context).copyWith(
-                        color: MyApp.of(context).isDarkMode()
-                            ? lightNeutral100
-                            : lightNeutral50),
-                  ),
+                  CustomTimer(
+                      seconds: counter,
+                      maxSeconds: widget.time[indexTime],
+                      isRunning: isRunning,
+                      indexTime: indexTime),
                   Column(
                     children: [
                       Text(
-                          "${((remainingPlus + counter) / 60).floor()}:${((remainingPlus + counter) % 60).toString().padLeft(2, '0')}",
+                          "${((remainingPlus + counter - widget.time[1]) / 60).floor()}:${((remainingPlus + counter - widget.time[1]) % 60).toString().padLeft(2, '0')}",
                           style: body0Bold(context).copyWith(
                               color: MyApp.of(context).isDarkMode()
                                   ? lightNeutral100
@@ -310,21 +337,23 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
                             : lightNeutral50,
                         child: IconButton(
                             iconSize: 60,
-                            color: controller.isPaused
+                            color: !isRunning
                                 ? const Color(0xff7C7C7C)
                                 : indexTime == 0
                                     ? const Color(0xffFA5F54)
                                     : const Color(0xff7189E1),
                             onPressed: () {
-                              if (controller.isPaused) {
-                                controller.resume();
+                              if (!isRunning) {
+                                isRunning = true;
+                                setState(() {});
                               } else {
-                                controller.pause();
+                                isRunning = false;
+                                setState(() {});
                               }
                               setState(() {});
                             },
                             icon: Icon(
-                              controller.isPaused
+                              !isRunning
                                   ? TablerIcons.player_play_filled
                                   : TablerIcons.player_pause_filled,
                             )),

@@ -1026,7 +1026,7 @@ class Dialogs {
     );
   }
 
-  static Widget buildExitDialog(context, timer, controller) {
+  static Widget buildExitDialog(context, timer) {
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
       child: AlertDialog(
@@ -1034,9 +1034,8 @@ class Dialogs {
         surfaceTintColor: Colors.transparent,
         backgroundColor:
             MyApp.of(context).isDarkMode() ? darkNeutral0 : lightNeutral100,
-        shape: RoundedRectangleBorder(
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(16)),
         ),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1114,7 +1113,6 @@ class Dialogs {
                       ),
                       onPressed: () {
                         Navigator.pop(context);
-                        controller.resume();
                       },
                       child: Text(
                           AppLocalizations.of(context)!.run_resume_workout,

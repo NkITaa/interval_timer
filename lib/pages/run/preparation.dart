@@ -70,7 +70,7 @@ class _PreparationState extends State<Preparation> {
     timer.cancel();
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => Run(
-              duration: 0,
+              startTime: DateTime.now(),
               time: widget.time,
               sets: widget.sets,
               currentSet: widget.currentSet,
