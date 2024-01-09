@@ -11,11 +11,13 @@ class TimeWheel extends StatelessWidget {
   final String type;
   final int value;
   final bool? minute;
+  final int? otherValue;
   TimeWheel(
       {super.key,
       required this.setValue,
       required this.type,
       required this.setValueLocal,
+      this.otherValue,
       this.minute,
       required this.value});
 
@@ -44,7 +46,7 @@ class TimeWheel extends StatelessWidget {
           ),
           ScrollSnapList(
             onItemFocus: (int index) {
-              if (index == 0 && minute == false && type == 'training') {
+              if (index == 0 && type == 'training' && otherValue == 0) {
                 return;
               } else {
                 setValueLocal(type, index, minute);

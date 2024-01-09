@@ -518,6 +518,7 @@ class Dialogs {
                               TimeWheel(
                                 type: type,
                                 value: minutes.inMinutes.remainder(60),
+                                otherValue: minutes.inSeconds.remainder(60),
                                 setValue: setValue,
                                 minute: true,
                                 setValueLocal: setValueLocal,
@@ -533,6 +534,7 @@ class Dialogs {
                               TimeWheel(
                                 type: type,
                                 value: minutes.inSeconds.remainder(60),
+                                otherValue: minutes.inMinutes.remainder(60),
                                 setValue: setValue,
                                 minute: false,
                                 setValueLocal: setValueLocal,
