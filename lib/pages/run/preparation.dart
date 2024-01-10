@@ -6,7 +6,7 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:interval_timer/const.dart';
 import 'package:interval_timer/pages/run/run.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:audioplayers/audioplayers.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:hive/hive.dart';
 import '../../main.dart';
 import '../home.dart';
@@ -62,12 +62,62 @@ class _PreparationState extends State<Preparation> {
   }
 
   playAudio() async {
-    await player.play(AssetSource(sound));
+    await player.setAsset(sound);
+    await player.play();
   }
 
   next() async {
     player.dispose();
     timer.cancel();
+
+    List<AudioSource> runTime = [];
+    List<AudioSource> pauseTime = [];
+
+    for (int i = 0; i < widget.time[0] - 5; i++) {
+      runTime.add(AudioSource.asset("assets/sounds/Silence.mp3"));
+    }
+
+    if (widget.time[0] >= 3) {
+      runTime.add(AudioSource.asset(sound));
+    }
+
+    for (int i = 0; i < widget.time[1] - 5; i++) {
+      pauseTime.add(AudioSource.asset("assets/sounds/Silence.mp3"));
+    }
+    if (widget.time[1] >= 3) {
+      pauseTime.add(AudioSource.asset(sound));
+    }
+
+    final run = ConcatenatingAudioSource(
+      useLazyPreparation: true,
+      shuffleOrder: DefaultShuffleOrder(),
+      children: runTime,
+    );
+
+    final pause = ConcatenatingAudioSource(
+      useLazyPreparation: true,
+      shuffleOrder: DefaultShuffleOrder(),
+      children: pauseTime,
+    );
+
+    final workout = ConcatenatingAudioSource(
+        useLazyPreparation: true,
+        shuffleOrder: DefaultShuffleOrder(),
+        children: [
+          ConcatenatingAudioSource(
+            children: [
+              run,
+              pause,
+            ],
+          )
+        ]);
+
+    final player2 = AudioPlayer();
+    player2.setLoopMode(LoopMode.all);
+    player2.setAudioSource(workout,
+        initialIndex: 0, initialPosition: Duration.zero);
+    player2.play();
+
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => Run(
               startTime: DateTime.now(),
@@ -75,6 +125,7 @@ class _PreparationState extends State<Preparation> {
               sets: widget.sets,
               currentSet: widget.currentSet,
               indexTime: widget.indexTime,
+              player: player2,
             )));
   }
 

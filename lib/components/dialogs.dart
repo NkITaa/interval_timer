@@ -8,7 +8,7 @@ import 'package:hive/hive.dart';
 import 'package:interval_timer/workout.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:audioplayers/audioplayers.dart';
+import 'package:just_audio/just_audio.dart';
 import '../const.dart';
 import '../main.dart';
 import '../pages/home.dart';
@@ -819,7 +819,7 @@ class Dialogs {
     String sound = Hive.box("settings").get("sound");
     final List<int> soundIndexes = List.generate(7, (index) => index + 1);
     int selectedIndex =
-        sound.length > 3 ? int.parse(sound.substring(17, 18)) - 1 : 0;
+        sound.length > 3 ? int.parse(sound.substring(24, 25)) - 1 : 0;
 
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
@@ -912,7 +912,7 @@ class Dialogs {
                         value: sound != "off" ? true : false,
                         onChanged: (selected) {
                           if (selected) {
-                            sound = "sounds/Countdown 1.mp3";
+                            sound = "assets/sounds/Countdown 1.mp3";
                           } else {
                             player.stop();
                             sound = "off";
@@ -971,21 +971,23 @@ class Dialogs {
                                           ? darkNeutral850
                                           : lightNeutral700),
                                   value:
-                                      "sounds/Countdown ${soundIndexes[index]}.mp3",
+                                      "assets/sounds/Countdown ${soundIndexes[index]}.mp3",
                                   groupValue: sound,
                                   onChanged: (value) async {
                                     sound = value.toString();
-                                    await player.play(AssetSource(sound));
                                     selectedIndex = index;
                                     setState(() {});
+                                    await player.setAsset(sound);
+                                    await player.play();
                                   },
                                 ),
                                 onTap: () async {
                                   sound =
-                                      "sounds/Countdown ${soundIndexes[index]}.mp3";
-                                  await player.play(AssetSource(sound));
+                                      "assets/sounds/Countdown ${soundIndexes[index]}.mp3";
                                   selectedIndex = index;
                                   setState(() {});
+                                  await player.setAsset(sound);
+                                  await player.play();
                                 },
                               );
                             },
@@ -1028,7 +1030,7 @@ class Dialogs {
     );
   }
 
-  static Widget buildExitDialog(context, timer) {
+  static Widget buildExitDialog(context, timer, player) {
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
       child: AlertDialog(
@@ -1082,6 +1084,7 @@ class Dialogs {
                     ),
                     onPressed: () {
                       timer.cancel();
+                      player.dispose();
                       Navigator.of(context).push(MaterialPageRoute(
                           fullscreenDialog: true,
                           builder: (context) => const Home(screenIndex: 1)));

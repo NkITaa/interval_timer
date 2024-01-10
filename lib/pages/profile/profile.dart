@@ -9,8 +9,8 @@ import '../../components/dialogs.dart';
 import '../../const.dart';
 import '../../main.dart';
 import 'components/settins_page.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:hive/hive.dart';
+import 'package:just_audio/just_audio.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});

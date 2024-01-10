@@ -30,7 +30,7 @@ void main() async {
   _themeMode =
       Hive.box("settings").get("darkmode") ? ThemeMode.dark : ThemeMode.light;
   if (Hive.box("settings").get("sound") == null) {
-    await Hive.box("settings").put("sound", "sounds/Countdown 1.mp3");
+    await Hive.box("settings").put("sound", "assets/sounds/Countdown 1.mp3");
   }
 
   runApp(const MyApp());

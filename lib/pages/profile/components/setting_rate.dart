@@ -17,7 +17,7 @@ class RateApp extends StatelessWidget {
       onTap: () async {
         if (!await launchUrl(
           Uri.parse(Platform.isAndroid
-              ? 'https://simplytimer.com/'
+              ? 'https://play.google.com/store/apps/details?id=com.nikita.interval_timer'
               : 'https://apps.apple.com/app/id6475160260'),
           mode: LaunchMode.externalApplication,
         )) {

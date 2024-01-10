@@ -6,7 +6,7 @@ import 'package:interval_timer/pages/run/custom_timer.dart';
 import 'package:interval_timer/pages/run/preparation.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:audioplayers/audioplayers.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:hive/hive.dart';
 import '../../components/dialogs.dart';
 import 'congrats.dart';
@@ -18,6 +18,7 @@ class Run extends StatefulWidget {
   final int currentSet;
   final int indexTime;
   final DateTime startTime;
+  final AudioPlayer player;
 
   const Run({
     super.key,
@@ -26,6 +27,7 @@ class Run extends StatefulWidget {
     required this.currentSet,
     required this.indexTime,
     required this.startTime,
+    required this.player,
   });
 
   @override
@@ -34,7 +36,6 @@ class Run extends StatefulWidget {
 
 class _RunState extends State<Run> with WidgetsBindingObserver {
   bool isRunning = true;
-  final player = AudioPlayer();
   String sound = Hive.box("settings").get("sound");
   DateTime? timeLeft;
 
@@ -46,15 +47,12 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
       counter--;
       setState(() {});
     }
-    if (counter == 3 && isRunning) {
-      player.play(AssetSource(sound));
-    }
   });
 
   late int currentSet = widget.currentSet;
   late int indexTime = widget.indexTime;
 
-  late int counter = widget.time[widget.indexTime];
+  late int counter = widget.time[widget.indexTime] - 1;
   late int remainingPlus = widget.indexTime == 0
       ? (((widget.time[0] + widget.time[1]) *
               (widget.sets - widget.currentSet + 1)) -
@@ -64,11 +62,11 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
           widget.time[0] -
           widget.time[1]);
 
-  next() {
+  next() async {
     if (indexTime == 0 && widget.sets == currentSet) {
       timer.cancel();
       WidgetsBinding.instance.removeObserver(this);
-
+      widget.player.dispose();
       Wakelock.disable();
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => Congrats(
@@ -83,7 +81,8 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
       if (widget.time[1] != 0) {
         indexTime = indexTime == 1 ? 0 : 1;
       }
-      counter = widget.time[indexTime];
+      await widget.player.seek(Duration.zero, index: indexTime);
+      counter = widget.time[indexTime] - 1;
       remainingPlus = indexTime == 0
           ? (((widget.time[0] + widget.time[1]) *
                   (widget.sets - currentSet + 1)) -
@@ -96,8 +95,11 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
     }
   }
 
-  back() {
+  back() async {
     if (indexTime == 0 && currentSet == 1) {
+      timer.cancel();
+      WidgetsBinding.instance.removeObserver(this);
+      widget.player.dispose();
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => Preparation(
               time: widget.time,
@@ -109,7 +111,8 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
         --currentSet;
       }
       indexTime = indexTime == 0 ? 1 : 0;
-      counter = widget.time[indexTime];
+      await widget.player.seek(Duration.zero, index: indexTime);
+      counter = widget.time[indexTime] - 1;
       remainingPlus = indexTime == 0
           ? (((widget.time[0] + widget.time[1]) *
                   (widget.sets - currentSet + 1)) -
@@ -134,6 +137,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
   dispose() {
     Wakelock.disable();
     timer.cancel();
+    widget.player.dispose();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -172,7 +176,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
 
             indexTime = index;
             currentSet = widget.sets - todoSets;
-            counter = widget.time[indexTime] - rest.abs();
+            counter = widget.time[indexTime] - rest.abs() - 1;
             remainingPlus = indexTime == 0
                 ? (((widget.time[0] + widget.time[1]) *
                         (widget.sets - currentSet + 1)) -
@@ -182,6 +186,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
                     widget.time[0] -
                     widget.time[1]);
             isRunning = true;
+            widget.player.play();
             timeLeft = null;
             setState(() {});
           }
@@ -190,6 +195,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
       case AppLifecycleState.paused:
         if (isRunning) {
           timeLeft = DateTime.now();
+          widget.player.pause();
           isRunning = false;
         }
         break;
@@ -218,12 +224,17 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
               color: const Color(0xffFADCE3),
               onPressed: () {
                 isRunning = false;
+                widget.player.pause();
                 setState(() {});
                 showDialog(
-                        context: context,
-                        builder: (BuildContext context) =>
-                            Dialogs.buildExitDialog(context, timer))
-                    .whenComplete(() => isRunning = true);
+                    context: context,
+                    builder: (BuildContext context) => Dialogs.buildExitDialog(
+                        context, timer, widget.player)).whenComplete(() {
+                  isRunning = true;
+                  widget.player.play();
+                  setState(() {});
+                  setState(() {});
+                });
               },
               icon: Icon(
                 TablerIcons.x,
@@ -248,6 +259,8 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
                     : lightNeutral50,
                 onPressed: () {
                   isRunning = false;
+                  widget.player.pause();
+                  final player2 = AudioPlayer();
                   setState(() {});
                   showModalBottomSheet(
                     backgroundColor: Colors.transparent,
@@ -256,12 +269,13 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
                     context: context,
                     builder: (BuildContext context) =>
                         Dialogs.buildChangeSoundDialog(
-                            player, context, setState),
+                            player2, context, setState),
                   ).whenComplete(() {
                     isRunning = true;
+                    widget.player.play();
                     sound = Hive.box("settings").get("sound");
                     setState(() {});
-                    player.stop();
+                    player2.stop();
                   });
                 },
                 icon: Icon(
@@ -281,9 +295,11 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
             onTap: () {
               if (!isRunning) {
                 isRunning = true;
+                widget.player.play();
                 setState(() {});
               } else {
                 isRunning = false;
+                widget.player.pause();
                 setState(() {});
               }
               setState(() {});
@@ -320,8 +336,8 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
                           color: MyApp.of(context).isDarkMode()
                               ? lightNeutral100
                               : lightNeutral50,
-                          onPressed: () {
-                            back();
+                          onPressed: () async {
+                            await back();
                           },
                           iconSize: 50,
                           icon: const Icon(
@@ -345,9 +361,11 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
                             onPressed: () {
                               if (!isRunning) {
                                 isRunning = true;
+                                widget.player.play();
                                 setState(() {});
                               } else {
                                 isRunning = false;
+                                widget.player.pause();
                                 setState(() {});
                               }
                               setState(() {});
@@ -365,8 +383,8 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
                           color: MyApp.of(context).isDarkMode()
                               ? lightNeutral100
                               : lightNeutral50,
-                          onPressed: () {
-                            next();
+                          onPressed: () async {
+                            await next();
                           },
                           iconSize: 50,
                           icon: const Icon(

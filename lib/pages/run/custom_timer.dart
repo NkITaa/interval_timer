@@ -39,7 +39,7 @@ class CustomTimer extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  '${((seconds) / 60).floor()}:${((seconds) % 60).toString().padLeft(2, '0')}',
+                  '${(seconds / 60).floor()}:${(seconds % 60).toString().padLeft(2, '0')}',
                   style: display2(context).copyWith(
                       color: MyApp.of(context).isDarkMode()
                           ? lightNeutral100
