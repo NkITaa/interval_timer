@@ -86,7 +86,6 @@ class _ProfileState extends State<Profile> {
                               : lightNeutral600),
                       last: true,
                       onTap: () async {
-                        await AudioPlayer.clearAssetCache();
                         // ignore: use_build_context_synchronously
                         showModalBottomSheet(
                           backgroundColor: Colors.transparent,

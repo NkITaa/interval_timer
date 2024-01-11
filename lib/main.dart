@@ -18,13 +18,11 @@ late ThemeMode? _themeMode;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Hive.registerAdapter(WorkoutAdapter());
+
   await Hive.initFlutter();
   await Hive.openBox("workouts");
   await Hive.openBox("settings");
-
-  if (Hive.box("settings").get("language") == null &&
-      Hive.box("settings").get("sound") == null &&
-      Hive.box("settings").get("darkmode") == null) {
+  if (Hive.box("settings").get("language") == null) {
     await Hive.box("settings").put("language", "en");
     await Hive.box("settings").put("sound", "assets/sounds/Countdown1.mp3");
     await Hive.box("settings").put(
@@ -49,7 +47,6 @@ void main() async {
     await copyAssetToFile("assets/images/pause.png", "pause.png");
     await copyAssetToFile("assets/images/training.png", "training.png");
   }
-  await AudioPlayer.clearAssetCache();
   await JustAudioBackground.init(
     androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
     androidNotificationChannelName: 'Audio playback',
