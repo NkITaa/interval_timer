@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:interval_timer/const.dart';
@@ -103,13 +104,16 @@ class _PreparationState extends State<Preparation> {
         appBar: AppBar(
           leading: IconButton(
               icon: const Icon(TablerIcons.x, color: Color(0xffFAEFDC)),
-              onPressed: () {
-                player.dispose();
+              onPressed: () async {
+                await player.dispose();
+                await widget.player.dispose();
                 timer.cancel();
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const Home(
-                          screenIndex: 1,
-                        )));
+                SchedulerBinding.instance.addPostFrameCallback((_) {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const Home(
+                            screenIndex: 1,
+                          )));
+                });
               }),
         ),
         body: InkWell(

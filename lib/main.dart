@@ -11,6 +11,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:just_audio/just_audio.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 
 late ThemeMode? _themeMode;
 
@@ -25,28 +26,35 @@ void main() async {
       Hive.box("settings").get("sound") == null &&
       Hive.box("settings").get("darkmode") == null) {
     await Hive.box("settings").put("language", "en");
-    await Hive.box("settings").put("sound", "assets/sounds/Countdown 1.mp3");
+    await Hive.box("settings").put("sound", "assets/sounds/Countdown1.mp3");
     await Hive.box("settings").put(
         "darkmode",
         SchedulerBinding.instance.platformDispatcher.platformBrightness ==
             Brightness.dark);
-    await copyAssetToFile("assets/sounds/30min.mp3", "30min");
-    await copyAssetToFile("assets/sounds/10min.mp3", "10min");
-    await copyAssetToFile("assets/sounds/5min.mp3", "5min");
-    await copyAssetToFile("assets/sounds/1min.mp3", "1min");
-    await copyAssetToFile("assets/sounds/30sec.mp3", "30sec");
-    await copyAssetToFile("assets/sounds/10sec.mp3", "10sec");
-    await copyAssetToFile("assets/sounds/5sec.mp3", "5sec");
-    await copyAssetToFile("assets/sounds/1sec.mp3", "1sec");
-    await copyAssetToFile("assets/sounds/Countdown1.mp3", "Countdown1");
-    await copyAssetToFile("assets/sounds/Countdown2.mp3", "Countdown2");
-    await copyAssetToFile("assets/sounds/Countdown3.mp3", "Countdown3");
-    await copyAssetToFile("assets/sounds/Countdown4.mp3", "Countdown4");
-    await copyAssetToFile("assets/sounds/Countdown5.mp3", "Countdown5");
-    await copyAssetToFile("assets/sounds/Countdown6.mp3", "Countdown6");
-    await copyAssetToFile("assets/sounds/Countdown7.mp3", "Countdown7");
+    await copyAssetToFile("assets/sounds/30min.mp3", "30min.mp3");
+    await copyAssetToFile("assets/sounds/10min.mp3", "10min.mp3");
+    await copyAssetToFile("assets/sounds/5min.mp3", "5min.mp3");
+    await copyAssetToFile("assets/sounds/1min.mp3", "1min.mp3");
+    await copyAssetToFile("assets/sounds/30sec.mp3", "30sec.mp3");
+    await copyAssetToFile("assets/sounds/10sec.mp3", "10sec.mp3");
+    await copyAssetToFile("assets/sounds/5sec.mp3", "5sec.mp3");
+    await copyAssetToFile("assets/sounds/1sec.mp3", "1sec.mp3");
+    await copyAssetToFile("assets/sounds/Countdown1.mp3", "Countdown1.mp3");
+    await copyAssetToFile("assets/sounds/Countdown2.mp3", "Countdown2.mp3");
+    await copyAssetToFile("assets/sounds/Countdown3.mp3", "Countdown3.mp3");
+    await copyAssetToFile("assets/sounds/Countdown4.mp3", "Countdown4.mp3");
+    await copyAssetToFile("assets/sounds/Countdown5.mp3", "Countdown5.mp3");
+    await copyAssetToFile("assets/sounds/Countdown6.mp3", "Countdown6.mp3");
+    await copyAssetToFile("assets/sounds/Countdown7.mp3", "Countdown7.mp3");
+    await copyAssetToFile("assets/images/pause.png", "pause.png");
+    await copyAssetToFile("assets/images/training.png", "training.png");
   }
   await AudioPlayer.clearAssetCache();
+  await JustAudioBackground.init(
+    androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
+    androidNotificationChannelName: 'Audio playback',
+    androidNotificationOngoing: true,
+  );
 
   _themeMode =
       Hive.box("settings").get("darkmode") ? ThemeMode.dark : ThemeMode.light;
@@ -62,7 +70,7 @@ Future<String> copyAssetToFile(
   List<int> bytes = data.buffer.asUint8List();
 
   Directory docDir = await getApplicationDocumentsDirectory();
-  String tempFilePath = '${docDir.path}/$tempFileName.mp3';
+  String tempFilePath = '${docDir.path}/$tempFileName';
 
   await File(tempFilePath).writeAsBytes(bytes);
 

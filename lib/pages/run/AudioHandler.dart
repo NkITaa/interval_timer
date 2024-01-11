@@ -3,6 +3,7 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:just_audio/just_audio.dart';
 import 'package:hive/hive.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 
 class AudioReturn {
   final AudioPlayer player;
@@ -29,6 +30,7 @@ Future<AudioReturn> initialize(List<int> time, int sets) async {
     children: workoutList,
   );
   await player.setAudioSource(workout);
+  sound == "off" ? await player.setVolume(0) : await player.setVolume(1);
 
   DateTime later = DateTime.now();
 
@@ -110,8 +112,11 @@ Future<List<String>> buildFileNames(int time, String sound) async {
   for (int i = 0; i < oneSec; i++) {
     buildFiles.add('${docDir.path}/1sec.mp3');
   }
+
+  String soundPath = sound == "off" ? "Countdown1.mp3" : sound.substring(14);
+
   if (time >= 4) {
-    buildFiles.add('${docDir.path}/${sound.substring(14)}');
+    buildFiles.add('${docDir.path}/$soundPath');
   }
   return buildFiles;
 }
@@ -119,22 +124,44 @@ Future<List<String>> buildFileNames(int time, String sound) async {
 Future<List<AudioSource>> buildWorkoutList(int sets) async {
   List<AudioSource> workoutList = [];
   final directory = await getApplicationCacheDirectory();
+  final docDir = await getApplicationDocumentsDirectory();
 
-  for (int i = 0; i < sets - 1; i++) {
+  print(docDir.path);
+
+  int i = 0;
+  for (; i < sets - 1; i++) {
     workoutList.add(
       AudioSource.uri(
         Uri.parse("file://${directory.path}/run.mp3"),
+        tag: MediaItem(
+          id: '$i training',
+          album: "training ${i + 1}",
+          title: "training ${i + 1}",
+          artUri: Uri.parse("file://${docDir.path}/training.png"),
+        ),
       ),
     );
     workoutList.add(
       AudioSource.uri(
         Uri.parse("file://${directory.path}/pause.mp3"),
+        tag: MediaItem(
+          id: '$i pause',
+          album: "pause ${i + 1}",
+          title: "pause ${i + 1}",
+          artUri: Uri.parse("file://${docDir.path}/pause.png"),
+        ),
       ),
     );
   }
   workoutList.add(
     AudioSource.uri(
       Uri.parse("file://${directory.path}/run.mp3"),
+      tag: MediaItem(
+        id: '$i training',
+        album: "training ${i + 1}",
+        title: "training ${i + 1}",
+        artUri: Uri.parse("file://${docDir.path}/training.png"),
+      ),
     ),
   );
   return workoutList;

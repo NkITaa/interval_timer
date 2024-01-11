@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:interval_timer/const.dart';
 import 'package:interval_timer/main.dart';
 import 'package:interval_timer/pages/run/custom_timer.dart';
 import 'package:interval_timer/pages/run/initialisation_screen.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:interval_timer/pages/run/preparation.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:hive/hive.dart';
 import '../../components/dialogs.dart';
@@ -35,21 +37,25 @@ class Run extends StatefulWidget {
   State<Run> createState() => _RunState();
 }
 
-class _RunState extends State<Run> {
+class _RunState extends State<Run> with WidgetsBindingObserver {
   String sound = Hive.box("settings").get("sound");
   late int remainderBasis = widget.totalDuration;
 
   next() async {
     if (widget.player.currentIndex! % 2 == 0 &&
         widget.sets == widget.player.currentIndex! ~/ 2 + 1) {
-      widget.player.dispose();
-      Wakelock.disable();
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => Congrats(
-                time: widget.time,
-                sets: widget.sets,
-                duration: DateTime.now().difference(widget.startTime).inSeconds,
-              )));
+      await widget.player.dispose();
+      await Wakelock.disable();
+
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => Congrats(
+                  time: widget.time,
+                  sets: widget.sets,
+                  duration:
+                      DateTime.now().difference(widget.startTime).inSeconds,
+                )));
+      });
     } else {
       await widget.player.seekToNext();
       int temp = 0;
@@ -64,13 +70,17 @@ class _RunState extends State<Run> {
   back() async {
     if (widget.player.currentIndex! % 2 == 0 &&
         widget.player.currentIndex! ~/ 2 + 1 == 1) {
-      widget.player.dispose();
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => InitialisationScreen(
-              time: widget.time,
-              sets: widget.sets,
-              currentSet: 1,
-              indexTime: 0)));
+      await widget.player.stop();
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => Preparation(
+                player: widget.player,
+                totalDuration: widget.totalDuration,
+                time: widget.time,
+                sets: widget.sets,
+                currentSet: 1,
+                indexTime: 0)));
+      });
     } else {
       await widget.player.seekToPrevious();
 
@@ -87,6 +97,7 @@ class _RunState extends State<Run> {
   void initState() {
     super.initState();
     widget.player.seek(Duration.zero, index: 0);
+    WidgetsBinding.instance.addObserver(this);
     Wakelock.enable();
   }
 
@@ -94,7 +105,25 @@ class _RunState extends State<Run> {
   dispose() {
     Wakelock.disable();
     widget.player.dispose();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // Handle state changes as needed
+
+    if (state == AppLifecycleState.resumed) {
+      int temp = 0;
+      for (int i = 0; i < widget.player.currentIndex!; i++) {
+        temp += widget.time[i % 2];
+      }
+      remainderBasis = widget.totalDuration - temp;
+
+      if (remainderBasis - widget.player.position.inSeconds - 1 <= 0) {
+        next();
+      }
+    }
   }
 
   @override
@@ -105,6 +134,10 @@ class _RunState extends State<Run> {
           if (snapshot.hasData) {
             int duration =
                 widget.player.duration!.inSeconds - snapshot.data!.inSeconds;
+
+            if (duration <= 0) {
+              next();
+            }
 
             return Container(
               decoration: BoxDecoration(
@@ -153,34 +186,25 @@ class _RunState extends State<Run> {
                     centerTitle: true,
                     actions: [
                       IconButton(
-                          color: MyApp.of(context).isDarkMode()
-                              ? lightNeutral100
-                              : lightNeutral50,
                           onPressed: () {
-                            widget.player.pause();
-                            final player2 = AudioPlayer();
+                            if (sound == "off") {
+                              sound = "assets/sounds/Countdown1.mp3";
+                              widget.player.setVolume(1);
+                            } else {
+                              sound = "off";
+                              widget.player.setVolume(0);
+                            }
+                            Hive.box("settings").put("sound", sound);
                             setState(() {});
-                            showModalBottomSheet(
-                              backgroundColor: Colors.transparent,
-                              isScrollControlled: true,
-                              enableDrag: false,
-                              context: context,
-                              builder: (BuildContext context) =>
-                                  Dialogs.buildChangeSoundDialog(
-                                      player2, context, setState),
-                            ).whenComplete(() {
-                              widget.player.play();
-                              sound = Hive.box("settings").get("sound");
-                              setState(() {});
-                              player2.stop();
-                            });
                           },
                           icon: Icon(
-                            TablerIcons.settings,
+                            sound == "off"
+                                ? TablerIcons.volume_off
+                                : TablerIcons.volume,
                             color: MyApp.of(context).isDarkMode()
                                 ? lightNeutral100
                                 : lightNeutral50,
-                          )),
+                          ))
                     ],
                   ),
                   body: SizedBox(
