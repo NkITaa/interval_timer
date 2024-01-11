@@ -1030,7 +1030,7 @@ class Dialogs {
     );
   }
 
-  static Widget buildExitDialog(context, timer, player) {
+  static Widget buildExitDialog(context, player) {
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
       child: AlertDialog(
@@ -1083,7 +1083,6 @@ class Dialogs {
                       ),
                     ),
                     onPressed: () {
-                      timer.cancel();
                       player.dispose();
                       Navigator.of(context).push(MaterialPageRoute(
                           fullscreenDialog: true,

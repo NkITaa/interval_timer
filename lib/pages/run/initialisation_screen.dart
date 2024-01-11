@@ -23,8 +23,14 @@ class InitialisationScreen extends StatelessWidget {
           if (snapshot.hasData) {
             AudioReturn data = snapshot.data!;
 
+            int totalDuration = 0;
+            for (int i = 0; i < sets * 2 - 1; i++) {
+              totalDuration += time[i % 2];
+            }
+
             if (data.ffmpegOutput[0] == "0" || data.ffmpegOutput[1] == "0") {
               return Preparation(
+                  totalDuration: totalDuration,
                   time: time,
                   sets: sets,
                   currentSet: currentSet,

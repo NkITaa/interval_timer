@@ -17,12 +17,14 @@ class Preparation extends StatefulWidget {
   final int currentSet;
   final int indexTime;
   final AudioPlayer player;
+  final totalDuration;
   const Preparation(
       {super.key,
       required this.time,
       required this.sets,
       required this.currentSet,
       required this.indexTime,
+      required this.totalDuration,
       required this.player});
 
   @override
@@ -71,6 +73,7 @@ class _PreparationState extends State<Preparation> {
   next() async {
     player.dispose();
     timer.cancel();
+    widget.player.play();
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => Run(
               startTime: DateTime.now(),
@@ -79,6 +82,7 @@ class _PreparationState extends State<Preparation> {
               currentSet: widget.currentSet,
               indexTime: widget.indexTime,
               player: widget.player,
+              totalDuration: widget.totalDuration,
             )));
   }
 
