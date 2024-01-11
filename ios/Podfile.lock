@@ -1,6 +1,13 @@
 PODS:
   - audio_session (0.0.1):
     - Flutter
+  - ffmpeg-kit-ios-audio (6.0)
+  - ffmpeg_kit_flutter_audio (6.0.3):
+    - ffmpeg_kit_flutter_audio/audio (= 6.0.3)
+    - Flutter
+  - ffmpeg_kit_flutter_audio/audio (6.0.3):
+    - ffmpeg-kit-ios-audio (= 6.0)
+    - Flutter
   - Flutter (1.0.0)
   - just_audio (0.0.1):
     - Flutter
@@ -14,15 +21,22 @@ PODS:
 
 DEPENDENCIES:
   - audio_session (from `.symlinks/plugins/audio_session/ios`)
+  - ffmpeg_kit_flutter_audio (from `.symlinks/plugins/ffmpeg_kit_flutter_audio/ios`)
   - Flutter (from `Flutter`)
   - just_audio (from `.symlinks/plugins/just_audio/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
   - wakelock (from `.symlinks/plugins/wakelock/ios`)
 
+SPEC REPOS:
+  trunk:
+    - ffmpeg-kit-ios-audio
+
 EXTERNAL SOURCES:
   audio_session:
     :path: ".symlinks/plugins/audio_session/ios"
+  ffmpeg_kit_flutter_audio:
+    :path: ".symlinks/plugins/ffmpeg_kit_flutter_audio/ios"
   Flutter:
     :path: Flutter
   just_audio:
@@ -36,6 +50,8 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   audio_session: 4f3e461722055d21515cf3261b64c973c062f345
+  ffmpeg-kit-ios-audio: 9fa9953fc197280a69e59c603c7fa7690df7190c
+  ffmpeg_kit_flutter_audio: 9b107d9902e16804c90637cd7f42106a5447a9e6
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   just_audio: baa7252489dbcf47a4c7cc9ca663e9661c99aafa
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943

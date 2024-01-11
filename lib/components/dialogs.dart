@@ -819,7 +819,7 @@ class Dialogs {
     String sound = Hive.box("settings").get("sound");
     final List<int> soundIndexes = List.generate(7, (index) => index + 1);
     int selectedIndex =
-        sound.length > 3 ? int.parse(sound.substring(24, 25)) - 1 : 0;
+        sound.length > 3 ? int.parse(sound.substring(23, 24)) - 1 : 0;
 
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
@@ -912,7 +912,7 @@ class Dialogs {
                         value: sound != "off" ? true : false,
                         onChanged: (selected) {
                           if (selected) {
-                            sound = "assets/sounds/Countdown 1.mp3";
+                            sound = "assets/sounds/Countdown1.mp3";
                           } else {
                             player.stop();
                             sound = "off";
@@ -971,7 +971,7 @@ class Dialogs {
                                           ? darkNeutral850
                                           : lightNeutral700),
                                   value:
-                                      "assets/sounds/Countdown ${soundIndexes[index]}.mp3",
+                                      "assets/sounds/Countdown${soundIndexes[index]}.mp3",
                                   groupValue: sound,
                                   onChanged: (value) async {
                                     sound = value.toString();
@@ -983,7 +983,7 @@ class Dialogs {
                                 ),
                                 onTap: () async {
                                   sound =
-                                      "assets/sounds/Countdown ${soundIndexes[index]}.mp3";
+                                      "assets/sounds/Countdown${soundIndexes[index]}.mp3";
                                   selectedIndex = index;
                                   setState(() {});
                                   await player.setAsset(sound);

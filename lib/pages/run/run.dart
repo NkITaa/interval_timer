@@ -129,6 +129,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     timer;
+    widget.player.seek(Duration.zero, index: 0);
     Wakelock.enable();
     WidgetsBinding.instance.addObserver(this);
   }
