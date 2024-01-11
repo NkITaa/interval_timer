@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:interval_timer/const.dart';
+import 'package:interval_timer/pages/run/initialisation_screen.dart';
 import 'package:interval_timer/workout.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../components/dialogs.dart';
 import '../../../main.dart';
-import '../../run/preparation.dart';
 
 class WorkoutTile extends StatelessWidget {
   final Workout workout;
@@ -123,7 +123,7 @@ class WorkoutTile extends StatelessWidget {
               child: ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => Preparation(
+                        builder: (context) => InitialisationScreen(
                               time: [
                                 workout.secondsTraining,
                                 workout.secondsPause

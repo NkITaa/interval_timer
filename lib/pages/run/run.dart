@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:interval_timer/const.dart';
 import 'package:interval_timer/main.dart';
 import 'package:interval_timer/pages/run/custom_timer.dart';
-import 'package:interval_timer/pages/run/preparation.dart';
+import 'package:interval_timer/pages/run/initialisation_screen.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:just_audio/just_audio.dart';
@@ -101,7 +101,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
       WidgetsBinding.instance.removeObserver(this);
       widget.player.dispose();
       Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => Preparation(
+          builder: (context) => InitialisationScreen(
               time: widget.time,
               sets: widget.sets,
               currentSet: 1,
@@ -129,7 +129,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     timer;
-    widget.player.seek(Duration.zero, index: 0);
+    widget.player.play();
     Wakelock.enable();
     WidgetsBinding.instance.addObserver(this);
   }
