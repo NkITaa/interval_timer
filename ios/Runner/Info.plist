@@ -51,5 +51,7 @@
     <array>
     	<string>audio</string>
     </array>
+	<key>NSCameraUsageDescription</key>
+	<string>Interval Timer does not need this permission, it is from a package</string>
 </dict>
 </plist>
