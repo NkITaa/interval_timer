@@ -44,7 +44,7 @@ class _ProfileState extends State<Profile> {
           padding: const EdgeInsets.only(left: 24.0, right: 24),
           child: Column(
             children: [
-              RateApp(version: '1.0.20'),
+              RateApp(version: '1.0.22'),
               SettingsBlock(
                 title: AppLocalizations.of(context)!.profile_settings,
                 tiles: [
@@ -176,7 +176,7 @@ class _ProfileState extends State<Profile> {
                 ],
               ),
               const SizedBox(height: 12),
-              Text("Version 1.0.20", style: body1(context)),
+              Text("Version 1.0.22", style: body1(context)),
               const SizedBox(height: 48),
             ],
           ),
