@@ -67,7 +67,16 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
   }
 
   back() async {
-    if (widget.player.currentIndex! % 2 == 0 &&
+    int duration = widget.player.position.inSeconds;
+    if (duration > 3) {
+      await widget.player.seek(Duration.zero);
+      int temp = 0;
+      for (int i = 0; i < widget.player.currentIndex!; i++) {
+        temp += widget.time[i % 2];
+      }
+      remainderBasis = widget.totalDuration - temp;
+      setState(() {});
+    } else if (widget.player.currentIndex! % 2 == 0 &&
         widget.player.currentIndex! ~/ 2 + 1 == 1) {
       await widget.player.stop();
       SchedulerBinding.instance.addPostFrameCallback((_) {
@@ -82,7 +91,6 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
       });
     } else {
       await widget.player.seekToPrevious();
-
       int temp = 0;
       for (int i = 0; i < widget.player.currentIndex!; i++) {
         temp += widget.time[i % 2];

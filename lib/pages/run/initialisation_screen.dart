@@ -93,7 +93,10 @@ class InitialisationScreen extends StatelessWidget {
                           ),
                           RichText(
                             text: TextSpan(
-                                style: body1BoldUnderlined(context),
+                                style: body1BoldUnderlined(context).copyWith(
+                                    color: MyApp.of(context).isDarkMode()
+                                        ? darkNeutral900
+                                        : lightNeutral850),
                                 text: AppLocalizations.of(context)!
                                     .workouts_delete_cancel,
                                 recognizer: TapGestureRecognizer()

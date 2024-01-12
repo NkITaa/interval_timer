@@ -24,7 +24,11 @@ void main() async {
   await Hive.openBox("settings");
   if (Hive.box("settings").get("language") == null) {
     await Hive.box("settings").put("language", "en");
+  }
+  if (Hive.box("settings").get("sound") == null) {
     await Hive.box("settings").put("sound", "assets/sounds/Countdown1.mp3");
+  }
+  if (Hive.box("settings").get("darkmode") == null) {
     await Hive.box("settings").put(
         "darkmode",
         SchedulerBinding.instance.platformDispatcher.platformBrightness ==
@@ -47,6 +51,7 @@ void main() async {
     await copyAssetToFile("assets/images/pause.png", "pause.png");
     await copyAssetToFile("assets/images/training.png", "training.png");
   }
+
   await JustAudioBackground.init(
     androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
     androidNotificationChannelName: 'Audio playback',
