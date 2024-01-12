@@ -10,7 +10,7 @@ class SettingsTile extends StatefulWidget {
   final String title;
   final bool switching;
   final bool last;
-  final Function()? onTap;
+  final Function(bool?)? onTap;
   const SettingsTile(
       {super.key,
       this.icon,
@@ -36,7 +36,7 @@ class _SettingsTileState extends State<SettingsTile> {
                     color: MyApp.of(context).isDarkMode()
                         ? darkNeutral900
                         : lightNeutral850),
-                onTap: widget.onTap,
+                onTap: () => widget.onTap!(false),
               )
             : ListTile(
                 contentPadding: const EdgeInsets.symmetric(horizontal: 0),
@@ -65,10 +65,7 @@ class _SettingsTileState extends State<SettingsTile> {
                         ),
                         value: MyApp.of(context).isDarkMode(),
                         onChanged: (selected) {
-                          selected
-                              ? MyApp.of(context).changeTheme(ThemeMode.dark)
-                              : MyApp.of(context).changeTheme(ThemeMode.light);
-                          widget.onTap!();
+                          widget.onTap!(selected);
                         })
                     : Icon(
                         TablerIcons.chevron_right,
@@ -76,7 +73,7 @@ class _SettingsTileState extends State<SettingsTile> {
                             ? darkNeutral900
                             : lightNeutral850,
                       ),
-                onTap: widget.onTap,
+                onTap: () => widget.onTap!(false),
               ),
         widget.last
             ? const SizedBox()

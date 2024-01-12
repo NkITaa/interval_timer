@@ -32,6 +32,7 @@ dev_dependencies:
   just_audio: ^0.9.36
   ffmpeg_kit_flutter_audio: ^6.0.3
   just_audio_background: ^0.0.1-beta.11
+  flutter_phoenix: ^1.1.1
 
 
 flutter:

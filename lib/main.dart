@@ -10,8 +10,8 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
-import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 late ThemeMode? _themeMode;
 
@@ -56,7 +56,9 @@ void main() async {
   _themeMode =
       Hive.box("settings").get("darkmode") ? ThemeMode.dark : ThemeMode.light;
 
-  runApp(const MyApp());
+  runApp(Phoenix(
+    child: const MyApp(),
+  ));
 }
 
 Future<String> copyAssetToFile(

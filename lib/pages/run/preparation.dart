@@ -18,7 +18,7 @@ class Preparation extends StatefulWidget {
   final int currentSet;
   final int indexTime;
   final AudioPlayer player;
-  final totalDuration;
+  final int totalDuration;
   const Preparation(
       {super.key,
       required this.time,
@@ -35,7 +35,6 @@ class Preparation extends StatefulWidget {
 class _PreparationState extends State<Preparation> {
   int counter = 9;
   bool isPaused = false;
-  final player = AudioPlayer();
 
   String sound = Hive.box("settings").get("sound");
 
@@ -48,9 +47,6 @@ class _PreparationState extends State<Preparation> {
         counter--;
       });
     }
-    if (counter == 3 && sound != "off" && !isPaused) {
-      playAudio();
-    }
   });
 
   @override
@@ -62,17 +58,10 @@ class _PreparationState extends State<Preparation> {
   @override
   dispose() {
     super.dispose();
-    player.dispose();
     timer.cancel();
   }
 
-  playAudio() async {
-    await player.setAsset(sound);
-    await player.play();
-  }
-
   next() async {
-    player.dispose();
     timer.cancel();
     widget.player.play();
     Navigator.of(context).push(MaterialPageRoute(
@@ -105,7 +94,6 @@ class _PreparationState extends State<Preparation> {
           leading: IconButton(
               icon: const Icon(TablerIcons.x, color: Color(0xffFAEFDC)),
               onPressed: () async {
-                await player.dispose();
                 await widget.player.dispose();
                 timer.cancel();
                 SchedulerBinding.instance.addPostFrameCallback((_) {
@@ -123,9 +111,6 @@ class _PreparationState extends State<Preparation> {
             setState(() {
               isPaused = !isPaused;
             });
-            if (counter <= 3 && isPaused) {
-              player.pause();
-            }
           },
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

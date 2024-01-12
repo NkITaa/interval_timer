@@ -1,4 +1,5 @@
 {
+    "restart_app": "Restart App",
     "training": "Training",
     "pause": "Pause",
     "paused": "Paused",

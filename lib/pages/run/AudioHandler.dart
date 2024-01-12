@@ -6,15 +6,14 @@ import 'package:hive/hive.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 
 class AudioReturn {
-  final AudioPlayer player;
   final List<String> ffmpegOutput;
-  AudioReturn(this.player, this.ffmpegOutput);
+  final String sound;
+  AudioReturn(this.ffmpegOutput, this.sound);
 }
 
-Future<AudioReturn> initialize(List<int> time, int sets) async {
+Future<AudioReturn> initialize(player, List<int> time, int sets) async {
   DateTime now = DateTime.now();
   String sound = await Hive.box("settings").get("sound");
-  final player = AudioPlayer();
   List<String> runDir = await buildFileNames(time[0], sound);
   List<String> pauseDir = await buildFileNames(time[1], sound);
   String messageRun = await concatenateMP3(runDir, "run.mp3");
@@ -28,8 +27,6 @@ Future<AudioReturn> initialize(List<int> time, int sets) async {
     children: workoutList,
   );
   await player.setAudioSource(workout);
-  sound == "off" ? await player.setVolume(0) : await player.setVolume(1);
-
   DateTime later = DateTime.now();
 
   int timeToInitialize = later.difference(now).inMilliseconds;
@@ -37,7 +34,7 @@ Future<AudioReturn> initialize(List<int> time, int sets) async {
     await Future.delayed(Duration(milliseconds: 1000 - timeToInitialize));
   }
 
-  return AudioReturn(player, [messageRun, messagePause]);
+  return AudioReturn([messageRun, messagePause], sound);
 }
 
 Future<String> concatenateMP3(
@@ -123,8 +120,6 @@ Future<List<AudioSource>> buildWorkoutList(int sets) async {
   List<AudioSource> workoutList = [];
   final directory = await getApplicationCacheDirectory();
   final docDir = await getApplicationDocumentsDirectory();
-
-  print(docDir.path);
 
   int i = 0;
   for (; i < sets - 1; i++) {

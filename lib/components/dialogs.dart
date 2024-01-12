@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:interval_timer/components/custom_textbox.dart';
 import 'package:interval_timer/components/time_wheel.dart';
 import 'package:interval_timer/components/workout_times_container.dart';
@@ -977,7 +978,13 @@ class Dialogs {
                                     sound = value.toString();
                                     selectedIndex = index;
                                     setState(() {});
-                                    await player.setAsset(sound);
+                                    await player
+                                        .setAudioSource(AudioSource.asset(sound,
+                                            tag: MediaItem(
+                                              id: sound,
+                                              title:
+                                                  'Sound ${soundIndexes[index]}',
+                                            )));
                                     await player.play();
                                   },
                                 ),
@@ -986,7 +993,13 @@ class Dialogs {
                                       "assets/sounds/Countdown${soundIndexes[index]}.mp3";
                                   selectedIndex = index;
                                   setState(() {});
-                                  await player.setAsset(sound);
+                                  await player
+                                      .setAudioSource(AudioSource.asset(sound,
+                                          tag: MediaItem(
+                                            id: sound,
+                                            title:
+                                                'Sound ${soundIndexes[index]}',
+                                          )));
                                   await player.play();
                                 },
                               );

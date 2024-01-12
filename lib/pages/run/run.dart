@@ -3,7 +3,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:interval_timer/const.dart';
 import 'package:interval_timer/main.dart';
 import 'package:interval_timer/pages/run/custom_timer.dart';
-import 'package:interval_timer/pages/run/initialisation_screen.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:interval_timer/pages/run/preparation.dart';
