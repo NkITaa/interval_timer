@@ -30,8 +30,7 @@ class Dialogs {
       filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
       child: StatefulBuilder(builder: (context, setState) {
         void updateTime(Duration pause, Duration training, int sets) {
-          workoutTime = (pause + training) * sets;
-          setState(() {});
+          workoutTime = (pause + training) * sets - pause;
         }
 
         update(String type, bool increment) {
@@ -200,7 +199,7 @@ class Dialogs {
       filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
       child: StatefulBuilder(builder: (context, setState) {
         void updateTime(Duration pause, Duration training, int sets) {
-          workoutTime = (pause + training) * sets;
+          workoutTime = (pause + training) * sets - pause;
         }
 
         update(String type, bool increment) {
@@ -434,7 +433,8 @@ class Dialogs {
       Duration otherMinutes,
       int sets,
       Function(String type, int value, bool? minute) setValue) {
-    late int workoutTime = (minutes.inSeconds + otherMinutes.inSeconds) * sets;
+    late int workoutTime = (minutes.inSeconds + otherMinutes.inSeconds) * sets -
+        (type == "training" ? otherMinutes.inSeconds : minutes.inSeconds);
 
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
@@ -472,7 +472,11 @@ class Dialogs {
           ),
           content: StatefulBuilder(builder: (context, setState) {
             void updateTime(Duration minutes, Duration otherMinutes, int sets) {
-              workoutTime = (minutes.inSeconds + otherMinutes.inSeconds) * sets;
+              workoutTime =
+                  (minutes.inSeconds + otherMinutes.inSeconds) * sets -
+                      (type == "training"
+                          ? otherMinutes.inSeconds
+                          : minutes.inSeconds);
             }
 
             setValueLocal(String type, int value, bool? minute) {

@@ -22,35 +22,7 @@ void main() async {
   await Hive.initFlutter();
   await Hive.openBox("workouts");
   await Hive.openBox("settings");
-  if (Hive.box("settings").get("language") == null) {
-    await Hive.box("settings").put("language", "en");
-  }
-  if (Hive.box("settings").get("sound") == null) {
-    await Hive.box("settings").put("sound", "assets/sounds/Countdown1.mp3");
-  }
-  if (Hive.box("settings").get("darkmode") == null) {
-    await Hive.box("settings").put(
-        "darkmode",
-        SchedulerBinding.instance.platformDispatcher.platformBrightness ==
-            Brightness.dark);
-    await copyAssetToFile("assets/sounds/30min.mp3", "30min.mp3");
-    await copyAssetToFile("assets/sounds/10min.mp3", "10min.mp3");
-    await copyAssetToFile("assets/sounds/5min.mp3", "5min.mp3");
-    await copyAssetToFile("assets/sounds/1min.mp3", "1min.mp3");
-    await copyAssetToFile("assets/sounds/30sec.mp3", "30sec.mp3");
-    await copyAssetToFile("assets/sounds/10sec.mp3", "10sec.mp3");
-    await copyAssetToFile("assets/sounds/5sec.mp3", "5sec.mp3");
-    await copyAssetToFile("assets/sounds/1sec.mp3", "1sec.mp3");
-    await copyAssetToFile("assets/sounds/Countdown1.mp3", "Countdown1.mp3");
-    await copyAssetToFile("assets/sounds/Countdown2.mp3", "Countdown2.mp3");
-    await copyAssetToFile("assets/sounds/Countdown3.mp3", "Countdown3.mp3");
-    await copyAssetToFile("assets/sounds/Countdown4.mp3", "Countdown4.mp3");
-    await copyAssetToFile("assets/sounds/Countdown5.mp3", "Countdown5.mp3");
-    await copyAssetToFile("assets/sounds/Countdown6.mp3", "Countdown6.mp3");
-    await copyAssetToFile("assets/sounds/Countdown7.mp3", "Countdown7.mp3");
-    await copyAssetToFile("assets/images/pause.png", "pause.png");
-    await copyAssetToFile("assets/images/training.png", "training.png");
-  }
+  await initialise();
 
   await JustAudioBackground.init(
     androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
@@ -64,6 +36,75 @@ void main() async {
   runApp(Phoenix(
     child: const MyApp(),
   ));
+}
+
+Future<void> initialise() async {
+  if (Hive.box("settings").get("language") == null) {
+    await Hive.box("settings").put("language", "en");
+  }
+  if (Hive.box("settings").get("sound") == null) {
+    await Hive.box("settings").put("sound", "assets/sounds/Countdown1.mp3");
+  }
+  if (Hive.box("settings").get("darkmode") == null) {
+    await Hive.box("settings").put(
+        "darkmode",
+        SchedulerBinding.instance.platformDispatcher.platformBrightness ==
+            Brightness.dark);
+  }
+
+  Directory docDir = await getApplicationDocumentsDirectory();
+
+  if (!await File('${docDir.path}/30min.mp3').exists()) {
+    await copyAssetToFile("assets/sounds/30min.mp3", "30min.mp3");
+  }
+  if (!await File('${docDir.path}/10min.mp3').exists()) {
+    await copyAssetToFile("assets/sounds/10min.mp3", "10min.mp3");
+  }
+  if (!await File('${docDir.path}/5min.mp3').exists()) {
+    await copyAssetToFile("assets/sounds/5min.mp3", "5min.mp3");
+  }
+  if (!await File('${docDir.path}/1min.mp3').exists()) {
+    await copyAssetToFile("assets/sounds/1min.mp3", "1min.mp3");
+  }
+  if (!await File('${docDir.path}/30sec.mp3').exists()) {
+    await copyAssetToFile("assets/sounds/30sec.mp3", "30sec.mp3");
+  }
+  if (!await File('${docDir.path}/10sec.mp3').exists()) {
+    await copyAssetToFile("assets/sounds/10sec.mp3", "10sec.mp3");
+  }
+  if (!await File('${docDir.path}/5sec.mp3').exists()) {
+    await copyAssetToFile("assets/sounds/5sec.mp3", "5sec.mp3");
+  }
+  if (!await File('${docDir.path}/1sec.mp3').exists()) {
+    await copyAssetToFile("assets/sounds/1sec.mp3", "1sec.mp3");
+  }
+  if (!await File('${docDir.path}/Countdown1.mp3').exists()) {
+    await copyAssetToFile("assets/sounds/Countdown1.mp3", "Countdown1.mp3");
+  }
+  if (!await File('${docDir.path}/Countdown2.mp3').exists()) {
+    await copyAssetToFile("assets/sounds/Countdown2.mp3", "Countdown2.mp3");
+  }
+  if (!await File('${docDir.path}/Countdown3.mp3').exists()) {
+    await copyAssetToFile("assets/sounds/Countdown3.mp3", "Countdown3.mp3");
+  }
+  if (!await File('${docDir.path}/Countdown4.mp3').exists()) {
+    await copyAssetToFile("assets/sounds/Countdown4.mp3", "Countdown4.mp3");
+  }
+  if (!await File('${docDir.path}/Countdown5.mp3').exists()) {
+    await copyAssetToFile("assets/sounds/Countdown5.mp3", "Countdown5.mp3");
+  }
+  if (!await File('${docDir.path}/Countdown6.mp3').exists()) {
+    await copyAssetToFile("assets/sounds/Countdown6.mp3", "Countdown6.mp3");
+  }
+  if (!await File('${docDir.path}/Countdown7.mp3').exists()) {
+    await copyAssetToFile("assets/sounds/Countdown7.mp3", "Countdown7.mp3");
+  }
+  if (!await File('${docDir.path}/pause.png').exists()) {
+    await copyAssetToFile("assets/images/pause.png", "pause.png");
+  }
+  if (!await File('${docDir.path}/training.png').exists()) {
+    await copyAssetToFile("assets/images/training.png", "training.png");
+  }
 }
 
 Future<String> copyAssetToFile(
