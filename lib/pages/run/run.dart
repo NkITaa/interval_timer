@@ -49,6 +49,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
       SchedulerBinding.instance.addPostFrameCallback((_) {
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => Congrats(
+                  didIt: true,
                   time: widget.time,
                   sets: widget.sets,
                   duration:
@@ -79,6 +80,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
     } else if (widget.player.currentIndex! % 2 == 0 &&
         widget.player.currentIndex! ~/ 2 + 1 == 1) {
       await widget.player.stop();
+      await Wakelock.disable();
       SchedulerBinding.instance.addPostFrameCallback((_) {
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => Preparation(
@@ -170,7 +172,13 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
                               context: context,
                               builder: (BuildContext context) =>
                                   Dialogs.buildExitDialog(
-                                      context, widget.player)).whenComplete(() {
+                                      context,
+                                      widget.player,
+                                      widget.time,
+                                      widget.sets,
+                                      DateTime.now()
+                                          .difference(widget.startTime)
+                                          .inSeconds)).whenComplete(() {
                             widget.player.play();
                             setState(() {});
                           });

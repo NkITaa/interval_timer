@@ -1,6 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:interval_timer/pages/run/congrats.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:interval_timer/components/custom_textbox.dart';
 import 'package:interval_timer/components/time_wheel.dart';
@@ -15,6 +17,7 @@ import '../main.dart';
 import '../pages/home.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import 'package:wakelock/wakelock.dart';
 
 class Dialogs {
   static Widget buildAddWorkoutDialog(
@@ -1047,7 +1050,7 @@ class Dialogs {
     );
   }
 
-  static Widget buildExitDialog(context, player) {
+  static Widget buildExitDialog(context, player, time, sets, duration) {
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
       child: AlertDialog(
@@ -1099,11 +1102,19 @@ class Dialogs {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    onPressed: () {
-                      player.dispose();
-                      Navigator.of(context).push(MaterialPageRoute(
-                          fullscreenDialog: true,
-                          builder: (context) => const Home(screenIndex: 1)));
+                    onPressed: () async {
+                      await player.dispose();
+
+                      await Wakelock.disable();
+                      SchedulerBinding.instance.addPostFrameCallback((_) {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => Congrats(
+                                  time: time,
+                                  didIt: false,
+                                  sets: sets,
+                                  duration: duration,
+                                )));
+                      });
                     },
                     child: Text(AppLocalizations.of(context)!.run_exit_workout,
                         style: body1Bold(context).copyWith(

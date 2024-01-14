@@ -15,10 +15,12 @@ class Congrats extends StatefulWidget {
   final int duration;
   final List<int> time;
   final int sets;
+  final bool didIt;
   const Congrats(
       {super.key,
       required this.time,
       required this.sets,
+      required this.didIt,
       required this.duration});
 
   @override
@@ -31,8 +33,8 @@ class _CongratsState extends State<Congrats> {
 
   @override
   void initState() {
+    if (widget.didIt) controller.play();
     super.initState();
-    controller.play();
   }
 
   @override

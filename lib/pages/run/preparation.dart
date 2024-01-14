@@ -133,14 +133,27 @@ class _PreparationState extends State<Preparation> {
                   ],
                 ),
               ),
-              RichText(
-                text: TextSpan(
-                    style: body1BoldUnderlined(context),
-                    text: AppLocalizations.of(context)!.run_skip,
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () async {
-                        await next();
-                      }),
+              InkWell(
+                onTap: () async {
+                  await next();
+                },
+                highlightColor: Colors.transparent,
+                splashColor: Colors.transparent,
+                child: SizedBox(
+                  height: 100,
+                  width: MediaQuery.of(context).size.width,
+                  child: Center(
+                    child: RichText(
+                      text: TextSpan(
+                          style: body1BoldUnderlined(context),
+                          text: AppLocalizations.of(context)!.run_skip,
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () async {
+                              await next();
+                            }),
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
