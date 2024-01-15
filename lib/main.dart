@@ -13,6 +13,7 @@ import 'dart:io';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:audio_session/audio_session.dart';
+import 'package:flutter_portal/flutter_portal.dart';
 
 late ThemeMode? _themeMode;
 
@@ -25,12 +26,10 @@ void main() async {
   await Hive.openBox("settings");
   await initialise();
 
-  //audio_session INSTANCE
   final session = await AudioSession.instance;
-  //audio_session DUCK OTHERS CONFIGURATION
   await session.configure(const AudioSessionConfiguration(
     avAudioSessionCategory: AVAudioSessionCategory.playback,
-    avAudioSessionCategoryOptions: AVAudioSessionCategoryOptions.duckOthers,
+    avAudioSessionCategoryOptions: AVAudioSessionCategoryOptions.mixWithOthers,
     avAudioSessionMode: AVAudioSessionMode.defaultMode,
     avAudioSessionRouteSharingPolicy:
         AVAudioSessionRouteSharingPolicy.defaultPolicy,
@@ -227,7 +226,10 @@ class _MyAppState extends State<MyApp> {
         textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme),
       ), // standard dark theme
       themeMode: _themeMode, // device controls theme
-      home: const Home(screenIndex: 0),
+      home: Portal(
+          child: Hive.box("settings").get("visible") ?? true == true
+              ? const Home(screenIndex: 1, visible: true)
+              : const Home(screenIndex: 0)),
     );
   }
 

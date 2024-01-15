@@ -10,7 +10,9 @@ import '../../const.dart';
 import '../../main.dart';
 
 class JumpIn extends StatefulWidget {
-  const JumpIn({super.key});
+  final bool visible;
+  final Function? killVisible;
+  const JumpIn({super.key, required this.visible, this.killVisible});
 
   @override
   State<JumpIn> createState() => _JumpInState();
@@ -92,6 +94,8 @@ class _JumpInState extends State<JumpIn> {
               height: 48,
             ),
             WorkoutTimesContainer(
+              killVisible: widget.killVisible,
+              visible: widget.visible,
               update: update,
               setValue: setValue,
               minutesTraining: minutesTraining,

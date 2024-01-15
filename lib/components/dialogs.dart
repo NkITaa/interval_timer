@@ -123,6 +123,7 @@ class Dialogs {
                   nameController: nameController,
                 ),
                 WorkoutTimesContainer(
+                  visible: false,
                   update: update,
                   setValue: setValue,
                   minutesTraining: minutesTraining,
@@ -295,6 +296,7 @@ class Dialogs {
                   nameController: nameController,
                 ),
                 WorkoutTimesContainer(
+                  visible: false,
                   update: update,
                   setValue: setValue,
                   minutesTraining: minutesTraining,
@@ -644,7 +646,9 @@ class Dialogs {
                     Hive.box("workouts").deleteAt(index);
                     Navigator.of(context).push(MaterialPageRoute(
                         fullscreenDialog: true,
-                        builder: (context) => const Home(screenIndex: 0)));
+                        builder: (context) => const Home(
+                              screenIndex: 0,
+                            )));
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
