@@ -58,7 +58,11 @@ void main() async {
 
 Future<void> initialise() async {
   if (Hive.box("settings").get("language") == null) {
-    await Hive.box("settings").put("language", "en");
+    if (Platform.localeName.contains("de")) {
+      await Hive.box("settings").put("language", "de");
+    } else {
+      await Hive.box("settings").put("language", "en");
+    }
   }
   if (Hive.box("settings").get("sound") == null) {
     await Hive.box("settings").put("sound", "assets/sounds/Countdown1.mp3");

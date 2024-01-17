@@ -44,7 +44,7 @@ class _ProfileState extends State<Profile> {
           padding: const EdgeInsets.only(left: 24.0, right: 24),
           child: Column(
             children: [
-              RateApp(version: '1.0.22'),
+              RateApp(version: '1.1.0'),
               SettingsBlock(
                 title: AppLocalizations.of(context)!.profile_settings,
                 tiles: [
@@ -143,6 +143,7 @@ class _ProfileState extends State<Profile> {
                 title: AppLocalizations.of(context)!.profile_legal,
                 tiles: [
                   SettingsTile(
+                    last: true,
                     title: AppLocalizations.of(context)!.profile_legal_imprint,
                     onTap: (selected) =>
                         Navigator.of(context).push(MaterialPageRoute(
@@ -152,31 +153,10 @@ class _ProfileState extends State<Profile> {
                                   index: 1,
                                 ))),
                   ),
-                  SettingsTile(
-                    title: AppLocalizations.of(context)!.profile_legal_privacy,
-                    onTap: (selected) =>
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => SettingsPage(
-                                  language:
-                                      Hive.box("settings").get("language"),
-                                  index: 2,
-                                ))),
-                  ),
-                  SettingsTile(
-                    last: true,
-                    title: AppLocalizations.of(context)!.profile_legal_terms,
-                    onTap: (selected) =>
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => SettingsPage(
-                                  language:
-                                      Hive.box("settings").get("language"),
-                                  index: 3,
-                                ))),
-                  ),
                 ],
               ),
               const SizedBox(height: 12),
-              Text("Version 1.0.22", style: body1(context)),
+              Text("Version 1.1.0", style: body1(context)),
               const SizedBox(height: 48),
             ],
           ),

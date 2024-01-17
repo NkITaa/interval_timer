@@ -58,6 +58,10 @@ Future<List<String>> buildFileNames(int time, String sound) async {
 
   int rest = time - 4;
 
+  if (rest < 0) {
+    rest += 4;
+  }
+
   int thirtyMin = rest ~/ 1800;
   rest = rest % 1800;
 

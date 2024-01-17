@@ -74,7 +74,8 @@ class _IncrementDecrementButtonState extends State<IncrementDecrementButton> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(right: 16.0),
+                              padding:
+                                  const EdgeInsets.only(right: 24.0, left: 24),
                               child: Container(
                                 decoration: BoxDecoration(
                                   color: MyApp.of(context).isDarkMode()
@@ -97,7 +98,7 @@ class _IncrementDecrementButtonState extends State<IncrementDecrementButton> {
                             ),
                             Container(
                               padding: const EdgeInsets.only(
-                                  top: 1, bottom: 1, left: 4, right: 4),
+                                  top: 8, bottom: 8, left: 12, right: 12),
                               decoration: BoxDecoration(
                                 color: MyApp.of(context).isDarkMode()
                                     ? darkNeutral100
