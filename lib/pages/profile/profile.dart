@@ -143,7 +143,6 @@ class _ProfileState extends State<Profile> {
                 title: AppLocalizations.of(context)!.profile_legal,
                 tiles: [
                   SettingsTile(
-                    last: true,
                     title: AppLocalizations.of(context)!.profile_legal_imprint,
                     onTap: (selected) =>
                         Navigator.of(context).push(MaterialPageRoute(
@@ -151,6 +150,17 @@ class _ProfileState extends State<Profile> {
                                   language:
                                       Hive.box("settings").get("language"),
                                   index: 1,
+                                ))),
+                  ),
+                  SettingsTile(
+                    last: true,
+                    title: AppLocalizations.of(context)!.profile_legal_privacy,
+                    onTap: (selected) =>
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => SettingsPage(
+                                  language:
+                                      Hive.box("settings").get("language"),
+                                  index: 2,
                                 ))),
                   ),
                 ],
