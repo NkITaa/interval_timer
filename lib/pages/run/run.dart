@@ -46,16 +46,14 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
       await widget.player.dispose();
       await Wakelock.disable();
 
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => Congrats(
-                  didIt: true,
-                  time: widget.time,
-                  sets: widget.sets,
-                  duration:
-                      DateTime.now().difference(widget.startTime).inSeconds,
-                )));
-      });
+      if (!context.mounted) return;
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => Congrats(
+                didIt: true,
+                time: widget.time,
+                sets: widget.sets,
+                duration: DateTime.now().difference(widget.startTime).inSeconds,
+              )));
     } else {
       await widget.player.seekToNext();
       int temp = 0;
@@ -129,7 +127,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
       }
       remainderBasis = widget.totalDuration - temp;
 
-      if (remainderBasis - widget.player.position.inSeconds - 1 <= 0) {
+      if (remainderBasis - widget.player.position.inSeconds <= 0) {
         next();
       }
     }

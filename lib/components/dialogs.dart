@@ -1108,8 +1108,8 @@ class Dialogs {
                     ),
                     onPressed: () async {
                       await player.dispose();
-
                       await Wakelock.disable();
+
                       SchedulerBinding.instance.addPostFrameCallback((_) {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => Congrats(

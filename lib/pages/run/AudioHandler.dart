@@ -116,6 +116,7 @@ Future<List<String>> buildFileNames(int time, String sound) async {
 
   if (time >= 4) {
     buildFiles.add('${docDir.path}/$soundPath');
+    buildFiles.add('${docDir.path}/1sec.mp3');
   }
   return buildFiles;
 }
