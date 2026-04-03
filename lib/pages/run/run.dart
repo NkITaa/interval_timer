@@ -41,9 +41,13 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
   late String sound = _originalSound;
   late int remainderBasis = widget.totalDuration;
   bool _navigating = false;
+  bool _advancing = false;
+  int _advanceVersion = 0;
 
   next() async {
     if (_navigating) return;
+    _advanceVersion++;
+    _advancing = true;
     if (widget.player.currentIndex! % 2 == 0 &&
         widget.sets == widget.player.currentIndex! ~/ 2 + 1) {
       _navigating = true;
@@ -65,11 +69,14 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
         temp += widget.time[i % 2];
       }
       remainderBasis = widget.totalDuration - temp;
+      _advancing = false;
       setState(() {});
     }
   }
 
   back() async {
+    _advanceVersion++;
+    _advancing = false;
     int duration = widget.player.position.inSeconds;
     if (duration > 3) {
       await widget.player.seek(Duration.zero);
@@ -233,24 +240,32 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
                           return const SizedBox(height: 380);
                         }
                         final positionSeconds = snapshot.data!.inSeconds;
-                        int duration = (widget.player.duration?.inSeconds ?? 0) -
-                            positionSeconds;
+                        final intendedDuration =
+                            widget.time[currentIndex % 2];
+                        int duration = intendedDuration - positionSeconds;
 
-                        if (duration <= 0 && !_navigating) {
+                        if (duration <= 0 && !_navigating && !_advancing) {
+                          _advancing = true;
+                          final version = _advanceVersion;
                           WidgetsBinding.instance.addPostFrameCallback((_) {
-                            next();
+                            _advancing = false;
+                            if (_advanceVersion == version) {
+                              next();
+                            }
                           });
                         }
 
-                        final remaining = remainderBasis - positionSeconds;
+                        final elapsed =
+                            positionSeconds.clamp(0, intendedDuration);
+                        final remaining = remainderBasis - elapsed;
                         return Column(
                           children: [
                             CustomTimer(
-                                seconds: duration.clamp(0, 999999),
-                                maxSeconds:
-                                    widget.player.duration?.inSeconds ?? 0,
+                                seconds: duration.clamp(0, intendedDuration),
+                                maxSeconds: intendedDuration,
                                 isRunning: isPlaying,
                                 indexTime: currentIndex % 2),
+                            const SizedBox(height: 16),
                             Column(
                               children: [
                                 Text(

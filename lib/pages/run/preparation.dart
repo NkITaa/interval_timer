@@ -36,12 +36,17 @@ class _PreparationState extends State<Preparation> {
   bool isPaused = false;
 
   String sound = SettingsService.sound;
+  AudioPlayer? _countdownPlayer;
 
   late Timer timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
     if (counter == 0) {
       await next();
     }
     if (counter > 0 && !isPaused) {
+      if (counter == 4 && sound != "off" && _countdownPlayer != null) {
+        _countdownPlayer!.seek(Duration.zero);
+        _countdownPlayer!.play();
+      }
       setState(() {
         counter--;
       });
@@ -51,17 +56,29 @@ class _PreparationState extends State<Preparation> {
   @override
   void initState() {
     super.initState();
+    _initCountdownPlayer();
     timer;
+  }
+
+  void _initCountdownPlayer() async {
+    if (sound != "off") {
+      _countdownPlayer = AudioPlayer();
+      await _countdownPlayer!.setAsset(sound);
+    }
   }
 
   @override
   void dispose() {
     timer.cancel();
+    _countdownPlayer?.dispose();
     super.dispose();
   }
 
   next() async {
     timer.cancel();
+    _countdownPlayer?.stop();
+    _countdownPlayer?.dispose();
+    _countdownPlayer = null;
     widget.player.play();
     Navigator.of(context).pushReplacement(MaterialPageRoute(
         builder: (context) => Run(
@@ -93,6 +110,8 @@ class _PreparationState extends State<Preparation> {
           leading: IconButton(
               icon: const Icon(TablerIcons.x, color: Color(0xffFAEFDC)),
               onPressed: () async {
+                await _countdownPlayer?.dispose();
+                _countdownPlayer = null;
                 await widget.player.dispose();
                 timer.cancel();
                 SchedulerBinding.instance.addPostFrameCallback((_) {

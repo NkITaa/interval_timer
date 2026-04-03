@@ -1,0 +1,4 @@
+app_identifier("com.nikita.intervalTimer")
+apple_id(ENV["APPLE_ID"])
+itc_team_id(ENV["ITC_TEAM_ID"])
+team_id("G5X499Q88J")

@@ -1,0 +1,129 @@
+default_platform(:android)
+
+platform :android do
+  # ──────────────────────────────────────────────
+  # Setup & helpers
+  # ──────────────────────────────────────────────
+
+  before_all do
+    setup_ci if ENV["CI"]
+  end
+
+  desc "Install Flutter dependencies"
+  lane :setup do
+    Dir.chdir("../..") do
+      sh("flutter pub get")
+    end
+  end
+
+  # ──────────────────────────────────────────────
+  # Build
+  # ──────────────────────────────────────────────
+
+  desc "Build debug APK"
+  lane :build_debug do
+    setup
+    Dir.chdir("../..") do
+      sh("flutter build apk --debug")
+    end
+  end
+
+  desc "Build release APK"
+  lane :build_release_apk do
+    setup
+    Dir.chdir("../..") do
+      sh("flutter build apk --release")
+    end
+  end
+
+  desc "Build release AAB (App Bundle for Play Store)"
+  lane :build_release do
+    setup
+    Dir.chdir("../..") do
+      sh("flutter build appbundle --release")
+    end
+  end
+
+  # ──────────────────────────────────────────────
+  # Test
+  # ──────────────────────────────────────────────
+
+  desc "Run Flutter tests"
+  lane :test do
+    Dir.chdir("../..") do
+      sh("flutter test")
+    end
+  end
+
+  desc "Run Flutter analyze"
+  lane :lint do
+    Dir.chdir("../..") do
+      sh("flutter analyze")
+    end
+  end
+
+  # ──────────────────────────────────────────────
+  # Deploy
+  # ──────────────────────────────────────────────
+
+  desc "Deploy to Play Store internal testing track"
+  lane :beta do
+    build_release
+
+    upload_to_play_store(
+      track: "internal",
+      release_status: "draft",
+      aab: "../build/app/outputs/bundle/release/app-release.aab",
+      skip_upload_metadata: true,
+      skip_upload_changelogs: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true
+    )
+  end
+
+  desc "Promote internal track to production"
+  lane :release do
+    upload_to_play_store(
+      track: "internal",
+      track_promote_to: "production",
+      skip_upload_aab: true,
+      skip_upload_metadata: true,
+      skip_upload_changelogs: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true
+    )
+  end
+
+  # ──────────────────────────────────────────────
+  # Signing
+  # ──────────────────────────────────────────────
+
+  desc "Generate a new upload keystore (run once, store securely)"
+  lane :create_keystore do
+    key_path = File.expand_path("~/upload-keystore.jks")
+
+    if File.exist?(key_path)
+      UI.user_error!("Keystore already exists at #{key_path}. Delete it first if you want to regenerate.")
+    end
+
+    sh(
+      "keytool", "-genkey", "-v",
+      "-keystore", key_path,
+      "-keyalg", "RSA",
+      "-keysize", "2048",
+      "-validity", "10000",
+      "-alias", "upload"
+    )
+
+    UI.success("Keystore created at #{key_path}")
+    UI.important("Add key.properties to android/ and reference it in android/app/build.gradle")
+  end
+
+  # ──────────────────────────────────────────────
+  # Error handling
+  # ──────────────────────────────────────────────
+
+  error do |lane, exception|
+    UI.error("Lane #{lane} failed: #{exception.message}")
+  end
+end

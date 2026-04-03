@@ -3,7 +3,7 @@ import 'theme/app_colors.dart';
 
 export 'theme/app_colors.dart';
 
-const appVersion = '1.1.2';
+const appVersion = '1.2.0';
 
 // L - lightNeutral
 const lightNeutral0 = Color(0xffFCFCFC);
