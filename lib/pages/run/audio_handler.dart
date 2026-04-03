@@ -1,7 +1,7 @@
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
-import 'dart:io';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:interval_timer/services/settings_service.dart';
@@ -17,8 +17,12 @@ Future<AudioReturn> initialize(player, List<int> time, int sets) async {
   List<String> runAssets = buildAssetPaths(time[0], sound);
   List<String> pauseAssets = buildAssetPaths(time[1], sound);
 
-  String messageRun = await concatenateAssets(runAssets, "run.mp3");
-  String messagePause = await concatenateAssets(pauseAssets, "pause.mp3");
+  final results = await Future.wait([
+    concatenateAssets(runAssets, "run.mp3"),
+    concatenateAssets(pauseAssets, "pause.mp3"),
+  ]);
+  String messageRun = results[0];
+  String messagePause = results[1];
 
   List<AudioSource> workoutList = await buildWorkoutList(sets);
 
@@ -39,9 +43,11 @@ Future<String> concatenateAssets(
     final outputFile = File('${directory.path}/$outputFileName');
     final sink = outputFile.openWrite();
 
-    for (String assetPath in assetPaths) {
-      final data = await rootBundle.load(assetPath);
-      sink.add(data.buffer.asUint8List());
+    final Map<String, Uint8List> cache = {};
+    for (final assetPath in assetPaths) {
+      final bytes = cache[assetPath] ??=
+          _stripMp3Metadata((await rootBundle.load(assetPath)).buffer.asUint8List());
+      sink.add(bytes);
     }
 
     await sink.close();
@@ -52,52 +58,66 @@ Future<String> concatenateAssets(
   }
 }
 
+/// Strips ID3v2 header and Xing/Info metadata frame from MP3 bytes.
+/// Returns raw MPEG audio frames only.
+Uint8List _stripMp3Metadata(Uint8List bytes) {
+  int offset = 0;
+
+  // Skip ID3v2 header if present ("ID3" magic bytes at start)
+  if (bytes.length >= 10 &&
+      bytes[0] == 0x49 && bytes[1] == 0x44 && bytes[2] == 0x33) {
+    // Size is a 28-bit synchsafe integer stored in bytes 6-9
+    final size = (bytes[6] & 0x7F) << 21 |
+                 (bytes[7] & 0x7F) << 14 |
+                 (bytes[8] & 0x7F) << 7 |
+                 (bytes[9] & 0x7F);
+    offset = size + 10;
+    // Account for optional ID3v2 footer (indicated by flag in byte 5, bit 4)
+    if (bytes[5] & 0x10 != 0) offset += 10;
+  }
+
+  // Find first MPEG frame sync (11 set bits: 0xFF followed by 0xE0+)
+  while (offset < bytes.length - 1) {
+    if (bytes[offset] == 0xFF && (bytes[offset + 1] & 0xE0) == 0xE0) {
+      // Check if this frame is a Xing/Info metadata frame
+      final searchEnd = (offset + 200).clamp(0, bytes.length - 4);
+      bool isXing = false;
+      for (int i = offset + 4; i <= searchEnd; i++) {
+        if ((bytes[i] == 0x58 && bytes[i + 1] == 0x69 &&
+             bytes[i + 2] == 0x6E && bytes[i + 3] == 0x67) || // "Xing"
+            (bytes[i] == 0x49 && bytes[i + 1] == 0x6E &&
+             bytes[i + 2] == 0x66 && bytes[i + 3] == 0x6F)) { // "Info"
+          isXing = true;
+          break;
+        }
+      }
+      if (isXing) {
+        // Skip this frame — scan for the next sync
+        for (int i = offset + 1; i < bytes.length - 1; i++) {
+          if (bytes[i] == 0xFF && (bytes[i + 1] & 0xE0) == 0xE0) {
+            offset = i;
+            break;
+          }
+        }
+      }
+      break;
+    }
+    offset++;
+  }
+
+  if (offset <= 0) return bytes;
+  return Uint8List.sublistView(bytes, offset);
+}
+
 List<String> buildAssetPaths(int time, String sound) {
-  List<String> buildFiles = [];
+  final buildFiles = <String>[];
 
-  int rest = time - 4;
-  if (rest < 0) {
-    rest += 4;
+  int silenceSeconds = time - 4;
+  if (silenceSeconds < 0) {
+    silenceSeconds += 4;
   }
 
-  int thirtyMin = rest ~/ 1800;
-  rest = rest % 1800;
-  int tenMin = rest ~/ 600;
-  rest = rest % 600;
-  int fiveMin = rest ~/ 300;
-  rest = rest % 300;
-  int oneMin = rest ~/ 60;
-  rest = rest % 60;
-  int thirtySec = rest ~/ 30;
-  rest = rest % 30;
-  int tenSec = rest ~/ 10;
-  rest = rest % 10;
-  int fiveSec = rest ~/ 5;
-  rest = rest % 5;
-  int oneSec = rest ~/ 1;
-
-  for (int i = 0; i < thirtyMin; i++) {
-    buildFiles.add('assets/sounds/30min.mp3');
-  }
-  for (int i = 0; i < tenMin; i++) {
-    buildFiles.add('assets/sounds/10min.mp3');
-  }
-  for (int i = 0; i < fiveMin; i++) {
-    buildFiles.add('assets/sounds/5min.mp3');
-  }
-  for (int i = 0; i < oneMin; i++) {
-    buildFiles.add('assets/sounds/1min.mp3');
-  }
-  for (int i = 0; i < thirtySec; i++) {
-    buildFiles.add('assets/sounds/30sec.mp3');
-  }
-  for (int i = 0; i < tenSec; i++) {
-    buildFiles.add('assets/sounds/10sec.mp3');
-  }
-  for (int i = 0; i < fiveSec; i++) {
-    buildFiles.add('assets/sounds/5sec.mp3');
-  }
-  for (int i = 0; i < oneSec; i++) {
+  for (int i = 0; i < silenceSeconds; i++) {
     buildFiles.add('assets/sounds/1sec.mp3');
   }
 
