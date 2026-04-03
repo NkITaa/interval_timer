@@ -10,7 +10,7 @@ class TimeWheel extends StatelessWidget {
   final int value;
   final bool? minute;
   final int? otherValue;
-  TimeWheel(
+  const TimeWheel(
       {super.key,
       required this.setValue,
       required this.type,

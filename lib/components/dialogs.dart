@@ -39,9 +39,7 @@ class Dialogs {
 
   /// Shared backdrop blur wrapper for all dialogs.
   static Widget _blurredDialog({required Widget child}) {
-    return _blurredDialog(
-      child: child,
-    );
+    return child;
   }
 
   /// Shared update/setValue logic for workout time editing.
@@ -617,7 +615,13 @@ class Dialogs {
           ),
           padding:
               const EdgeInsets.only(left: 24, right: 24, bottom: 24, top: 12),
-          child: Column(
+          child: RadioGroup<String>(
+            groupValue: language,
+            onChanged: (value) {
+              language = value.toString();
+              setState(() {});
+            },
+            child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               _dialogHeader(context,
@@ -638,14 +642,9 @@ class Dialogs {
                         child: Text(AppLocalizations.of(context)!.german,
                             style: body1(context)),
                       ),
-                      Radio(
+                      Radio<String>(
                         activeColor: context.colors.iconPrimary,
                         value: "de",
-                        groupValue: language,
-                        onChanged: (value) {
-                          language = value.toString();
-                          setState(() {});
-                        },
                       ),
                     ],
                   ),
@@ -667,14 +666,9 @@ class Dialogs {
                         child: Text(AppLocalizations.of(context)!.english,
                             style: body1(context)),
                       ),
-                      Radio(
+                      Radio<String>(
                         activeColor: context.colors.iconPrimary,
                         value: "en",
-                        groupValue: language,
-                        onChanged: (value) {
-                          language = value.toString();
-                          setState(() {});
-                        },
                       )
                     ],
                   ),
@@ -698,6 +692,7 @@ class Dialogs {
                     )),
               )
             ],
+          ),
           ),
         );
       }),
@@ -794,7 +789,23 @@ class Dialogs {
                         const SizedBox(
                           height: 12,
                         ),
-                        Container(
+                        RadioGroup<String>(
+                          groupValue: sound,
+                          onChanged: (value) async {
+                            if (value == null) return;
+                            sound = value;
+                            selectedIndex = int.parse(sound.substring(23, 24)) - 1;
+                            setState(() {});
+                            await player
+                                .setAudioSource(AudioSource.asset(sound,
+                                    tag: MediaItem(
+                                      id: sound,
+                                      title:
+                                          'Sound ${int.parse(sound.substring(23, 24))}',
+                                    )));
+                            await player.play();
+                          },
+                          child: Container(
                           decoration: BoxDecoration(
                               color: context.colors.cardSurface,
                               borderRadius: const BorderRadius.all(
@@ -818,26 +829,12 @@ class Dialogs {
                                 ),
                                 contentPadding: const EdgeInsets.symmetric(
                                     horizontal: 8, vertical: 0),
-                                trailing: Radio(
+                                trailing: Radio<String>(
                                   activeColor: context.colors.iconPrimary,
                                   fillColor: WidgetStateProperty.all(
                                       context.colors.iconPrimary),
                                   value:
                                       "assets/sounds/Countdown${soundIndexes[index]}.mp3",
-                                  groupValue: sound,
-                                  onChanged: (value) async {
-                                    sound = value.toString();
-                                    selectedIndex = index;
-                                    setState(() {});
-                                    await player
-                                        .setAudioSource(AudioSource.asset(sound,
-                                            tag: MediaItem(
-                                              id: sound,
-                                              title:
-                                                  'Sound ${soundIndexes[index]}',
-                                            )));
-                                    await player.play();
-                                  },
                                 ),
                                 onTap: () async {
                                   sound =
@@ -856,6 +853,7 @@ class Dialogs {
                               );
                             },
                           ),
+                        ),
                         ),
                       ],
                     )

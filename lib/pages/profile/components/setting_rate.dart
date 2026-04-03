@@ -7,7 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class RateApp extends StatelessWidget {
   final String? version;
-  RateApp({required this.version, super.key});
+  const RateApp({required this.version, super.key});
 
   @override
   Widget build(BuildContext context) {

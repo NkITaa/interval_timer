@@ -6,7 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 class SettingsPageLegal extends StatelessWidget {
   final Future<String> data;
 
-  SettingsPageLegal({required this.data, super.key});
+  const SettingsPageLegal({required this.data, super.key});
 
   @override
   Widget build(BuildContext context) {

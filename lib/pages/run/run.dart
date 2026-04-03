@@ -49,7 +49,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
       await widget.player.dispose();
       await WakelockPlus.disable();
 
-      if (!context.mounted) return;
+      if (!mounted) return;
       Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) => Congrats(
                 didIt: true,
