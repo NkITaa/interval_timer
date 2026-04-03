@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:interval_timer/pages/workouts/components/workout_list.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:interval_timer/l10n/app_localizations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
 import '../../../const.dart';
@@ -58,9 +58,9 @@ class _WorkoutSearchBarState extends State<WorkoutSearchBar> {
         builder: (context, controller) {
           return SearchBar(
             shadowColor:
-                MaterialStateColor.resolveWith((states) => Colors.transparent),
-            shape: MaterialStateProperty.resolveWith<OutlinedBorder?>(
-              (Set<MaterialState> states) {
+                WidgetStateColor.resolveWith((states) => Colors.transparent),
+            shape: WidgetStateProperty.resolveWith<OutlinedBorder?>(
+              (Set<WidgetState> states) {
                 return RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16.0),
                 );
@@ -76,24 +76,24 @@ class _WorkoutSearchBarState extends State<WorkoutSearchBar> {
               ),
             ),
             hintText: AppLocalizations.of(context)!.workouts_search,
-            hintStyle: MaterialStateProperty.all<TextStyle>(
+            hintStyle: WidgetStateProperty.all<TextStyle>(
               body2(context).copyWith(
                   color: MyApp.of(context).isDarkMode()
                       ? darkNeutral700
                       : lightNeutral700),
             ),
-            textStyle: MaterialStateProperty.all<TextStyle>(
+            textStyle: WidgetStateProperty.all<TextStyle>(
               body2(context).copyWith(
                   color: MyApp.of(context).isDarkMode()
                       ? darkNeutral850
                       : lightNeutral850),
             ),
-            backgroundColor: MaterialStateProperty.all<Color>(
+            backgroundColor: WidgetStateProperty.all<Color>(
                 MyApp.of(context).isDarkMode()
                     ? darkNeutral100
                     : lightNeutral0),
             surfaceTintColor:
-                MaterialStateProperty.all<Color>(Colors.transparent),
+                WidgetStateProperty.all<Color>(Colors.transparent),
             controller: controller,
             onTap: () {
               controller.openView();

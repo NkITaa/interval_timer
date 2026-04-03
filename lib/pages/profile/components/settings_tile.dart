@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-// ignore: depend_on_referenced_packages
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
 import '../../../const.dart';
@@ -45,17 +44,17 @@ class _SettingsTileState extends State<SettingsTile> {
                 trailing: widget.switching
                     ? Switch(
                         inactiveThumbColor: Colors.white,
-                        thumbColor: MaterialStateProperty.all<Color>(
+                        thumbColor: WidgetStateProperty.all<Color>(
                           Colors.white,
                         ),
-                        trackOutlineColor: MaterialStateProperty.all<Color>(
+                        trackOutlineColor: WidgetStateProperty.all<Color>(
                             Colors.transparent),
                         inactiveTrackColor: MyApp.of(context).isDarkMode()
                             ? darkNeutral500
                             : lightNeutral300,
-                        trackColor: MaterialStateProperty.resolveWith<Color?>(
-                          (Set<MaterialState> states) {
-                            if (states.contains(MaterialState.selected)) {
+                        trackColor: WidgetStateProperty.resolveWith<Color?>(
+                          (Set<WidgetState> states) {
+                            if (states.contains(WidgetState.selected)) {
                               return MyApp.of(context).isDarkMode()
                                   ? const Color(0xff5F8DEE)
                                   : const Color(0xff3772EE);

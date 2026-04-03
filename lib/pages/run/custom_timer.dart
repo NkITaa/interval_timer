@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../const.dart';
 import '../../main.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:interval_timer/l10n/app_localizations.dart';
 
 class CustomTimer extends StatelessWidget {
   final int seconds;
@@ -25,7 +25,7 @@ class CustomTimer extends StatelessWidget {
         fit: StackFit.expand,
         children: [
           CircularProgressIndicator(
-            backgroundColor: Colors.white.withOpacity(0.5),
+            backgroundColor: Colors.white.withValues(alpha: 0.5),
             value: 1 - (seconds / maxSeconds),
             strokeWidth: 16,
             strokeCap: StrokeCap.round,

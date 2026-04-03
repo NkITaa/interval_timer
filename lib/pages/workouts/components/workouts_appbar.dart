@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-// ignore: depend_on_referenced_packages
+import 'package:interval_timer/l10n/app_localizations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:interval_timer/components/dialogs.dart';
 import 'package:interval_timer/const.dart';

@@ -10,14 +10,14 @@ import 'package:interval_timer/components/workout_times_container.dart';
 import 'package:hive/hive.dart';
 import 'package:interval_timer/workout.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:interval_timer/l10n/app_localizations.dart';
 import 'package:just_audio/just_audio.dart';
 import '../const.dart';
 import '../main.dart';
 import '../pages/home.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 class Dialogs {
   static Widget buildAddWorkoutDialog(
@@ -902,15 +902,15 @@ class Dialogs {
                   trailing: Padding(
                     padding: const EdgeInsets.only(right: 4.0),
                     child: Switch(
-                        trackOutlineColor: MaterialStateProperty.all<Color>(
+                        trackOutlineColor: WidgetStateProperty.all<Color>(
                             Colors.transparent),
                         inactiveThumbColor: Colors.white,
-                        thumbColor: MaterialStateProperty.all<Color>(
+                        thumbColor: WidgetStateProperty.all<Color>(
                           Colors.white,
                         ),
-                        trackColor: MaterialStateProperty.resolveWith<Color?>(
-                          (Set<MaterialState> states) {
-                            if (states.contains(MaterialState.selected)) {
+                        trackColor: WidgetStateProperty.resolveWith<Color?>(
+                          (Set<WidgetState> states) {
+                            if (states.contains(WidgetState.selected)) {
                               return MyApp.of(context).isDarkMode()
                                   ? const Color(0xff5F8DEE)
                                   : const Color(0xff3772EE);
@@ -978,7 +978,7 @@ class Dialogs {
                                   activeColor: MyApp.of(context).isDarkMode()
                                       ? darkNeutral850
                                       : lightNeutral700,
-                                  fillColor: MaterialStateProperty.all(
+                                  fillColor: WidgetStateProperty.all(
                                       MyApp.of(context).isDarkMode()
                                           ? darkNeutral850
                                           : lightNeutral700),
@@ -1108,7 +1108,7 @@ class Dialogs {
                     ),
                     onPressed: () async {
                       await player.dispose();
-                      await Wakelock.disable();
+                      await WakelockPlus.disable();
 
                       SchedulerBinding.instance.addPostFrameCallback((_) {
                         Navigator.of(context).push(MaterialPageRoute(

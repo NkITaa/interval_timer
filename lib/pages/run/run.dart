@@ -4,13 +4,13 @@ import 'package:interval_timer/const.dart';
 import 'package:interval_timer/main.dart';
 import 'package:interval_timer/pages/run/custom_timer.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:interval_timer/l10n/app_localizations.dart';
 import 'package:interval_timer/pages/run/preparation.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:hive/hive.dart';
 import '../../components/dialogs.dart';
 import 'congrats.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 class Run extends StatefulWidget {
   final int totalDuration;
@@ -37,14 +37,14 @@ class Run extends StatefulWidget {
 }
 
 class _RunState extends State<Run> with WidgetsBindingObserver {
-  String sound = Hive.box("settings").get("sound");
+  String sound = Hive.box("settings").get("sound") ?? "assets/sounds/Countdown1.mp3";
   late int remainderBasis = widget.totalDuration;
 
   next() async {
     if (widget.player.currentIndex! % 2 == 0 &&
         widget.sets == widget.player.currentIndex! ~/ 2 + 1) {
       await widget.player.dispose();
-      await Wakelock.disable();
+      await WakelockPlus.disable();
 
       if (!context.mounted) return;
       Navigator.of(context).push(MaterialPageRoute(
@@ -78,7 +78,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
     } else if (widget.player.currentIndex! % 2 == 0 &&
         widget.player.currentIndex! ~/ 2 + 1 == 1) {
       await widget.player.stop();
-      await Wakelock.disable();
+      await WakelockPlus.disable();
       SchedulerBinding.instance.addPostFrameCallback((_) {
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => Preparation(
@@ -105,12 +105,12 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
     super.initState();
     widget.player.seek(Duration.zero, index: 0);
     WidgetsBinding.instance.addObserver(this);
-    Wakelock.enable();
+    WakelockPlus.enable();
   }
 
   @override
-  dispose() {
-    Wakelock.disable();
+  void dispose() {
+    WakelockPlus.disable();
     widget.player.dispose();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
@@ -140,7 +140,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             int duration =
-                widget.player.duration!.inSeconds - snapshot.data!.inSeconds;
+                (widget.player.duration?.inSeconds ?? 0) - snapshot.data!.inSeconds;
 
             if (duration <= 0) {
               next();
@@ -243,7 +243,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
                           children: [
                             CustomTimer(
                                 seconds: duration,
-                                maxSeconds: widget.player.duration!.inSeconds,
+                                maxSeconds: widget.player.duration?.inSeconds ?? 0,
                                 isRunning: widget.player.playerState.playing,
                                 indexTime: widget.player.currentIndex! % 2),
                             Column(

@@ -13,7 +13,7 @@ class AudioReturn {
 
 Future<AudioReturn> initialize(player, List<int> time, int sets) async {
   DateTime now = DateTime.now();
-  String sound = await Hive.box("settings").get("sound");
+  String sound = Hive.box("settings").get("sound") ?? "assets/sounds/Countdown1.mp3";
   List<String> runDir = await buildFileNames(time[0], sound);
   List<String> pauseDir = await buildFileNames(time[1], sound);
   String messageRun = await concatenateMP3(runDir, "run.mp3");

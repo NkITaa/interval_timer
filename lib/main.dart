@@ -3,7 +3,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:interval_timer/pages/home.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:interval_timer/l10n/app_localizations.dart';
 import 'package:interval_timer/workout.dart';
 import 'const.dart';
 import 'package:hive/hive.dart';
@@ -231,7 +231,7 @@ class _MyAppState extends State<MyApp> {
       ), // standard dark theme
       themeMode: _themeMode, // device controls theme
       home: Portal(
-          child: Hive.box("settings").get("visible") ?? true == true
+          child: (Hive.box("settings").get("visible") ?? true) == true
               ? const Home(screenIndex: 1, visible: true)
               : const Home(screenIndex: 0)),
     );

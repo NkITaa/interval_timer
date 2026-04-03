@@ -4,36 +4,38 @@ publish_to: 'none'
 version: 1.1.2+30
 
 environment:
-  sdk: '>=3.0.5 <4.0.0'
+  sdk: '>=3.8.0 <4.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  intl: any
+  intl: ^0.20.2
   cupertino_icons: ^1.0.2
-
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  flutter_lints: ^2.0.0
   flutter_tabler_icons: ^1.7.0
   google_fonts: ^6.1.0
   scroll_snap_list: ^0.9.1
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   confetti: ^0.7.0
-  hive_generator: ^2.0.1
   flutter_markdown: ^0.6.18+2
   url_launcher: ^6.2.2
   top_snackbar_flutter: ^3.1.0
-  wakelock: ^0.6.2
+  wakelock_plus: ^1.2.8
   just_audio: ^0.9.36
   ffmpeg_kit_flutter_audio: ^6.0.3
   just_audio_background: ^0.0.1-beta.11
   flutter_phoenix: ^1.1.1
   flutter_portal: ^1.1.4
+  path_provider: ^2.1.1
+  audio_session: ^0.1.18
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+  hive_generator: ^2.0.1
 
 
 flutter:

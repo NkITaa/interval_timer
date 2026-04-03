@@ -4,7 +4,7 @@ import 'package:interval_timer/const.dart';
 import 'package:interval_timer/main.dart';
 import 'settings_page_legal.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:interval_timer/l10n/app_localizations.dart';
 
 class SettingsPage extends StatelessWidget {
   final int index;

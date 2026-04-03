@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:interval_timer/components/hide_widgets_on_scroll.dart';
-// ignore: depend_on_referenced_packages
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:interval_timer/l10n/app_localizations.dart';
 import 'package:interval_timer/const.dart';
 import 'package:interval_timer/main.dart';
 

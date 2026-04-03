@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import '../const.dart';
 import '../main.dart';
 import 'increment_decrement_button.dart';
@@ -37,7 +36,7 @@ class WorkoutTimesContainer extends StatelessWidget {
                     offset: Offset(0, 0),
                   )
                 : BoxShadow(
-                    color: const Color(0xff1D1D1D).withOpacity(0.08),
+                    color: const Color(0xff1D1D1D).withValues(alpha: 0.08),
                     spreadRadius: 0,
                     blurRadius: 8,
                     offset: const Offset(0, 2),

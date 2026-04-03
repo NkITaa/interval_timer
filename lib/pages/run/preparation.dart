@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:interval_timer/const.dart';
 import 'package:interval_timer/pages/run/run.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:interval_timer/l10n/app_localizations.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:hive/hive.dart';
 import '../../main.dart';
@@ -36,7 +36,7 @@ class _PreparationState extends State<Preparation> {
   int counter = 9;
   bool isPaused = false;
 
-  String sound = Hive.box("settings").get("sound");
+  String sound = Hive.box("settings").get("sound") ?? "assets/sounds/Countdown1.mp3";
 
   late Timer timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
     if (counter == 0) {
@@ -56,9 +56,9 @@ class _PreparationState extends State<Preparation> {
   }
 
   @override
-  dispose() {
-    super.dispose();
+  void dispose() {
     timer.cancel();
+    super.dispose();
   }
 
   next() async {

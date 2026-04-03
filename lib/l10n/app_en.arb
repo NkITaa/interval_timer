@@ -71,5 +71,6 @@
     "profile_legal_imprint": "Imprint",
     "profile_legal_terms": "Terms",
 
-    "profile_settings_sound_dialog": "Select Sound"
+    "profile_settings_sound_dialog": "Select Sound",
+    "error_not_enough_space": "Not Enough Space on Device"
 }

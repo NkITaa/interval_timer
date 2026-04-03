@@ -71,5 +71,6 @@
   "profile_legal_imprint": "Impressum",
   "profile_legal_terms": "AGBs",
 
-  "profile_settings_sound_dialog": "Sound Auswählen"
+  "profile_settings_sound_dialog": "Sound Auswählen",
+  "error_not_enough_space": "Nicht genug Speicherplatz auf dem Gerät"
 }

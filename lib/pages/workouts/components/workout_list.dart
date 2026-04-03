@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:interval_timer/const.dart';
 import 'package:interval_timer/pages/workouts/components/workout_tile.dart';
 import 'package:hive/hive.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:interval_timer/l10n/app_localizations.dart';
 
 import '../../../components/dialogs.dart';
 import '../../../main.dart';

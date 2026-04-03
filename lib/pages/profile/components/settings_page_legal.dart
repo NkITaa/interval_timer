@@ -4,7 +4,7 @@ import 'package:interval_timer/const.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsPageLegal extends StatelessWidget {
-  Future<String> data;
+  final Future<String> data;
 
   SettingsPageLegal({required this.data, super.key});
 
@@ -16,8 +16,8 @@ class SettingsPageLegal extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           return Markdown(
             onTapLink: (text, href, title) async {
-              if (href != null && !await launchUrl(Uri.parse(href))) {
-                throw Exception('Could not launch');
+              if (href != null) {
+                await launchUrl(Uri.parse(href));
               }
             },
             data: snapshot.data!,

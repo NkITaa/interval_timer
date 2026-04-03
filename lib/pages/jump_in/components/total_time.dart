@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../const.dart';
 import '../../../main.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:interval_timer/l10n/app_localizations.dart';
 
 class TotalTime extends StatelessWidget {
   final Duration totalTime;

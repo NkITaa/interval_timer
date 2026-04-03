@@ -5,9 +5,8 @@ import 'package:interval_timer/const.dart';
 import 'package:interval_timer/main.dart';
 import 'package:interval_timer/pages/run/preparation.dart';
 import 'package:just_audio/just_audio.dart';
-import '../home.dart';
-import 'AudioHandler.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'audio_handler.dart';
+import 'package:interval_timer/l10n/app_localizations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
 class InitialisationScreen extends StatelessWidget {
@@ -48,8 +47,8 @@ class InitialisationScreen extends StatelessWidget {
                   indexTime: indexTime,
                   player: player);
             } else {
-              return const Center(
-                child: Text("Not Enough Space on Device"),
+              return Center(
+                child: Text(AppLocalizations.of(context)!.error_not_enough_space),
               );
             }
           } else {

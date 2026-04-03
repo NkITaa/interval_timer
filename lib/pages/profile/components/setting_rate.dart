@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:interval_timer/l10n/app_localizations.dart';
 import '../../../const.dart';
 import '../../../main.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -15,14 +15,12 @@ class RateApp extends StatelessWidget {
     return InkWell(
       splashColor: Colors.transparent,
       onTap: () async {
-        if (!await launchUrl(
+        await launchUrl(
           Uri.parse(Platform.isAndroid
               ? 'https://play.google.com/store/apps/details?id=com.nikita.interval_timer'
               : 'https://apps.apple.com/app/id6475160260'),
           mode: LaunchMode.externalApplication,
-        )) {
-          throw Exception('Could not launch');
-        }
+        );
       },
       child: Container(
         height: 68,
@@ -37,7 +35,7 @@ class RateApp extends StatelessWidget {
                     offset: Offset(0, 0), // changes position of shadow
                   )
                 : BoxShadow(
-                    color: const Color(0xff1D1D1D).withOpacity(0.16),
+                    color: const Color(0xff1D1D1D).withValues(alpha: 0.16),
                     spreadRadius: 0,
                     blurRadius: 24,
                     offset: const Offset(0, 6), // changes position of shadow
@@ -73,12 +71,10 @@ class RateApp extends StatelessWidget {
             const Spacer(),
             ElevatedButton(
               onPressed: () async {
-                if (!await launchUrl(
+                await launchUrl(
                   Uri.parse('https://apps.apple.com/app/id6475160260'),
                   mode: LaunchMode.externalApplication,
-                )) {
-                  throw Exception('Could not launch');
-                }
+                );
               },
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.only(

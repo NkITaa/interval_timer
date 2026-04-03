@@ -3,7 +3,7 @@ import 'package:interval_timer/components/workout_times_container.dart';
 import 'package:interval_timer/pages/jump_in/components/total_time.dart';
 import 'package:interval_timer/pages/run/initialisation_screen.dart';
 import 'package:interval_timer/workout.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:interval_timer/l10n/app_localizations.dart';
 
 import '../../components/dialogs.dart';
 import '../../const.dart';
