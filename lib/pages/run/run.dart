@@ -42,6 +42,8 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
   late int remainderBasis = widget.totalDuration;
   bool _navigating = false;
   bool _advancing = false;
+  bool _dialogOpen = false;
+  bool _disposed = false;
   int _advanceVersion = 0;
 
   next() async {
@@ -51,6 +53,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
     if (widget.player.currentIndex! % 2 == 0 &&
         widget.sets == widget.player.currentIndex! ~/ 2 + 1) {
       _navigating = true;
+      _disposed = true;
       await widget.player.dispose();
       await WakelockPlus.disable();
 
@@ -132,7 +135,10 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
   @override
   void dispose() {
     WakelockPlus.disable();
-    widget.player.dispose();
+    if (!_disposed) {
+      _disposed = true;
+      widget.player.dispose();
+    }
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -164,7 +170,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: !isPlaying
+          colors: (!isPlaying && !_dialogOpen)
               ? [const Color(0xffA3A3A3), const Color(0xff7C7C7C)]
               : isTraining
                   ? [const Color(0xffF01D52), const Color(0xffFA5F54)]
@@ -177,8 +183,8 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
             leading: IconButton(
                 color: const Color(0xffFADCE3),
                 onPressed: () {
+                  _dialogOpen = true;
                   widget.player.pause();
-                  setState(() {});
                   showDialog(
                       context: context,
                       builder: (BuildContext context) =>
@@ -190,6 +196,8 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
                               DateTime.now()
                                   .difference(widget.startTime)
                                   .inSeconds)).whenComplete(() {
+                    if (!mounted || _disposed) return;
+                    _dialogOpen = false;
                     widget.player.play();
                     setState(() {});
                   });
@@ -299,14 +307,14 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
                           backgroundColor: textColor,
                           child: IconButton(
                               iconSize: 60,
-                              color: !isPlaying
+                              color: (!isPlaying && !_dialogOpen)
                                   ? const Color(0xff7C7C7C)
                                   : isTraining
                                       ? const Color(0xffFA5F54)
                                       : const Color(0xff7189E1),
                               onPressed: _togglePlayPause,
                               icon: Icon(
-                                !isPlaying
+                                (!isPlaying && !_dialogOpen)
                                     ? TablerIcons.player_play_filled
                                     : TablerIcons.player_pause_filled,
                               )),

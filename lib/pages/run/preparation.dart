@@ -43,7 +43,7 @@ class _PreparationState extends State<Preparation> {
       await next();
     }
     if (counter > 0 && !isPaused) {
-      if (counter == 4 && sound != "off" && _countdownPlayer != null) {
+      if (counter >= 2 && counter <= 4 && sound != "off" && _countdownPlayer != null) {
         _countdownPlayer!.seek(Duration.zero);
         _countdownPlayer!.play();
       }

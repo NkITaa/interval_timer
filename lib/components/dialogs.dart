@@ -942,7 +942,7 @@ class Dialogs {
                       ),
                     ),
                     onPressed: () async {
-                      await player.dispose();
+                      await player.stop();
                       await WakelockPlus.disable();
 
                       SchedulerBinding.instance.addPostFrameCallback((_) {

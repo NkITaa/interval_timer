@@ -58,17 +58,17 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/wakelock_plus/ios"
 
 SPEC CHECKSUMS:
-  audio_service: 2023a4a1bdb2fd1443e7b00bdbdb1baa321525db
-  audio_session: 9bdd3bf46960d4322cb8c3cb6138295dcfe84eee
+  audio_service: f509d65da41b9521a61f1c404dd58651f265a567
+  audio_session: 4f3e461722055d21515cf3261b64c973c062f345
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  just_audio: 6c031bb61297cf218b4462be616638e81c058e97
-  package_info_plus: af8e2ca6888548050f16fa2f1938db7b5a5df499
-  path_provider_foundation: 2a68637f8a62df7f6e790a428d1bdf72cb4e2d59
-  sqflite: 5b24d06a453c198c13b305ceea4b4286cc07cfe4
-  url_launcher_ios: 20ac5d9ae4206c13b59c0f31ea0c4bd324cc4912
-  wakelock_plus: e29112ab3ef0b318e58cfa5c32326458be66b556
+  just_audio: baa7252489dbcf47a4c7cc9ca663e9661c99aafa
+  package_info_plus: c0502532a26c7662a62a356cebe2692ec5fe4ec4
+  path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
+  sqflite: 31f7eba61e3074736dff8807a9b41581e4f7f15a
+  url_launcher_ios: bf5ce03e0e2088bad9cc378ea97fa0ed5b49673b
+  wakelock_plus: 76957ab028e12bfa4e66813c99e46637f367fc7e
 
 PODFILE CHECKSUM: 75b9ef8c8727257e2ac75dc5ab4c406975e8bb2d
 
-COCOAPODS: 1.16.2
+COCOAPODS: 1.12.1
