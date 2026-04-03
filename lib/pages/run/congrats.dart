@@ -6,6 +6,7 @@ import 'package:interval_timer/const.dart';
 
 import 'package:interval_timer/pages/home.dart';
 import 'package:interval_timer/l10n/app_localizations.dart';
+import 'package:interval_timer/services/haptic_service.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
 import '../../components/dialogs.dart';
@@ -33,7 +34,10 @@ class _CongratsState extends State<Congrats> {
 
   @override
   void initState() {
-    if (widget.didIt) controller.play();
+    if (widget.didIt) {
+      controller.play();
+      HapticService.heavy();
+    }
     super.initState();
   }
 

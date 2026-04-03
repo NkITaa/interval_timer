@@ -8,6 +8,7 @@ import 'package:interval_timer/l10n/app_localizations.dart';
 import 'package:interval_timer/pages/run/preparation.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:interval_timer/services/settings_service.dart';
+import 'package:interval_timer/services/haptic_service.dart';
 import '../../components/dialogs.dart';
 import 'congrats.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
@@ -45,6 +46,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
   bool _dialogOpen = false;
   bool _disposed = false;
   int _advanceVersion = 0;
+  int _lastHapticSecond = -1;
 
   next() async {
     if (_navigating) return;
@@ -56,6 +58,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
       _disposed = true;
       await widget.player.dispose();
       await WakelockPlus.disable();
+      HapticService.success();
 
       if (!mounted) return;
       Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -66,6 +69,8 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
                 duration: DateTime.now().difference(widget.startTime).inSeconds,
               )));
     } else {
+      HapticService.heavy();
+      _lastHapticSecond = -1;
       await widget.player.seekToNext();
       int temp = 0;
       for (int i = 0; i < widget.player.currentIndex!; i++) {
@@ -116,6 +121,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
   }
 
   void _togglePlayPause() {
+    HapticService.selection();
     if (!widget.player.playerState.playing) {
       widget.player.play();
     } else {
@@ -252,6 +258,15 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
                             widget.time[currentIndex % 2];
                         int duration = intendedDuration - positionSeconds;
 
+                        if (duration >= 1 && duration <= 3 && duration != _lastHapticSecond) {
+                          _lastHapticSecond = duration;
+                          if (duration == 1) {
+                            HapticService.medium();
+                          } else {
+                            HapticService.light();
+                          }
+                        }
+
                         if (duration <= 0 && !_navigating && !_advancing) {
                           _advancing = true;
                           final version = _advanceVersion;
@@ -297,6 +312,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
                         IconButton(
                             color: textColor,
                             onPressed: () async {
+                              HapticService.selection();
                               await back();
                             },
                             iconSize: 50,
@@ -323,6 +339,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
                         IconButton(
                             color: textColor,
                             onPressed: () async {
+                              HapticService.selection();
                               await next();
                             },
                             iconSize: 50,

@@ -7,6 +7,7 @@ class SettingsTile extends StatefulWidget {
   final Icon? icon;
   final String title;
   final bool switching;
+  final bool? switchValue;
   final bool last;
   final Function(bool?)? onTap;
   const SettingsTile(
@@ -15,7 +16,8 @@ class SettingsTile extends StatefulWidget {
       required this.title,
       this.onTap,
       this.last = false,
-      this.switching = false});
+      this.switching = false,
+      this.switchValue});
 
   @override
   State<SettingsTile> createState() => _SettingsTileState();
@@ -57,7 +59,7 @@ class _SettingsTileState extends State<SettingsTile> {
                             return null;
                           },
                         ),
-                        value: Theme.of(context).brightness == Brightness.dark,
+                        value: widget.switchValue ?? (Theme.of(context).brightness == Brightness.dark),
                         onChanged: (selected) {
                           widget.onTap!(selected);
                         })

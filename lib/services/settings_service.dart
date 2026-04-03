@@ -17,6 +17,10 @@ class SettingsService {
   static String get language => _box.get("language", defaultValue: "en");
   static Future<void> setLanguage(String value) => _box.put("language", value);
 
+  // Haptic
+  static bool get isHapticEnabled => _box.get("haptic", defaultValue: true);
+  static Future<void> setHaptic(bool value) => _box.put("haptic", value);
+
   // Visible (onboarding)
   static bool get isJumpInVisible => _box.get("visible", defaultValue: true);
   static Future<void> setJumpInVisible(bool value) => _box.put("visible", value);

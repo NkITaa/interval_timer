@@ -191,6 +191,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profile_settings_sound => 'Sound';
 
   @override
+  String get profile_settings_vibration => 'Vibration';
+
+  @override
   String get profile_help => 'Help and Contact';
 
   @override

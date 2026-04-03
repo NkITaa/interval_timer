@@ -452,6 +452,12 @@ abstract class AppLocalizations {
   /// **'Sound'**
   String get profile_settings_sound;
 
+  /// No description provided for @profile_settings_vibration.
+  ///
+  /// In en, this message translates to:
+  /// **'Vibration'**
+  String get profile_settings_vibration;
+
   /// No description provided for @profile_help.
   ///
   /// In en, this message translates to:

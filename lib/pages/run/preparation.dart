@@ -8,6 +8,7 @@ import 'package:interval_timer/pages/run/run.dart';
 import 'package:interval_timer/l10n/app_localizations.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:interval_timer/services/settings_service.dart';
+import 'package:interval_timer/services/haptic_service.dart';
 
 import '../home.dart';
 
@@ -40,12 +41,18 @@ class _PreparationState extends State<Preparation> {
 
   late Timer timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
     if (counter == 0) {
+      HapticService.heavy();
       await next();
     }
     if (counter > 0 && !isPaused) {
       if (counter >= 2 && counter <= 4 && sound != "off" && _countdownPlayer != null) {
         _countdownPlayer!.seek(Duration.zero);
         _countdownPlayer!.play();
+      }
+      if (counter >= 2 && counter <= 4) {
+        HapticService.light();
+      } else if (counter == 1) {
+        HapticService.medium();
       }
       setState(() {
         counter--;
@@ -127,6 +134,7 @@ class _PreparationState extends State<Preparation> {
           highlightColor: Colors.transparent,
           splashColor: Colors.transparent,
           onTap: () {
+            HapticService.selection();
             setState(() {
               isPaused = !isPaused;
             });
@@ -152,6 +160,7 @@ class _PreparationState extends State<Preparation> {
               ),
               InkWell(
                 onTap: () async {
+                  HapticService.selection();
                   await next();
                 },
                 highlightColor: Colors.transparent,
@@ -166,6 +175,7 @@ class _PreparationState extends State<Preparation> {
                           text: AppLocalizations.of(context)!.run_skip,
                           recognizer: TapGestureRecognizer()
                             ..onTap = () async {
+                              HapticService.selection();
                               await next();
                             }),
                     ),

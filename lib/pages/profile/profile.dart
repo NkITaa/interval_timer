@@ -77,7 +77,6 @@ class _ProfileState extends State<Profile> {
                           AppLocalizations.of(context)!.profile_settings_sound,
                       icon: Icon(TablerIcons.volume,
                           color: context.colors.iconSecondary),
-                      last: true,
                       onTap: (selected) async {
                         final player = AudioPlayer();
                         // ignore: use_build_context_synchronously
@@ -91,6 +90,18 @@ class _ProfileState extends State<Profile> {
                                   player, context, setState),
                         ).whenComplete(() => player.dispose());
                       }),
+                  SettingsTile(
+                    title: AppLocalizations.of(context)!.profile_settings_vibration,
+                    icon: Icon(TablerIcons.device_mobile_vibration,
+                        color: context.colors.iconSecondary),
+                    switching: true,
+                    switchValue: SettingsService.isHapticEnabled,
+                    last: true,
+                    onTap: (selected) {
+                      SettingsService.setHaptic(selected!);
+                      setState(() {});
+                    },
+                  ),
                 ],
               ),
               SettingsBlock(
