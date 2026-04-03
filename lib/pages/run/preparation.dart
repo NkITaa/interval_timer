@@ -35,11 +35,13 @@ class Preparation extends StatefulWidget {
 class _PreparationState extends State<Preparation> {
   int counter = 9;
   bool isPaused = false;
+  bool _navigating = false;
 
   String sound = SettingsService.sound;
   AudioPlayer? _countdownPlayer;
 
   late Timer timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
+    if (_navigating) return;
     if (counter == 0) {
       HapticService.heavy();
       await next();
@@ -82,11 +84,14 @@ class _PreparationState extends State<Preparation> {
   }
 
   next() async {
+    if (_navigating) return;
+    _navigating = true;
     timer.cancel();
     _countdownPlayer?.stop();
     _countdownPlayer?.dispose();
     _countdownPlayer = null;
     widget.player.play();
+    if (!mounted) return;
     Navigator.of(context).pushReplacement(MaterialPageRoute(
         builder: (context) => Run(
               startTime: DateTime.now(),
@@ -117,10 +122,13 @@ class _PreparationState extends State<Preparation> {
           leading: IconButton(
               icon: const Icon(TablerIcons.x, color: Color(0xffFAEFDC)),
               onPressed: () async {
+                if (_navigating) return;
+                _navigating = true;
+                HapticService.selection();
+                timer.cancel();
                 await _countdownPlayer?.dispose();
                 _countdownPlayer = null;
                 await widget.player.dispose();
-                timer.cancel();
                 SchedulerBinding.instance.addPostFrameCallback((_) {
                   Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(

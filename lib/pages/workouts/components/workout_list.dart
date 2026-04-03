@@ -5,6 +5,7 @@ import 'package:hive/hive.dart';
 import 'package:interval_timer/l10n/app_localizations.dart';
 
 import '../../../components/dialogs.dart';
+import 'package:interval_timer/services/haptic_service.dart';
 
 
 class WorkoutList extends StatelessWidget {
@@ -56,6 +57,7 @@ class WorkoutList extends StatelessWidget {
                 height: 50,
                 child: ElevatedButton(
                     onPressed: () {
+                      HapticService.medium();
                       TextEditingController nameController =
                           TextEditingController();
                       showModalBottomSheet(

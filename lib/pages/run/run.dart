@@ -188,25 +188,49 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
           appBar: AppBar(
             leading: IconButton(
                 color: const Color(0xffFADCE3),
-                onPressed: () {
+                onPressed: () async {
+                  if (_dialogOpen) return;
+                  HapticService.selection();
                   _dialogOpen = true;
                   widget.player.pause();
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) =>
-                          Dialogs.buildExitDialog(
-                              context,
-                              widget.player,
-                              widget.time,
-                              widget.sets,
-                              DateTime.now()
-                                  .difference(widget.startTime)
-                                  .inSeconds)).whenComplete(() {
-                    if (!mounted || _disposed) return;
+                  setState(() {});
+
+                  final shouldExit = await showDialog<bool>(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext context) =>
+                        Dialogs.buildExitDialog(context),
+                  );
+
+                  if (!mounted || _disposed) return;
+
+                  if (shouldExit == true) {
+                    _navigating = true;
+                    _disposed = true;
+                    try {
+                      await widget.player.stop();
+                      await widget.player.dispose();
+                    } catch (_) {}
+                    await WakelockPlus.disable();
+                    if (!mounted) return;
+                    Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                        builder: (context) => Congrats(
+                          time: widget.time,
+                          didIt: false,
+                          sets: widget.sets,
+                          duration: DateTime.now()
+                              .difference(widget.startTime)
+                              .inSeconds,
+                        ),
+                      ),
+                      (route) => false,
+                    );
+                  } else {
                     _dialogOpen = false;
                     widget.player.play();
                     setState(() {});
-                  });
+                  }
                 },
                 icon: Icon(TablerIcons.x, color: textColor)),
             title: Text(
@@ -219,6 +243,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
             actions: [
               IconButton(
                   onPressed: () {
+                    HapticService.light();
                     if (sound == "off") {
                       sound = _originalSound == "off" ? "assets/sounds/Countdown1.mp3" : _originalSound;
                       widget.player.setVolume(1);

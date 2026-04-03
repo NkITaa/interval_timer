@@ -3,6 +3,7 @@ import 'package:interval_timer/l10n/app_localizations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:interval_timer/components/dialogs.dart';
 import 'package:interval_timer/const.dart';
+import 'package:interval_timer/services/haptic_service.dart';
 
 
 class WorkoutsAppbar extends StatelessWidget implements PreferredSizeWidget {
@@ -35,6 +36,7 @@ class WorkoutsAppbar extends StatelessWidget implements PreferredSizeWidget {
                 color: context.colors.iconPrimary,
               ),
               onPressed: () {
+                HapticService.selection();
                 TextEditingController nameController = TextEditingController();
                 showModalBottomSheet(
                   backgroundColor: Colors.transparent,

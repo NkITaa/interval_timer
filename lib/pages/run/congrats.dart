@@ -65,7 +65,10 @@ class _CongratsState extends State<Congrats> {
                 ],
               ),
               IconButton(
-                onPressed: () => controller.play(),
+                onPressed: () {
+                  HapticService.selection();
+                  controller.play();
+                },
                 iconSize: 64,
                 icon: Icon(
                   TablerIcons.trophy,
@@ -94,6 +97,7 @@ class _CongratsState extends State<Congrats> {
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () {
+                    HapticService.medium();
                     Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
                           builder: (context) => const Home(screenIndex: 1)),
@@ -119,6 +123,7 @@ class _CongratsState extends State<Congrats> {
                             color: context.colors.neutral300),
                       ),
                       onPressed: () {
+                        HapticService.selection();
                         TextEditingController nameController =
                             TextEditingController(text: "");
                         showModalBottomSheet(

@@ -7,6 +7,7 @@ import 'package:interval_timer/l10n/app_localizations.dart';
 
 import '../../components/dialogs.dart';
 import '../../const.dart';
+import 'package:interval_timer/services/haptic_service.dart';
 
 class JumpIn extends StatefulWidget {
   final bool visible;
@@ -109,6 +110,7 @@ class _JumpInState extends State<JumpIn> {
                 height: 55,
                 child: ElevatedButton(
                   onPressed: () {
+                    HapticService.medium();
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => InitialisationScreen(
                               time: [
@@ -141,6 +143,7 @@ class _JumpInState extends State<JumpIn> {
                           color: context.colors.neutral300),
                     ),
                     onPressed: () {
+                      HapticService.selection();
                       TextEditingController nameController =
                           TextEditingController(text: "");
                       showModalBottomSheet(

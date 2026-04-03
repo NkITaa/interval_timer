@@ -3,6 +3,7 @@ import 'package:interval_timer/components/hide_widgets_on_scroll.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:interval_timer/l10n/app_localizations.dart';
 import 'package:interval_timer/const.dart';
+import 'package:interval_timer/services/haptic_service.dart';
 
 class BottomNavBar extends StatefulWidget {
   final ScrollController controller;
@@ -31,6 +32,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
         ),
         child: BottomNavigationBar(
           onTap: (index) {
+            HapticService.light();
             widget.onTabTapped(index);
             setState(() {});
           },

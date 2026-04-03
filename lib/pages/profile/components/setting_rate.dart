@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:interval_timer/l10n/app_localizations.dart';
 import '../../../const.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:interval_timer/services/haptic_service.dart';
 
 class RateApp extends StatelessWidget {
   final String? version;
@@ -14,6 +15,7 @@ class RateApp extends StatelessWidget {
     return InkWell(
       splashColor: Colors.transparent,
       onTap: () async {
+        HapticService.selection();
         await launchUrl(
           Uri.parse(Platform.isAndroid
               ? 'https://play.google.com/store/apps/details?id=com.nikita.interval_timer'
@@ -69,6 +71,7 @@ class RateApp extends StatelessWidget {
             const Spacer(),
             ElevatedButton(
               onPressed: () async {
+                HapticService.selection();
                 await launchUrl(
                   Uri.parse(Platform.isAndroid
                       ? 'https://play.google.com/store/apps/details?id=com.nikita.interval_timer'

@@ -6,6 +6,7 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:interval_timer/l10n/app_localizations.dart';
 
 import '../../../components/dialogs.dart';
+import 'package:interval_timer/services/haptic_service.dart';
 
 
 class WorkoutTile extends StatelessWidget {
@@ -23,6 +24,7 @@ class WorkoutTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+        HapticService.selection();
         TextEditingController nameController =
             TextEditingController(text: workout.name);
         showModalBottomSheet(
@@ -55,6 +57,7 @@ class WorkoutTile extends StatelessWidget {
                     color: context.colors.bodyText,
                   ),
                   onPressed: () {
+                    HapticService.selection();
                     TextEditingController nameController =
                         TextEditingController(text: workout.name);
                     showModalBottomSheet(
@@ -120,6 +123,7 @@ class WorkoutTile extends StatelessWidget {
               height: 50,
               child: ElevatedButton(
                   onPressed: () {
+                    HapticService.medium();
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => InitialisationScreen(
                               time: [

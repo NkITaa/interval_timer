@@ -8,6 +8,7 @@ import 'package:just_audio/just_audio.dart';
 import 'audio_handler.dart';
 import 'package:interval_timer/l10n/app_localizations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
+import 'package:interval_timer/services/haptic_service.dart';
 
 class InitialisationScreen extends StatelessWidget {
   final List<int> time;
@@ -65,6 +66,7 @@ class InitialisationScreen extends StatelessWidget {
                           color: context.colors.subtleElement,
                         ),
                         onPressed: () async {
+                          HapticService.selection();
                           await player.dispose();
                           SchedulerBinding.instance.addPostFrameCallback((_) {
                             Navigator.of(context).pop();
@@ -94,6 +96,7 @@ class InitialisationScreen extends StatelessWidget {
                                     .workouts_delete_cancel,
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () async {
+                                    HapticService.selection();
                                     await player.dispose();
                                     SchedulerBinding.instance
                                         .addPostFrameCallback((_) {

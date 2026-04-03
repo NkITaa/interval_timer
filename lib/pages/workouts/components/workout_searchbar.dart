@@ -6,6 +6,7 @@ import 'package:interval_timer/l10n/app_localizations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
 import '../../../const.dart';
+import 'package:interval_timer/services/haptic_service.dart';
 
 
 class WorkoutSearchBar extends StatefulWidget {
@@ -36,6 +37,7 @@ class _WorkoutSearchBarState extends State<WorkoutSearchBar> {
             color: context.colors.iconPrimary,
           ),
           onPressed: () {
+            HapticService.selection();
             Navigator.pop(context);
           },
         ),
@@ -82,6 +84,7 @@ class _WorkoutSearchBarState extends State<WorkoutSearchBar> {
                 WidgetStateProperty.all<Color>(Colors.transparent),
             controller: controller,
             onTap: () {
+              HapticService.light();
               controller.openView();
             },
           );

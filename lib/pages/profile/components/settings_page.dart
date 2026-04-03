@@ -4,6 +4,7 @@ import 'package:interval_timer/const.dart';
 import 'settings_page_legal.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:interval_timer/l10n/app_localizations.dart';
+import 'package:interval_timer/services/haptic_service.dart';
 
 class SettingsPage extends StatelessWidget {
   final int index;
@@ -28,6 +29,7 @@ class SettingsPage extends StatelessWidget {
             icon: Icon(TablerIcons.chevron_left,
                 color: context.colors.iconPrimary),
             onPressed: () {
+              HapticService.selection();
               Navigator.pop(context);
             },
           ),

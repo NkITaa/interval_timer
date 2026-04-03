@@ -4,6 +4,7 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:interval_timer/l10n/app_localizations.dart';
 import '../const.dart';
 import 'dialogs.dart';
+import 'package:interval_timer/services/haptic_service.dart';
 
 class IncrementDecrementButton extends StatefulWidget {
   final String type;
@@ -97,7 +98,9 @@ class _IncrementDecrementButtonState extends State<IncrementDecrementButton> {
                           ? widget.minutes.toString().substring(2, 7)
                           : widget.sets.toString(),
                       recognizer: TapGestureRecognizer()
-                        ..onTap = () => showDialog(
+                        ..onTap = () {
+                            HapticService.selection();
+                            showDialog(
                                     context: context,
                                     builder: (BuildContext context) =>
                                         Dialogs.buildSetTimesDialog(
@@ -110,7 +113,8 @@ class _IncrementDecrementButtonState extends State<IncrementDecrementButton> {
                                 .then((value) {
                               _removeOverlay();
                               widget.killVisible!();
-                            }),
+                            });
+                          },
                     ),
                   ),
                 ),
@@ -149,6 +153,7 @@ class _IncrementDecrementButtonState extends State<IncrementDecrementButton> {
         children: [
           IconButton(
               onPressed: () {
+                HapticService.light();
                 widget.update(widget.type, false);
               },
               icon: Icon(
@@ -177,17 +182,20 @@ class _IncrementDecrementButtonState extends State<IncrementDecrementButton> {
                                 ? widget.minutes.toString().substring(2, 7)
                                 : widget.sets.toString(),
                             recognizer: TapGestureRecognizer()
-                              ..onTap = () => showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) =>
-                                        Dialogs.buildSetTimesDialog(
-                                            context,
-                                            widget.type,
-                                            widget.minutes,
-                                            widget.otherMinutes,
-                                            widget.sets,
-                                            widget.setValue),
-                                  ),
+                              ..onTap = () {
+                                    HapticService.selection();
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          Dialogs.buildSetTimesDialog(
+                                              context,
+                                              widget.type,
+                                              widget.minutes,
+                                              widget.otherMinutes,
+                                              widget.sets,
+                                              widget.setValue),
+                                    );
+                                  },
                           ),
                         ),
                       )
@@ -198,17 +206,20 @@ class _IncrementDecrementButtonState extends State<IncrementDecrementButton> {
                               ? widget.minutes.toString().substring(2, 7)
                               : widget.sets.toString(),
                           recognizer: TapGestureRecognizer()
-                            ..onTap = () => showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      Dialogs.buildSetTimesDialog(
-                                          context,
-                                          widget.type,
-                                          widget.minutes,
-                                          widget.otherMinutes,
-                                          widget.sets,
-                                          widget.setValue),
-                                ),
+                            ..onTap = () {
+                                  HapticService.selection();
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        Dialogs.buildSetTimesDialog(
+                                            context,
+                                            widget.type,
+                                            widget.minutes,
+                                            widget.otherMinutes,
+                                            widget.sets,
+                                            widget.setValue),
+                                  );
+                                },
                         ),
                       ),
               ],
@@ -216,6 +227,7 @@ class _IncrementDecrementButtonState extends State<IncrementDecrementButton> {
           ),
           IconButton(
               onPressed: () {
+                HapticService.light();
                 widget.update(widget.type, true);
               },
               icon: Icon(

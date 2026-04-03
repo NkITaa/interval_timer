@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
 import '../../../const.dart';
+import 'package:interval_timer/services/haptic_service.dart';
 
 class SettingsTile extends StatefulWidget {
   final Icon? icon;
@@ -34,7 +35,10 @@ class _SettingsTileState extends State<SettingsTile> {
                 title: Text(widget.title, style: body1(context)),
                 trailing: Icon(TablerIcons.chevron_right,
                     color: context.colors.bodyText),
-                onTap: () => widget.onTap!(false),
+                onTap: () {
+                  HapticService.light();
+                  widget.onTap!(false);
+                },
               )
             : ListTile(
                 contentPadding: const EdgeInsets.symmetric(horizontal: 0),
@@ -61,13 +65,17 @@ class _SettingsTileState extends State<SettingsTile> {
                         ),
                         value: widget.switchValue ?? (Theme.of(context).brightness == Brightness.dark),
                         onChanged: (selected) {
+                          HapticService.light();
                           widget.onTap!(selected);
                         })
                     : Icon(
                         TablerIcons.chevron_right,
                         color: context.colors.bodyText,
                       ),
-                onTap: () => widget.onTap!(false),
+                onTap: () {
+                  HapticService.light();
+                  widget.onTap!(false);
+                },
               ),
         widget.last
             ? const SizedBox()

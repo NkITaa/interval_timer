@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:interval_timer/pages/run/congrats.dart';
 import 'package:just_audio_background/just_audio_background.dart';
+import 'package:interval_timer/services/haptic_service.dart';
 import 'package:interval_timer/components/custom_textbox.dart';
 import 'package:interval_timer/components/time_wheel.dart';
 import 'package:interval_timer/components/workout_times_container.dart';
@@ -16,8 +15,6 @@ import '../main.dart';
 import '../pages/home.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
-import 'package:wakelock_plus/wakelock_plus.dart';
-
 int _soundIndex(String soundPath) {
   final match = RegExp(r'Countdown(\d+)').firstMatch(soundPath);
   return match != null ? int.parse(match.group(1)!) : 1;
@@ -32,7 +29,10 @@ class Dialogs {
       children: [
         Text(title, style: titleStyle ?? heading3Bold(context)),
         IconButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            HapticService.selection();
+            Navigator.pop(context);
+          },
           icon: Icon(
             TablerIcons.x,
             color: context.colors.subtleElement,
@@ -182,6 +182,7 @@ class Dialogs {
                     ),
                     onPressed: () {
                       if (nameController.text.trim().isNotEmpty) {
+                        HapticService.medium();
                         Hive.box("workouts").add(Workout(
                             name: nameController.text.trim(),
                             secondsTraining: minutesTraining.inSeconds,
@@ -291,6 +292,7 @@ class Dialogs {
                     ),
                     onPressed: () async {
                       if (nameController.text.trim().isNotEmpty) {
+                        HapticService.medium();
                         index != null
                             ? Hive.box("workouts").putAt(
                                 index,
@@ -354,6 +356,7 @@ class Dialogs {
                                 color: context.colors.error600),
                           ),
                           onPressed: () {
+                            HapticService.heavy();
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
@@ -502,6 +505,7 @@ class Dialogs {
                     height: 50,
                     child: ElevatedButton(
                         onPressed: () {
+                          HapticService.medium();
                           Navigator.pop(context);
                         },
                         child: Text(
@@ -556,6 +560,7 @@ class Dialogs {
                     ),
                   ),
                   onPressed: () {
+                    HapticService.heavy();
                     Hive.box("workouts").deleteAt(index);
                     Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
@@ -593,6 +598,7 @@ class Dialogs {
                           color: context.colors.neutral300),
                     ),
                     onPressed: () {
+                      HapticService.selection();
                       Navigator.pop(context);
                     },
                     child: Text(
@@ -623,6 +629,7 @@ class Dialogs {
           child: RadioGroup<String>(
             groupValue: language,
             onChanged: (value) {
+              HapticService.selection();
               language = value.toString();
               setState(() {});
             },
@@ -687,6 +694,7 @@ class Dialogs {
                 height: 50,
                 child: ElevatedButton(
                     onPressed: () {
+                      HapticService.medium();
                       MyApp.of(context).setLocale(Locale(language));
                       Navigator.pop(context);
                     },
@@ -774,6 +782,7 @@ class Dialogs {
                         inactiveTrackColor: context.colors.subtleElement,
                         value: sound != "off" ? true : false,
                         onChanged: (selected) {
+                          HapticService.light();
                           if (selected) {
                             sound = "assets/sounds/Countdown1.mp3";
                           } else {
@@ -797,6 +806,7 @@ class Dialogs {
                           groupValue: sound,
                           onChanged: (value) async {
                             if (value == null) return;
+                            HapticService.selection();
                             sound = value;
                             selectedIndex = _soundIndex(sound) - 1;
                             setState(() {});
@@ -841,6 +851,7 @@ class Dialogs {
                                       "assets/sounds/Countdown${soundIndexes[index]}.mp3",
                                 ),
                                 onTap: () async {
+                                  HapticService.selection();
                                   sound =
                                       "assets/sounds/Countdown${soundIndexes[index]}.mp3";
                                   selectedIndex = index;
@@ -878,6 +889,7 @@ class Dialogs {
                 height: 50,
                 child: ElevatedButton(
                     onPressed: () async {
+                      HapticService.medium();
                       Navigator.pop(context);
                       await SettingsService.setSound(sound);
                     },
@@ -894,7 +906,7 @@ class Dialogs {
     );
   }
 
-  static Widget buildExitDialog(context, player, time, sets, duration) {
+  static Widget buildExitDialog(BuildContext context) {
     return _blurredDialog(
       child: AlertDialog(
         insetPadding: const EdgeInsets.symmetric(horizontal: 24),
@@ -911,7 +923,8 @@ class Dialogs {
             IconButton(
                 padding: const EdgeInsets.all(0),
                 onPressed: () {
-                  Navigator.pop(context);
+                  HapticService.selection();
+                  Navigator.pop(context, false);
                 },
                 icon: Icon(
                   size: 24,
@@ -941,22 +954,9 @@ class Dialogs {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    onPressed: () async {
-                      await player.stop();
-                      await WakelockPlus.disable();
-
-                      SchedulerBinding.instance.addPostFrameCallback((_) {
-                        Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                              builder: (context) => Congrats(
-                                    time: time,
-                                    didIt: false,
-                                    sets: sets,
-                                    duration: duration,
-                                  )),
-                          (route) => false,
-                        );
-                      });
+                    onPressed: () {
+                      HapticService.heavy();
+                      Navigator.pop(context, true);
                     },
                     child: Text(AppLocalizations.of(context)!.run_exit_workout,
                         style: body1Bold(context).copyWith(
@@ -980,7 +980,8 @@ class Dialogs {
                             color: context.colors.neutral300),
                       ),
                       onPressed: () {
-                        Navigator.pop(context);
+                        HapticService.selection();
+                        Navigator.pop(context, false);
                       },
                       child: Text(
                           AppLocalizations.of(context)!.run_resume_workout,
