@@ -70,7 +70,9 @@ class RateApp extends StatelessWidget {
             ElevatedButton(
               onPressed: () async {
                 await launchUrl(
-                  Uri.parse('https://apps.apple.com/app/id6475160260'),
+                  Uri.parse(Platform.isAndroid
+                      ? 'https://play.google.com/store/apps/details?id=com.nikita.interval_timer'
+                      : 'https://apps.apple.com/app/id6475160260'),
                   mode: LaunchMode.externalApplication,
                 );
               },

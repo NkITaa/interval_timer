@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
@@ -6,9 +7,9 @@ import 'package:just_audio_background/just_audio_background.dart';
 import 'package:interval_timer/services/settings_service.dart';
 
 class AudioReturn {
-  final List<String> ffmpegOutput;
+  final List<String> concatenationResult;
   final String sound;
-  AudioReturn(this.ffmpegOutput, this.sound);
+  AudioReturn(this.concatenationResult, this.sound);
 }
 
 Future<AudioReturn> initialize(player, List<int> time, int sets) async {
@@ -46,6 +47,7 @@ Future<String> concatenateAssets(
     await sink.close();
     return "0";
   } catch (e) {
+    debugPrint('Audio concatenation failed for $outputFileName: $e');
     return "1";
   }
 }

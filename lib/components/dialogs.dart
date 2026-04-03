@@ -18,6 +18,11 @@ import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
+int _soundIndex(String soundPath) {
+  final match = RegExp(r'Countdown(\d+)').firstMatch(soundPath);
+  return match != null ? int.parse(match.group(1)!) : 1;
+}
+
 class Dialogs {
   /// Shared dialog header with title and close button.
   static Widget _dialogHeader(BuildContext context, String title,
@@ -703,8 +708,7 @@ class Dialogs {
       AudioPlayer player, BuildContext context, Function setStateParent) {
     String sound = SettingsService.sound;
     final List<int> soundIndexes = List.generate(7, (index) => index + 1);
-    int selectedIndex =
-        sound.length > 3 ? int.parse(sound.substring(23, 24)) - 1 : 0;
+    int selectedIndex = sound.length > 3 ? _soundIndex(sound) - 1 : 0;
 
     return _blurredDialog(
       child: StatefulBuilder(
@@ -794,14 +798,14 @@ class Dialogs {
                           onChanged: (value) async {
                             if (value == null) return;
                             sound = value;
-                            selectedIndex = int.parse(sound.substring(23, 24)) - 1;
+                            selectedIndex = _soundIndex(sound) - 1;
                             setState(() {});
                             await player
                                 .setAudioSource(AudioSource.asset(sound,
                                     tag: MediaItem(
                                       id: sound,
                                       title:
-                                          'Sound ${int.parse(sound.substring(23, 24))}',
+                                          'Sound ${_soundIndex(sound)}',
                                     )));
                             await player.play();
                           },

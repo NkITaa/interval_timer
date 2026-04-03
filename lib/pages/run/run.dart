@@ -37,7 +37,8 @@ class Run extends StatefulWidget {
 }
 
 class _RunState extends State<Run> with WidgetsBindingObserver {
-  String sound = SettingsService.sound;
+  final String _originalSound = SettingsService.sound;
+  late String sound = _originalSound;
   late int remainderBasis = widget.totalDuration;
   bool _navigating = false;
 
@@ -198,13 +199,12 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
               IconButton(
                   onPressed: () {
                     if (sound == "off") {
-                      sound = "assets/sounds/Countdown1.mp3";
+                      sound = _originalSound == "off" ? "assets/sounds/Countdown1.mp3" : _originalSound;
                       widget.player.setVolume(1);
                     } else {
                       sound = "off";
                       widget.player.setVolume(0);
                     }
-                    SettingsService.setSound(sound);
                     setState(() {});
                   },
                   icon: Icon(

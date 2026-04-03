@@ -7,7 +7,7 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import '../../components/dialogs.dart';
 import '../../const.dart';
 import '../../main.dart';
-import 'components/settins_page.dart';
+import 'components/settings_page.dart';
 import 'package:interval_timer/services/settings_service.dart';
 import 'package:just_audio/just_audio.dart';
 
@@ -42,7 +42,7 @@ class _ProfileState extends State<Profile> {
           padding: const EdgeInsets.only(left: 24.0, right: 24),
           child: Column(
             children: [
-              const RateApp(version: '1.1.2'),
+              const RateApp(version: appVersion),
               SettingsBlock(
                 title: AppLocalizations.of(context)!.profile_settings,
                 tiles: [
@@ -107,7 +107,6 @@ class _ProfileState extends State<Profile> {
                                 ))),
                   ),
                   SettingsTile(
-                    last: true,
                     title: AppLocalizations.of(context)!.profile_legal_privacy,
                     onTap: (selected) =>
                         Navigator.of(context).push(MaterialPageRoute(
@@ -117,10 +116,21 @@ class _ProfileState extends State<Profile> {
                                   index: 2,
                                 ))),
                   ),
+                  SettingsTile(
+                    last: true,
+                    title: AppLocalizations.of(context)!.profile_legal_terms,
+                    onTap: (selected) =>
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => SettingsPage(
+                                  language:
+                                      SettingsService.language,
+                                  index: 3,
+                                ))),
+                  ),
                 ],
               ),
               const SizedBox(height: 12),
-              Text("Version 1.1.2", style: body1(context)),
+              Text("Version $appVersion", style: body1(context)),
               const SizedBox(height: 48),
             ],
           ),

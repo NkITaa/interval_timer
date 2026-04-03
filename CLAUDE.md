@@ -31,7 +31,7 @@ Workout execution flow: **JumpIn** → **InitialisationScreen** → **Preparatio
 
 ### Audio System
 The audio system is the most complex part of the codebase:
-- `lib/pages/run/AudioHandler.dart` — Uses **FFmpeg** (`ffmpeg_kit_flutter_audio`) to concatenate silent duration MP3s + countdown sounds into `run.mp3` and `pause.mp3` at runtime
+- `lib/pages/run/audio_handler.dart` — Uses Dart I/O byte concatenation to combine silent duration MP3s + countdown sounds into `run.mp3` and `pause.mp3` at runtime
 - Duration is built from pre-made silence clips (30min, 10min, 5min, 1min, 30sec, 10sec, 5sec, 1sec) combined to match the exact training/pause time
 - **just_audio** with `ConcatenatingAudioSource` plays alternating training/pause segments; the player's `currentIndex` determines which segment is active
 - `just_audio_background` enables background playback and lock screen controls
@@ -39,7 +39,7 @@ The audio system is the most complex part of the codebase:
 
 ### Theming
 - `lib/const.dart` — Full light/dark color palette (`lightNeutral*`/`darkNeutral*` plus success/warning/error scales) and text style functions that take `context` to auto-switch on dark mode
-- Dark mode toggled via `MyApp.of(context).changeTheme()`, persisted in Hive, requires app restart (`flutter_phoenix`)
+- Dark mode toggled via `MyApp.of(context).changeTheme()`, persisted in Hive, switches live via `setState()` on root widget
 
 ### Localization
 - ARB files in `lib/l10n/` (English template: `app_en.arb`, German: `app_de.arb`)

@@ -38,7 +38,7 @@ class InitialisationScreen extends StatelessWidget {
               totalDuration += time[i % 2];
             }
 
-            if (data.ffmpegOutput[0] == "0" || data.ffmpegOutput[1] == "0") {
+            if (data.concatenationResult[0] == "0" && data.concatenationResult[1] == "0") {
               return Preparation(
                   totalDuration: totalDuration,
                   time: time,
