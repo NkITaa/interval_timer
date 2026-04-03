@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'theme/app_colors.dart';
 
-import 'main.dart';
+export 'theme/app_colors.dart';
 
 // L - lightNeutral
 const lightNeutral0 = Color(0xffFCFCFC);
@@ -103,85 +104,85 @@ const darkError800 = Color(0xff99423A);
 const darkError900 = Color(0xff7F3D37);
 
 // headingFonts
-TextStyle heading1(context) => TextStyle(
+TextStyle heading1(BuildContext context) => TextStyle(
     fontSize: 26,
-    color: MyApp.of(context).isDarkMode() ? darkNeutral900 : lightNeutral900);
-TextStyle heading1Bold(context) => TextStyle(
+    color: context.colors.neutral900);
+TextStyle heading1Bold(BuildContext context) => TextStyle(
     fontSize: 26,
     fontWeight: FontWeight.bold,
-    color: MyApp.of(context).isDarkMode() ? darkNeutral900 : lightNeutral900);
-TextStyle heading2Bold(context) => TextStyle(
+    color: context.colors.neutral900);
+TextStyle heading2Bold(BuildContext context) => TextStyle(
     fontSize: 24,
     fontWeight: FontWeight.bold,
-    color: MyApp.of(context).isDarkMode() ? darkNeutral900 : lightNeutral900);
-TextStyle heading3Bold(context) => TextStyle(
+    color: context.colors.neutral900);
+TextStyle heading3Bold(BuildContext context) => TextStyle(
     fontSize: 22,
     fontWeight: FontWeight.bold,
-    color: MyApp.of(context).isDarkMode() ? darkNeutral900 : lightNeutral900);
+    color: context.colors.neutral900);
 
 // bodyFonts
-TextStyle body0Bold(context) => TextStyle(
+TextStyle body0Bold(BuildContext context) => TextStyle(
     fontSize: 20,
-    color: MyApp.of(context).isDarkMode() ? darkNeutral900 : lightNeutral850,
+    color: context.colors.bodyText,
     fontWeight: FontWeight.bold);
-TextStyle body1(context) => TextStyle(
+TextStyle body1(BuildContext context) => TextStyle(
       fontSize: 16,
-      color: MyApp.of(context).isDarkMode() ? darkNeutral900 : lightNeutral850,
+      color: context.colors.bodyText,
     );
 
-TextStyle body1Bold(context) => TextStyle(
+TextStyle body1Bold(BuildContext context) => TextStyle(
     fontSize: 16,
-    color: MyApp.of(context).isDarkMode() ? darkNeutral900 : lightNeutral850,
+    color: context.colors.bodyText,
     fontWeight: FontWeight.bold);
-TextStyle body1Underlined(context) => TextStyle(
+TextStyle body1Underlined(BuildContext context) => TextStyle(
     fontSize: 16,
-    color: MyApp.of(context).isDarkMode() ? darkNeutral900 : lightNeutral850,
+    color: context.colors.bodyText,
     decoration: TextDecoration.underline);
-TextStyle body1BoldUnderlined(context) => TextStyle(
+TextStyle body1BoldUnderlined(BuildContext context) => TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.bold,
-    color: MyApp.of(context).isDarkMode() ? lightNeutral100 : lightNeutral50,
+    color: context.colors.textOnGradient,
     decoration: TextDecoration.underline);
-TextStyle body2(context) => TextStyle(
+TextStyle body2(BuildContext context) => TextStyle(
       fontSize: 14,
-      color: MyApp.of(context).isDarkMode() ? darkNeutral900 : lightNeutral850,
+      color: context.colors.bodyText,
     );
-TextStyle body2Bold(context) => TextStyle(
+TextStyle body2Bold(BuildContext context) => TextStyle(
     fontSize: 14,
-    color: MyApp.of(context).isDarkMode() ? darkNeutral900 : lightNeutral850,
+    color: context.colors.bodyText,
     fontWeight: FontWeight.bold);
-TextStyle body2Underlined(context) => TextStyle(
+TextStyle body2Underlined(BuildContext context) => TextStyle(
     fontSize: 14,
-    color: MyApp.of(context).isDarkMode() ? darkNeutral900 : lightNeutral850,
+    color: context.colors.bodyText,
     decoration: TextDecoration.underline);
-TextStyle body3(context) => TextStyle(
+TextStyle body3(BuildContext context) => TextStyle(
       fontSize: 12,
-      color: MyApp.of(context).isDarkMode() ? darkNeutral900 : lightNeutral850,
+      color: context.colors.bodyText,
     );
-TextStyle body3Bold(context) => TextStyle(
+TextStyle body3Bold(BuildContext context) => TextStyle(
     fontSize: 12,
-    color: MyApp.of(context).isDarkMode() ? darkNeutral900 : lightNeutral850,
+    color: context.colors.bodyText,
     fontWeight: FontWeight.bold);
 
 // footerFonts
-TextStyle footer(context) => TextStyle(
+TextStyle footer(BuildContext context) => TextStyle(
     fontSize: 12,
-    color: MyApp.of(context).isDarkMode() ? darkNeutral500 : lightNeutral300);
-TextStyle footerBold(context) => TextStyle(
+    color: context.colors.subtleElement);
+TextStyle footerBold(BuildContext context) => TextStyle(
     fontSize: 12,
-    color: MyApp.of(context).isDarkMode() ? darkNeutral500 : lightNeutral300,
+    color: context.colors.subtleElement,
     fontWeight: FontWeight.bold);
 
 // displayFonts
-TextStyle display1(context) => TextStyle(
+TextStyle display1(BuildContext context) => TextStyle(
     fontSize: 100,
     fontWeight: FontWeight.bold,
-    color: MyApp.of(context).isDarkMode() ? lightNeutral100 : lightNeutral50);
-TextStyle display2(context) => TextStyle(
+    color: context.colors.textOnGradient);
+TextStyle display2(BuildContext context) => TextStyle(
     fontSize: 80,
     fontWeight: FontWeight.bold,
-    color: MyApp.of(context).isDarkMode() ? lightNeutral100 : lightNeutral50);
-TextStyle display3(context) => TextStyle(
+    color: context.colors.textOnGradient);
+TextStyle display3(BuildContext context) => TextStyle(
     fontSize: 32,
     fontWeight: FontWeight.bold,
-    color: MyApp.of(context).isDarkMode() ? lightNeutral100 : lightNeutral50);
+    color: context.colors.textOnGradient);

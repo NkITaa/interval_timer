@@ -2,7 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:interval_timer/const.dart';
-import 'package:interval_timer/main.dart';
+
 import 'package:interval_timer/pages/run/preparation.dart';
 import 'package:just_audio/just_audio.dart';
 import 'audio_handler.dart';
@@ -53,9 +53,7 @@ class InitialisationScreen extends StatelessWidget {
             }
           } else {
             return Container(
-                color: MyApp.of(context).isDarkMode()
-                    ? darkNeutral0
-                    : lightNeutral100,
+                color: context.colors.scaffoldSurface,
                 child: Scaffold(
                     backgroundColor: Colors.transparent,
                     appBar: AppBar(
@@ -64,9 +62,7 @@ class InitialisationScreen extends StatelessWidget {
                       leading: IconButton(
                         icon: Icon(
                           TablerIcons.x,
-                          color: MyApp.of(context).isDarkMode()
-                              ? darkNeutral500
-                              : lightNeutral300,
+                          color: context.colors.subtleElement,
                         ),
                         onPressed: () async {
                           await player.dispose();
@@ -93,9 +89,7 @@ class InitialisationScreen extends StatelessWidget {
                           RichText(
                             text: TextSpan(
                                 style: body1BoldUnderlined(context).copyWith(
-                                    color: MyApp.of(context).isDarkMode()
-                                        ? darkNeutral900
-                                        : lightNeutral850),
+                                    color: context.colors.bodyText),
                                 text: AppLocalizations.of(context)!
                                     .workouts_delete_cancel,
                                 recognizer: TapGestureRecognizer()

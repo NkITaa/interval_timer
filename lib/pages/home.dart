@@ -3,7 +3,7 @@ import 'package:interval_timer/components/bottom_navbar.dart';
 import 'package:interval_timer/pages/jump_in/jump_in.dart';
 import 'package:interval_timer/pages/profile/profile.dart';
 import 'package:interval_timer/pages/workouts/workouts.dart';
-import 'package:hive/hive.dart';
+import 'package:interval_timer/services/settings_service.dart';
 
 class Home extends StatefulWidget {
   final int screenIndex;
@@ -37,7 +37,7 @@ class _HomeState extends State<Home> {
   }
 
   killVisible() {
-    Hive.box("settings").put("visible", false);
+    SettingsService.setJumpInVisible(false);
     setState(() {
       visible = false;
       screens[1] = JumpIn(

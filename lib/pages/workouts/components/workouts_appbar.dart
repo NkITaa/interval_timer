@@ -4,7 +4,6 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:interval_timer/components/dialogs.dart';
 import 'package:interval_timer/const.dart';
 
-import '../../../main.dart';
 
 class WorkoutsAppbar extends StatelessWidget implements PreferredSizeWidget {
   final Function setListState;
@@ -33,9 +32,7 @@ class WorkoutsAppbar extends StatelessWidget implements PreferredSizeWidget {
             child: IconButton(
               icon: Icon(
                 TablerIcons.circle_plus,
-                color: MyApp.of(context).isDarkMode()
-                    ? darkNeutral850
-                    : lightNeutral700,
+                color: context.colors.iconPrimary,
               ),
               onPressed: () {
                 TextEditingController nameController = TextEditingController();

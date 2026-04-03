@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:interval_timer/const.dart';
-import 'package:interval_timer/main.dart';
 import 'settings_page_legal.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:interval_timer/l10n/app_localizations.dart';
@@ -27,9 +26,7 @@ class SettingsPage extends StatelessWidget {
           surfaceTintColor: Colors.transparent,
           leading: IconButton(
             icon: Icon(TablerIcons.chevron_left,
-                color: MyApp.of(context).isDarkMode()
-                    ? darkNeutral850
-                    : lightNeutral700),
+                color: context.colors.iconPrimary),
             onPressed: () {
               Navigator.pop(context);
             },

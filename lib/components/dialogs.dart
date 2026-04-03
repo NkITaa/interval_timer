@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:interval_timer/pages/run/congrats.dart';
@@ -8,6 +6,7 @@ import 'package:interval_timer/components/custom_textbox.dart';
 import 'package:interval_timer/components/time_wheel.dart';
 import 'package:interval_timer/components/workout_times_container.dart';
 import 'package:hive/hive.dart';
+import 'package:interval_timer/services/settings_service.dart';
 import 'package:interval_timer/workout.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:interval_timer/l10n/app_localizations.dart';
@@ -20,6 +19,95 @@ import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 class Dialogs {
+  /// Shared dialog header with title and close button.
+  static Widget _dialogHeader(BuildContext context, String title,
+      {TextStyle? titleStyle}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(title, style: titleStyle ?? heading3Bold(context)),
+        IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: Icon(
+            TablerIcons.x,
+            color: context.colors.subtleElement,
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// Shared backdrop blur wrapper for all dialogs.
+  static Widget _blurredDialog({required Widget child}) {
+    return _blurredDialog(
+      child: child,
+    );
+  }
+
+  /// Shared update/setValue logic for workout time editing.
+  static ({Function(String, bool) update, Function(String, int, bool?) setValue})
+      _workoutHelpers({
+    required StateSetter setState,
+    required Duration Function() getTraining,
+    required void Function(Duration) setTraining,
+    required Duration Function() getPause,
+    required void Function(Duration) setPause,
+    required int Function() getSets,
+    required void Function(int) setSets,
+    required void Function() updateTime,
+  }) {
+    update(String type, bool increment) {
+      if (increment) {
+        if (type == "training" && getTraining().inSeconds < 3585) {
+          setTraining(getTraining() + const Duration(seconds: 15));
+        } else if (type == "pause" && getPause().inSeconds < 3585) {
+          setPause(getPause() + const Duration(seconds: 15));
+        } else if (type == "set" && getSets() < 99) {
+          setSets(getSets() + 1);
+        }
+      } else {
+        if (type == "training" && getTraining().inSeconds > 15) {
+          setTraining(getTraining() - const Duration(seconds: 15));
+        } else if (type == "pause" && getPause().inSeconds > 15) {
+          setPause(getPause() - const Duration(seconds: 15));
+        } else if (type == "set" && getSets() > 1) {
+          setSets(getSets() - 1);
+        }
+      }
+      updateTime();
+      setState(() {});
+    }
+
+    setValue(String type, int value, bool? minute) {
+      if (type == "training") {
+        if (minute!) {
+          setTraining(Duration(
+              minutes: value,
+              seconds: getTraining().inSeconds.remainder(60)));
+        } else {
+          setTraining(Duration(
+              minutes: getTraining().inMinutes.remainder(60),
+              seconds: value));
+        }
+      } else if (type == "pause") {
+        if (minute!) {
+          setPause(Duration(
+              minutes: value,
+              seconds: getPause().inSeconds.remainder(60)));
+        } else {
+          setPause(Duration(
+              minutes: getPause().inMinutes.remainder(60), seconds: value));
+        }
+      } else {
+        setSets(value);
+      }
+      updateTime();
+      setState(() {});
+    }
+
+    return (update: update, setValue: setValue);
+  }
+
   static Widget buildAddWorkoutDialog(
     BuildContext context,
     Function setListState,
@@ -29,92 +117,32 @@ class Dialogs {
     Duration minutesTraining = const Duration(minutes: 1, seconds: 15);
     Duration minutesPause = const Duration(seconds: 15);
     int sets = 3;
-    return BackdropFilter(
-      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+    return _blurredDialog(
       child: StatefulBuilder(builder: (context, setState) {
-        void updateTime(Duration pause, Duration training, int sets) {
-          workoutTime = (pause + training) * sets - pause;
-        }
-
-        update(String type, bool increment) {
-          if (increment) {
-            if (type == "training" && minutesTraining.inSeconds < 3585) {
-              minutesTraining = minutesTraining + const Duration(seconds: 15);
-            } else if (type == "pause" && minutesPause.inSeconds < 3585) {
-              minutesPause = minutesPause + const Duration(seconds: 15);
-            } else if (type == "set" && sets < 99) {
-              sets = sets + 1;
-            }
-          } else {
-            if (type == "training" && minutesTraining.inSeconds > 15) {
-              minutesTraining = minutesTraining - const Duration(seconds: 15);
-            } else if (type == "pause" && minutesPause.inSeconds > 15) {
-              minutesPause = minutesPause - const Duration(seconds: 15);
-            } else if (type == "set" && sets > 1) {
-              sets = sets - 1;
-            }
-          }
-          updateTime(minutesPause, minutesTraining, sets);
-          setState(() {});
-        }
-
-        setValue(String type, int value, bool? minute) {
-          if (type == "training") {
-            if (minute!) {
-              minutesTraining = Duration(
-                  minutes: value,
-                  seconds: minutesTraining.inSeconds.remainder(60));
-            } else {
-              minutesTraining = Duration(
-                  minutes: minutesTraining.inMinutes.remainder(60),
-                  seconds: value);
-            }
-          } else if (type == "pause") {
-            if (minute!) {
-              minutesPause = Duration(
-                  minutes: value,
-                  seconds: minutesPause.inSeconds.remainder(60));
-            } else {
-              minutesPause = Duration(
-                  minutes: minutesPause.inMinutes.remainder(60),
-                  seconds: value);
-            }
-          } else {
-            sets = value;
-          }
-          updateTime(minutesPause, minutesTraining, sets);
-          setState(() {});
-        }
+        final helpers = _workoutHelpers(
+          setState: setState,
+          getTraining: () => minutesTraining,
+          setTraining: (v) => minutesTraining = v,
+          getPause: () => minutesPause,
+          setPause: (v) => minutesPause = v,
+          getSets: () => sets,
+          setSets: (v) => sets = v,
+          updateTime: () =>
+              workoutTime = (minutesPause + minutesTraining) * sets - minutesPause,
+        );
 
         return Container(
             padding:
                 const EdgeInsets.only(left: 24, right: 24, bottom: 24, top: 12),
             decoration: BoxDecoration(
-              color: MyApp.of(context).isDarkMode()
-                  ? darkNeutral0
-                  : lightNeutral100,
+              color: context.colors.scaffoldSurface,
               borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(16), topRight: Radius.circular(16)),
             ),
             child: SingleChildScrollView(
               child: Column(mainAxisSize: MainAxisSize.min, children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(AppLocalizations.of(context)!.workouts_create,
-                        style: heading3Bold(context)),
-                    IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: Icon(
-                          TablerIcons.x,
-                          color: MyApp.of(context).isDarkMode()
-                              ? darkNeutral500
-                              : lightNeutral300,
-                        )),
-                  ],
-                ),
+                _dialogHeader(context,
+                    AppLocalizations.of(context)!.workouts_create),
                 const SizedBox(
                   height: 18,
                 ),
@@ -124,8 +152,8 @@ class Dialogs {
                 ),
                 WorkoutTimesContainer(
                   visible: false,
-                  update: update,
-                  setValue: setValue,
+                  update: helpers.update,
+                  setValue: helpers.setValue,
                   minutesTraining: minutesTraining,
                   minutesPause: minutesPause,
                   sets: sets,
@@ -160,9 +188,7 @@ class Dialogs {
                         showTopSnackBar(
                           Overlay.of(context),
                           CustomSnackBar.success(
-                            backgroundColor: MyApp.of(context).isDarkMode()
-                                ? const Color(0xff239670)
-                                : const Color(0xff059666),
+                            backgroundColor: context.colors.success600,
                             icon: const SizedBox(),
                             maxLines: 1,
                             message:
@@ -175,9 +201,7 @@ class Dialogs {
                     },
                     child: Text(AppLocalizations.of(context)!.save_workout,
                         style: body1Bold(context).copyWith(
-                            color: MyApp.of(context).isDarkMode()
-                                ? darkNeutral50
-                                : lightNeutral50)),
+                            color: context.colors.neutral50)),
                   ),
                 )
               ]),
@@ -199,95 +223,35 @@ class Dialogs {
             seconds:
                 (minutesTraining.inSeconds + minutesPause.inSeconds) * sets) -
         Duration(seconds: minutesPause.inSeconds);
-    return BackdropFilter(
-      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+    return _blurredDialog(
       child: StatefulBuilder(builder: (context, setState) {
-        void updateTime(Duration pause, Duration training, int sets) {
-          workoutTime = (pause + training) * sets - pause;
-        }
-
-        update(String type, bool increment) {
-          if (increment) {
-            if (type == "training" && minutesTraining.inSeconds < 3585) {
-              minutesTraining = minutesTraining + const Duration(seconds: 15);
-            } else if (type == "pause" && minutesPause.inSeconds < 3585) {
-              minutesPause = minutesPause + const Duration(seconds: 15);
-            } else if (type == "set" && sets < 99) {
-              sets = sets + 1;
-            }
-          } else {
-            if (type == "training" && minutesTraining.inSeconds > 15) {
-              minutesTraining = minutesTraining - const Duration(seconds: 15);
-            } else if (type == "pause" && minutesPause.inSeconds > 15) {
-              minutesPause = minutesPause - const Duration(seconds: 15);
-            } else if (type == "set" && sets > 1) {
-              sets = sets - 1;
-            }
-          }
-          updateTime(minutesPause, minutesTraining, sets);
-          setState(() {});
-        }
-
-        setValue(String type, int value, bool? minute) {
-          if (type == "training") {
-            if (minute!) {
-              minutesTraining = Duration(
-                  minutes: value,
-                  seconds: minutesTraining.inSeconds.remainder(60));
-            } else {
-              minutesTraining = Duration(
-                  minutes: minutesTraining.inMinutes.remainder(60),
-                  seconds: value);
-            }
-          } else if (type == "pause") {
-            if (minute!) {
-              minutesPause = Duration(
-                  minutes: value,
-                  seconds: minutesPause.inSeconds.remainder(60));
-            } else {
-              minutesPause = Duration(
-                  minutes: minutesPause.inMinutes.remainder(60),
-                  seconds: value);
-            }
-          } else {
-            sets = value;
-          }
-          updateTime(minutesPause, minutesTraining, sets);
-          setState(() {});
-        }
+        final helpers = _workoutHelpers(
+          setState: setState,
+          getTraining: () => minutesTraining,
+          setTraining: (v) => minutesTraining = v,
+          getPause: () => minutesPause,
+          setPause: (v) => minutesPause = v,
+          getSets: () => sets,
+          setSets: (v) => sets = v,
+          updateTime: () =>
+              workoutTime = (minutesPause + minutesTraining) * sets - minutesPause,
+        );
 
         return Container(
             padding:
                 const EdgeInsets.only(left: 24, right: 24, bottom: 24, top: 12),
             decoration: BoxDecoration(
-              color: MyApp.of(context).isDarkMode()
-                  ? darkNeutral0
-                  : lightNeutral100,
+              color: context.colors.scaffoldSurface,
               borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(16), topRight: Radius.circular(16)),
             ),
             child: SingleChildScrollView(
               child: Column(mainAxisSize: MainAxisSize.min, children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                        index != null && setListState != null
-                            ? AppLocalizations.of(context)!.workouts_edit
-                            : AppLocalizations.of(context)!.workouts_save,
-                        style: heading3Bold(context)),
-                    IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: Icon(
-                          TablerIcons.x,
-                          color: MyApp.of(context).isDarkMode()
-                              ? darkNeutral500
-                              : lightNeutral300,
-                        )),
-                  ],
-                ),
+                _dialogHeader(
+                    context,
+                    index != null && setListState != null
+                        ? AppLocalizations.of(context)!.workouts_edit
+                        : AppLocalizations.of(context)!.workouts_save),
                 const SizedBox(
                   height: 18,
                 ),
@@ -297,8 +261,8 @@ class Dialogs {
                 ),
                 WorkoutTimesContainer(
                   visible: false,
-                  update: update,
-                  setValue: setValue,
+                  update: helpers.update,
+                  setValue: helpers.setValue,
                   minutesTraining: minutesTraining,
                   minutesPause: minutesPause,
                   sets: sets,
@@ -349,9 +313,7 @@ class Dialogs {
                                 Overlay.of(context),
                                 CustomSnackBar.success(
                                   backgroundColor:
-                                      MyApp.of(context).isDarkMode()
-                                          ? const Color(0xff239670)
-                                          : const Color(0xff059666),
+                                      context.colors.success600,
                                   icon: const SizedBox(),
                                   maxLines: 1,
                                   message: index != null
@@ -368,9 +330,7 @@ class Dialogs {
                     },
                     child: Text(AppLocalizations.of(context)!.save_workout,
                         style: body1Bold(context).copyWith(
-                            color: MyApp.of(context).isDarkMode()
-                                ? darkNeutral50
-                                : lightNeutral50)),
+                            color: context.colors.neutral50)),
                   ),
                 ),
                 const SizedBox(
@@ -382,17 +342,13 @@ class Dialogs {
                         height: 50,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: MyApp.of(context).isDarkMode()
-                                ? darkNeutral100
-                                : lightNeutral0,
+                            backgroundColor: context.colors.cardSurface,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
                             side: BorderSide(
                                 width: 1,
-                                color: MyApp.of(context).isDarkMode()
-                                    ? const Color(0xffDC5D51)
-                                    : const Color(0xffDC3526)),
+                                color: context.colors.error600),
                           ),
                           onPressed: () {
                             showDialog(
@@ -409,17 +365,13 @@ class Dialogs {
                               Icon(
                                 TablerIcons.trash,
                                 size: 24,
-                                color: MyApp.of(context).isDarkMode()
-                                    ? darkError600
-                                    : lightError600,
+                                color: context.colors.error600,
                               ),
                               const SizedBox(width: 8),
                               Text(
                                   AppLocalizations.of(context)!.workouts_delete,
                                   style: body1Bold(context).copyWith(
-                                      color: MyApp.of(context).isDarkMode()
-                                          ? darkError600
-                                          : lightError600)),
+                                      color: context.colors.error600)),
                             ],
                           ),
                         ),
@@ -441,40 +393,24 @@ class Dialogs {
     late int workoutTime = (minutes.inSeconds + otherMinutes.inSeconds) * sets -
         (type == "training" ? otherMinutes.inSeconds : minutes.inSeconds);
 
-    return BackdropFilter(
-      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+    return _blurredDialog(
       child: AlertDialog(
           insetPadding: const EdgeInsets.symmetric(horizontal: 24),
           backgroundColor:
-              MyApp.of(context).isDarkMode() ? darkNeutral0 : lightNeutral100,
+              context.colors.scaffoldSurface,
           surfaceTintColor: Colors.transparent,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
           titlePadding:
               const EdgeInsets.only(left: 24, right: 12, bottom: 4, top: 12),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                  type == "set"
-                      ? AppLocalizations.of(context)!.workout_sets
-                      : type == "pause"
-                          ? AppLocalizations.of(context)!.workout_pause_time
-                          : AppLocalizations.of(context)!.workout_training_time,
-                  style: heading3Bold(context)),
-              IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: Icon(
-                    TablerIcons.x,
-                    color: MyApp.of(context).isDarkMode()
-                        ? darkNeutral500
-                        : lightNeutral300,
-                  )),
-            ],
-          ),
+          title: _dialogHeader(
+              context,
+              type == "set"
+                  ? AppLocalizations.of(context)!.workout_sets
+                  : type == "pause"
+                      ? AppLocalizations.of(context)!.workout_pause_time
+                      : AppLocalizations.of(context)!.workout_training_time),
           content: StatefulBuilder(builder: (context, setState) {
             void updateTime(Duration minutes, Duration otherMinutes, int sets) {
               workoutTime =
@@ -502,9 +438,7 @@ class Dialogs {
 
             return Container(
               decoration: BoxDecoration(
-                color: MyApp.of(context).isDarkMode()
-                    ? darkNeutral0
-                    : lightNeutral100,
+                color: context.colors.scaffoldSurface,
                 borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(16),
                     topRight: Radius.circular(16)),
@@ -516,9 +450,7 @@ class Dialogs {
                   type != "set"
                       ? Container(
                           decoration: BoxDecoration(
-                            color: MyApp.of(context).isDarkMode()
-                                ? darkNeutral100
-                                : lightNeutral0,
+                            color: context.colors.cardSurface,
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(16)),
                           ),
@@ -537,9 +469,7 @@ class Dialogs {
                               Text(":",
                                   style: TextStyle(
                                       fontSize: 32,
-                                      color: MyApp.of(context).isDarkMode()
-                                          ? darkNeutral900
-                                          : lightNeutral900)),
+                                      color: context.colors.neutral900)),
                               const SizedBox(width: 18),
                               TimeWheel(
                                 type: type,
@@ -581,9 +511,7 @@ class Dialogs {
                                     : AppLocalizations.of(context)!
                                         .workout_training_time_save,
                             style: body1Bold(context).copyWith(
-                                color: MyApp.of(context).isDarkMode()
-                                    ? darkNeutral50
-                                    : lightNeutral50))),
+                                color: context.colors.neutral50))),
                   ),
                 ],
               ),
@@ -593,34 +521,18 @@ class Dialogs {
   }
 
   static Widget buildDeleteDialog(context, index, setListState) {
-    return BackdropFilter(
-      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+    return _blurredDialog(
       child: AlertDialog(
         surfaceTintColor: Colors.transparent,
         backgroundColor:
-            MyApp.of(context).isDarkMode() ? darkNeutral0 : lightNeutral100,
+            context.colors.scaffoldSurface,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
         titlePadding:
             const EdgeInsets.only(left: 24, right: 12, top: 12, bottom: 0),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(AppLocalizations.of(context)!.workouts_delete,
-                style: heading3Bold(context)),
-            IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: Icon(
-                  TablerIcons.x,
-                  color: MyApp.of(context).isDarkMode()
-                      ? darkNeutral500
-                      : lightNeutral300,
-                )),
-          ],
-        ),
+        title: _dialogHeader(
+            context, AppLocalizations.of(context)!.workouts_delete),
         insetPadding: const EdgeInsets.symmetric(horizontal: 24),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -635,35 +547,29 @@ class Dialogs {
               height: 50,
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: MyApp.of(context).isDarkMode()
-                        ? darkError700
-                        : lightError700,
+                    backgroundColor: context.colors.error700,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                   onPressed: () {
                     Hive.box("workouts").deleteAt(index);
-                    Navigator.of(context).push(MaterialPageRoute(
-                        fullscreenDialog: true,
-                        builder: (context) => const Home(
-                              screenIndex: 0,
-                            )));
+                    Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                          builder: (context) => const Home(screenIndex: 0)),
+                      (route) => false,
+                    );
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(TablerIcons.trash,
                           size: 24,
-                          color: MyApp.of(context).isDarkMode()
-                              ? lightNeutral100
-                              : lightNeutral50),
+                          color: context.colors.textOnGradient),
                       const SizedBox(width: 8),
                       Text(AppLocalizations.of(context)!.workouts_delete,
                           style: body1Bold(context).copyWith(
-                              color: MyApp.of(context).isDarkMode()
-                                  ? lightNeutral100
-                                  : lightNeutral50)),
+                              color: context.colors.textOnGradient)),
                     ],
                   )),
             ),
@@ -675,17 +581,13 @@ class Dialogs {
                 height: 50,
                 child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: MyApp.of(context).isDarkMode()
-                          ? darkNeutral100
-                          : lightNeutral0,
+                      backgroundColor: context.colors.cardSurface,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                       side: BorderSide(
                           width: 1,
-                          color: MyApp.of(context).isDarkMode()
-                              ? darkNeutral300
-                              : lightNeutral300),
+                          color: context.colors.neutral300),
                     ),
                     onPressed: () {
                       Navigator.pop(context);
@@ -701,16 +603,15 @@ class Dialogs {
 
   static Widget buildChangeLanguageDialog(
       BuildContext context, Function setStateParent) {
-    String language = Hive.box("settings").get("language");
+    String language = SettingsService.language;
 
-    return BackdropFilter(
-      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+    return _blurredDialog(
       child: StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
         return Container(
           decoration: BoxDecoration(
             color:
-                MyApp.of(context).isDarkMode() ? darkNeutral100 : lightNeutral0,
+                context.colors.cardSurface,
             borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(16), topRight: Radius.circular(16)),
           ),
@@ -719,25 +620,8 @@ class Dialogs {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    AppLocalizations.of(context)!.system_language,
-                    style: heading3Bold(context),
-                  ),
-                  IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: Icon(
-                        TablerIcons.x,
-                        color: MyApp.of(context).isDarkMode()
-                            ? darkNeutral500
-                            : lightNeutral300,
-                      )),
-                ],
-              ),
+              _dialogHeader(context,
+                  AppLocalizations.of(context)!.system_language),
               const SizedBox(
                 height: 8,
               ),
@@ -755,9 +639,7 @@ class Dialogs {
                             style: body1(context)),
                       ),
                       Radio(
-                        activeColor: MyApp.of(context).isDarkMode()
-                            ? darkNeutral850
-                            : lightNeutral700,
+                        activeColor: context.colors.iconPrimary,
                         value: "de",
                         groupValue: language,
                         onChanged: (value) {
@@ -786,9 +668,7 @@ class Dialogs {
                             style: body1(context)),
                       ),
                       Radio(
-                        activeColor: MyApp.of(context).isDarkMode()
-                            ? darkNeutral850
-                            : lightNeutral700,
+                        activeColor: context.colors.iconPrimary,
                         value: "en",
                         groupValue: language,
                         onChanged: (value) {
@@ -814,9 +694,7 @@ class Dialogs {
                     child: Text(
                       AppLocalizations.of(context)!.confirm,
                       style: body1Bold(context).copyWith(
-                          color: MyApp.of(context).isDarkMode()
-                              ? darkNeutral50
-                              : lightNeutral50),
+                          color: context.colors.neutral50),
                     )),
               )
             ],
@@ -828,19 +706,18 @@ class Dialogs {
 
   static Widget buildChangeSoundDialog(
       AudioPlayer player, BuildContext context, Function setStateParent) {
-    String sound = Hive.box("settings").get("sound");
+    String sound = SettingsService.sound;
     final List<int> soundIndexes = List.generate(7, (index) => index + 1);
     int selectedIndex =
         sound.length > 3 ? int.parse(sound.substring(23, 24)) - 1 : 0;
 
-    return BackdropFilter(
-      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+    return _blurredDialog(
       child: StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
         return Container(
           decoration: BoxDecoration(
             color:
-                MyApp.of(context).isDarkMode() ? darkNeutral50 : lightNeutral50,
+                context.colors.neutral50,
             borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(16), topRight: Radius.circular(16)),
           ),
@@ -850,36 +727,17 @@ class Dialogs {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    AppLocalizations.of(context)!.profile_settings_sound_dialog,
-                    style: heading3Bold(context).copyWith(
-                        color: MyApp.of(context).isDarkMode()
-                            ? darkNeutral900
-                            : lightNeutral900),
-                  ),
-                  IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: Icon(
-                        TablerIcons.x,
-                        color: MyApp.of(context).isDarkMode()
-                            ? darkNeutral500
-                            : lightNeutral300,
-                      )),
-                ],
-              ),
+              _dialogHeader(
+                  context,
+                  AppLocalizations.of(context)!.profile_settings_sound_dialog,
+                  titleStyle: heading3Bold(context).copyWith(
+                      color: context.colors.neutral900)),
               const SizedBox(
                 height: 16,
               ),
               Container(
                 decoration: BoxDecoration(
-                  color: MyApp.of(context).isDarkMode()
-                      ? darkNeutral100
-                      : lightNeutral0,
+                  color: context.colors.cardSurface,
                   borderRadius: const BorderRadius.all(Radius.circular(16)),
                 ),
                 child: ListTile(
@@ -889,16 +747,12 @@ class Dialogs {
                     padding: const EdgeInsets.only(left: 4.0),
                     child: Icon(
                       TablerIcons.music,
-                      color: MyApp.of(context).isDarkMode()
-                          ? darkNeutral600
-                          : lightNeutral600,
+                      color: context.colors.neutral600,
                     ),
                   ),
                   title: Text(AppLocalizations.of(context)!.countdown,
                       style: body1(context).copyWith(
-                          color: MyApp.of(context).isDarkMode()
-                              ? darkNeutral900
-                              : lightNeutral850)),
+                          color: context.colors.bodyText)),
                   trailing: Padding(
                     padding: const EdgeInsets.only(right: 4.0),
                     child: Switch(
@@ -911,16 +765,14 @@ class Dialogs {
                         trackColor: WidgetStateProperty.resolveWith<Color?>(
                           (Set<WidgetState> states) {
                             if (states.contains(WidgetState.selected)) {
-                              return MyApp.of(context).isDarkMode()
+                              return Theme.of(context).brightness == Brightness.dark
                                   ? const Color(0xff5F8DEE)
                                   : const Color(0xff3772EE);
                             }
                             return null;
                           },
                         ),
-                        inactiveTrackColor: MyApp.of(context).isDarkMode()
-                            ? darkNeutral500
-                            : lightNeutral300,
+                        inactiveTrackColor: context.colors.subtleElement,
                         value: sound != "off" ? true : false,
                         onChanged: (selected) {
                           if (selected) {
@@ -929,7 +781,7 @@ class Dialogs {
                             player.stop();
                             sound = "off";
                           }
-                          Hive.box("settings").put("sound", sound);
+                          SettingsService.setSound(sound);
                           selectedIndex = 0;
                           setState(() {});
                         }),
@@ -944,9 +796,7 @@ class Dialogs {
                         ),
                         Container(
                           decoration: BoxDecoration(
-                              color: MyApp.of(context).isDarkMode()
-                                  ? darkNeutral100
-                                  : lightNeutral0,
+                              color: context.colors.cardSurface,
                               borderRadius: const BorderRadius.all(
                                 Radius.circular(16),
                               )),
@@ -957,31 +807,21 @@ class Dialogs {
                             itemBuilder: (BuildContext context, int index) {
                               return ListTile(
                                 leading: Icon(TablerIcons.player_play,
-                                    color: MyApp.of(context).isDarkMode()
-                                        ? darkNeutral600
-                                        : lightNeutral600),
+                                    color: context.colors.neutral600),
                                 title: Text(
                                   'Sound ${soundIndexes[index]}',
                                   style: selectedIndex == index
                                       ? body1Bold(context).copyWith(
-                                          color: MyApp.of(context).isDarkMode()
-                                              ? darkNeutral900
-                                              : lightNeutral850)
+                                          color: context.colors.bodyText)
                                       : body1(context).copyWith(
-                                          color: MyApp.of(context).isDarkMode()
-                                              ? darkNeutral900
-                                              : lightNeutral850),
+                                          color: context.colors.bodyText),
                                 ),
                                 contentPadding: const EdgeInsets.symmetric(
                                     horizontal: 8, vertical: 0),
                                 trailing: Radio(
-                                  activeColor: MyApp.of(context).isDarkMode()
-                                      ? darkNeutral850
-                                      : lightNeutral700,
+                                  activeColor: context.colors.iconPrimary,
                                   fillColor: WidgetStateProperty.all(
-                                      MyApp.of(context).isDarkMode()
-                                          ? darkNeutral850
-                                          : lightNeutral700),
+                                      context.colors.iconPrimary),
                                   value:
                                       "assets/sounds/Countdown${soundIndexes[index]}.mp3",
                                   groupValue: sound,
@@ -1037,14 +877,12 @@ class Dialogs {
                 child: ElevatedButton(
                     onPressed: () async {
                       Navigator.pop(context);
-                      await Hive.box("settings").put("sound", sound);
+                      await SettingsService.setSound(sound);
                     },
                     child: Text(
                       AppLocalizations.of(context)!.confirm,
                       style: body1Bold(context).copyWith(
-                          color: MyApp.of(context).isDarkMode()
-                              ? darkNeutral50
-                              : lightNeutral50),
+                          color: context.colors.neutral50),
                     )),
               )
             ],
@@ -1055,13 +893,12 @@ class Dialogs {
   }
 
   static Widget buildExitDialog(context, player, time, sets, duration) {
-    return BackdropFilter(
-      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+    return _blurredDialog(
       child: AlertDialog(
         insetPadding: const EdgeInsets.symmetric(horizontal: 24),
         surfaceTintColor: Colors.transparent,
         backgroundColor:
-            MyApp.of(context).isDarkMode() ? darkNeutral0 : lightNeutral100,
+            context.colors.scaffoldSurface,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(16)),
         ),
@@ -1077,9 +914,7 @@ class Dialogs {
                 icon: Icon(
                   size: 24,
                   TablerIcons.x,
-                  color: MyApp.of(context).isDarkMode()
-                      ? darkNeutral500
-                      : lightNeutral300,
+                  color: context.colors.subtleElement,
                 )),
           ],
         ),
@@ -1099,9 +934,7 @@ class Dialogs {
                 height: 50,
                 child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: MyApp.of(context).isDarkMode()
-                          ? darkNeutral850
-                          : lightNeutral850,
+                      backgroundColor: context.colors.neutral850,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -1111,20 +944,21 @@ class Dialogs {
                       await WakelockPlus.disable();
 
                       SchedulerBinding.instance.addPostFrameCallback((_) {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => Congrats(
-                                  time: time,
-                                  didIt: false,
-                                  sets: sets,
-                                  duration: duration,
-                                )));
+                        Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: (context) => Congrats(
+                                    time: time,
+                                    didIt: false,
+                                    sets: sets,
+                                    duration: duration,
+                                  )),
+                          (route) => false,
+                        );
                       });
                     },
                     child: Text(AppLocalizations.of(context)!.run_exit_workout,
                         style: body1Bold(context).copyWith(
-                            color: MyApp.of(context).isDarkMode()
-                                ? darkNeutral50
-                                : lightNeutral50))),
+                            color: context.colors.neutral50))),
               ),
               const SizedBox(
                 height: 12,
@@ -1134,18 +968,14 @@ class Dialogs {
                   height: 50,
                   child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: MyApp.of(context).isDarkMode()
-                            ? darkNeutral100
-                            : lightNeutral0,
+                        backgroundColor: context.colors.cardSurface,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                         elevation: 0,
                         side: BorderSide(
                             width: 1,
-                            color: MyApp.of(context).isDarkMode()
-                                ? darkNeutral300
-                                : lightNeutral300),
+                            color: context.colors.neutral300),
                       ),
                       onPressed: () {
                         Navigator.pop(context);

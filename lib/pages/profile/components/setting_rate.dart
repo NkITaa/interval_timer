@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:interval_timer/l10n/app_localizations.dart';
 import '../../../const.dart';
-import '../../../main.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class RateApp extends StatelessWidget {
@@ -27,7 +26,7 @@ class RateApp extends StatelessWidget {
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           boxShadow: [
-            MyApp.of(context).isDarkMode()
+            Theme.of(context).brightness == Brightness.dark
                 ? const BoxShadow(
                     color: Colors.transparent,
                     spreadRadius: 0,
@@ -41,8 +40,7 @@ class RateApp extends StatelessWidget {
                     offset: const Offset(0, 6), // changes position of shadow
                   ),
           ],
-          color:
-              MyApp.of(context).isDarkMode() ? darkNeutral50 : lightNeutral50,
+          color: context.colors.neutral50,
           borderRadius: BorderRadius.circular(16),
         ),
         child: Row(
@@ -86,9 +84,7 @@ class RateApp extends StatelessWidget {
               child: Text(
                 AppLocalizations.of(context)!.profile_rate_us,
                 style: body2Bold(context).copyWith(
-                  color: MyApp.of(context).isDarkMode()
-                      ? darkNeutral50
-                      : lightNeutral50,
+                  color: context.colors.neutral50,
                 ),
               ),
             )

@@ -2,14 +2,13 @@ import 'dart:async';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:interval_timer/const.dart';
 import 'package:interval_timer/pages/run/run.dart';
 import 'package:interval_timer/l10n/app_localizations.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:hive/hive.dart';
-import '../../main.dart';
+import 'package:interval_timer/services/settings_service.dart';
+
 import '../home.dart';
 
 class Preparation extends StatefulWidget {
@@ -36,7 +35,7 @@ class _PreparationState extends State<Preparation> {
   int counter = 9;
   bool isPaused = false;
 
-  String sound = Hive.box("settings").get("sound") ?? "assets/sounds/Countdown1.mp3";
+  String sound = SettingsService.sound;
 
   late Timer timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
     if (counter == 0) {
@@ -64,7 +63,7 @@ class _PreparationState extends State<Preparation> {
   next() async {
     timer.cancel();
     widget.player.play();
-    Navigator.of(context).push(MaterialPageRoute(
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
         builder: (context) => Run(
               startTime: DateTime.now(),
               time: widget.time,
@@ -97,10 +96,11 @@ class _PreparationState extends State<Preparation> {
                 await widget.player.dispose();
                 timer.cancel();
                 SchedulerBinding.instance.addPostFrameCallback((_) {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const Home(
-                            screenIndex: 1,
-                          )));
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                        builder: (context) => const Home(screenIndex: 1)),
+                    (route) => false,
+                  );
                 });
               }),
         ),
@@ -127,9 +127,7 @@ class _PreparationState extends State<Preparation> {
                     ),
                     Text(AppLocalizations.of(context)!.run_preparing,
                         style: heading1Bold(context).copyWith(
-                            color: MyApp.of(context).isDarkMode()
-                                ? lightNeutral100
-                                : lightNeutral50)),
+                            color: context.colors.textOnGradient)),
                   ],
                 ),
               ),

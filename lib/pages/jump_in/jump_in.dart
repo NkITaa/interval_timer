@@ -7,7 +7,6 @@ import 'package:interval_timer/l10n/app_localizations.dart';
 
 import '../../components/dialogs.dart';
 import '../../const.dart';
-import '../../main.dart';
 
 class JumpIn extends StatefulWidget {
   final bool visible;
@@ -124,9 +123,7 @@ class _JumpInState extends State<JumpIn> {
                   child: Text(
                     AppLocalizations.of(context)!.start_workout,
                     style: body1Bold(context).copyWith(
-                      color: MyApp.of(context).isDarkMode()
-                          ? darkNeutral50
-                          : lightNeutral50,
+                      color: context.colors.neutral50,
                     ),
                   ),
                 )),
@@ -138,14 +135,10 @@ class _JumpInState extends State<JumpIn> {
                 height: 55,
                 child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: MyApp.of(context).isDarkMode()
-                          ? darkNeutral100
-                          : lightNeutral0,
+                      backgroundColor: context.colors.cardSurface,
                       side: BorderSide(
                           width: 1,
-                          color: MyApp.of(context).isDarkMode()
-                              ? darkNeutral300
-                              : lightNeutral300),
+                          color: context.colors.neutral300),
                     ),
                     onPressed: () {
                       TextEditingController nameController =

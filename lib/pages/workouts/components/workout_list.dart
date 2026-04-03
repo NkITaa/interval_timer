@@ -5,7 +5,7 @@ import 'package:hive/hive.dart';
 import 'package:interval_timer/l10n/app_localizations.dart';
 
 import '../../../components/dialogs.dart';
-import '../../../main.dart';
+
 
 class WorkoutList extends StatelessWidget {
   final Function setListState;
@@ -70,9 +70,7 @@ class WorkoutList extends StatelessWidget {
                     },
                     child: Text(AppLocalizations.of(context)!.workouts_create,
                         style: body1Bold(context).copyWith(
-                            color: MyApp.of(context).isDarkMode()
-                                ? darkNeutral50
-                                : lightNeutral50))),
+                            color: context.colors.neutral50))),
               )
             ],
           )

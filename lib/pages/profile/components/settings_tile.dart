@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
 import '../../../const.dart';
-import '../../../main.dart';
 
 class SettingsTile extends StatefulWidget {
   final Icon? icon;
@@ -32,9 +31,7 @@ class _SettingsTileState extends State<SettingsTile> {
                 contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                 title: Text(widget.title, style: body1(context)),
                 trailing: Icon(TablerIcons.chevron_right,
-                    color: MyApp.of(context).isDarkMode()
-                        ? darkNeutral900
-                        : lightNeutral850),
+                    color: context.colors.bodyText),
                 onTap: () => widget.onTap!(false),
               )
             : ListTile(
@@ -49,28 +46,24 @@ class _SettingsTileState extends State<SettingsTile> {
                         ),
                         trackOutlineColor: WidgetStateProperty.all<Color>(
                             Colors.transparent),
-                        inactiveTrackColor: MyApp.of(context).isDarkMode()
-                            ? darkNeutral500
-                            : lightNeutral300,
+                        inactiveTrackColor: context.colors.subtleElement,
                         trackColor: WidgetStateProperty.resolveWith<Color?>(
                           (Set<WidgetState> states) {
                             if (states.contains(WidgetState.selected)) {
-                              return MyApp.of(context).isDarkMode()
+                              return Theme.of(context).brightness == Brightness.dark
                                   ? const Color(0xff5F8DEE)
                                   : const Color(0xff3772EE);
                             }
                             return null;
                           },
                         ),
-                        value: MyApp.of(context).isDarkMode(),
+                        value: Theme.of(context).brightness == Brightness.dark,
                         onChanged: (selected) {
                           widget.onTap!(selected);
                         })
                     : Icon(
                         TablerIcons.chevron_right,
-                        color: MyApp.of(context).isDarkMode()
-                            ? darkNeutral900
-                            : lightNeutral850,
+                        color: context.colors.bodyText,
                       ),
                 onTap: () => widget.onTap!(false),
               ),
@@ -79,9 +72,7 @@ class _SettingsTileState extends State<SettingsTile> {
             : Divider(
                 height: 0,
                 thickness: 1,
-                color: MyApp.of(context).isDarkMode()
-                    ? darkNeutral200
-                    : lightNeutral200,
+                color: context.colors.neutral200,
               )
       ],
     );

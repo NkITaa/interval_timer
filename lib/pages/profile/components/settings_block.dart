@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../const.dart';
-import '../../../main.dart';
 
 class SettingsBlock extends StatelessWidget {
   final List<Widget> tiles;
@@ -23,7 +22,7 @@ class SettingsBlock extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             boxShadow: [
-              MyApp.of(context).isDarkMode()
+              Theme.of(context).brightness == Brightness.dark
                   ? const BoxShadow(
                       color: Colors.transparent,
                       spreadRadius: 0,
@@ -37,8 +36,7 @@ class SettingsBlock extends StatelessWidget {
                       offset: const Offset(0, 6), // changes position of shadow
                     ),
             ],
-            color:
-                MyApp.of(context).isDarkMode() ? darkNeutral50 : lightNeutral50,
+            color: context.colors.neutral50,
             borderRadius: BorderRadius.circular(16),
           ),
           padding: const EdgeInsets.only(left: 24.0, right: 24),

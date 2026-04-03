@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../const.dart';
-import '../../main.dart';
+
 import 'package:interval_timer/l10n/app_localizations.dart';
 
 class CustomTimer extends StatelessWidget {
@@ -30,9 +30,7 @@ class CustomTimer extends StatelessWidget {
             strokeWidth: 16,
             strokeCap: StrokeCap.round,
             valueColor: AlwaysStoppedAnimation<Color>(
-                MyApp.of(context).isDarkMode()
-                    ? lightNeutral100
-                    : lightNeutral50),
+                context.colors.textOnGradient),
           ),
           Align(
             child: Column(
@@ -41,9 +39,7 @@ class CustomTimer extends StatelessWidget {
                 Text(
                   '${(seconds / 60).floor()}:${(seconds % 60).toString().padLeft(2, '0')}',
                   style: display2(context).copyWith(
-                      color: MyApp.of(context).isDarkMode()
-                          ? lightNeutral100
-                          : lightNeutral50),
+                      color: context.colors.textOnGradient),
                 ),
                 Text(
                   !isRunning
@@ -52,9 +48,7 @@ class CustomTimer extends StatelessWidget {
                           ? AppLocalizations.of(context)!.training
                           : AppLocalizations.of(context)!.pause,
                   style: heading1Bold(context).copyWith(
-                      color: MyApp.of(context).isDarkMode()
-                          ? lightNeutral100
-                          : lightNeutral50),
+                      color: context.colors.textOnGradient),
                 ),
               ],
             ),

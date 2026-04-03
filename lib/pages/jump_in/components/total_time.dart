@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../const.dart';
-import '../../../main.dart';
+
 import 'package:interval_timer/l10n/app_localizations.dart';
 
 class TotalTime extends StatelessWidget {
@@ -19,9 +19,7 @@ class TotalTime extends StatelessWidget {
           Text(
               "${(totalTime.inSeconds / 60).floor()}:${(totalTime.inSeconds % 60).toString().padLeft(2, '0')}",
               style: display1(context).copyWith(
-                color: MyApp.of(context).isDarkMode()
-                    ? darkNeutral900
-                    : lightNeutral900,
+                color: context.colors.neutral900,
               )),
         ],
       ),

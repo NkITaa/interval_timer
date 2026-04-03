@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:interval_timer/const.dart';
-import 'package:interval_timer/main.dart';
 import 'package:scroll_snap_list/scroll_snap_list.dart';
 
 class TimeWheel extends StatelessWidget {
@@ -31,15 +30,11 @@ class TimeWheel extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Divider(
-                  color: MyApp.of(context).isDarkMode()
-                      ? darkNeutral850
-                      : lightNeutral850,
+                  color: context.colors.neutral850,
                   thickness: 3),
               const SizedBox(height: 50),
               Divider(
-                  color: MyApp.of(context).isDarkMode()
-                      ? darkNeutral850
-                      : lightNeutral850,
+                  color: context.colors.neutral850,
                   thickness: 3),
             ],
           ),

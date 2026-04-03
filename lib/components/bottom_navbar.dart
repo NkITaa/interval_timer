@@ -3,7 +3,6 @@ import 'package:interval_timer/components/hide_widgets_on_scroll.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:interval_timer/l10n/app_localizations.dart';
 import 'package:interval_timer/const.dart';
-import 'package:interval_timer/main.dart';
 
 class BottomNavBar extends StatefulWidget {
   final ScrollController controller;
@@ -37,16 +36,10 @@ class _BottomNavBarState extends State<BottomNavBar> {
           },
           unselectedLabelStyle: footerBold(context),
           selectedLabelStyle: footerBold(context),
-          selectedIconTheme: MyApp.of(context).isDarkMode()
-              ? const IconThemeData(color: darkNeutral850)
-              : const IconThemeData(color: lightNeutral850),
-          unselectedIconTheme: MyApp.of(context).isDarkMode()
-              ? const IconThemeData(color: darkNeutral500)
-              : const IconThemeData(color: lightNeutral300),
-          selectedItemColor:
-              MyApp.of(context).isDarkMode() ? darkNeutral850 : lightNeutral850,
-          unselectedItemColor:
-              MyApp.of(context).isDarkMode() ? darkNeutral500 : lightNeutral300,
+          selectedIconTheme: IconThemeData(color: context.colors.neutral850),
+          unselectedIconTheme: IconThemeData(color: context.colors.subtleElement),
+          selectedItemColor: context.colors.neutral850,
+          unselectedItemColor: context.colors.subtleElement,
           currentIndex: widget.screenIndex,
           items: [
             BottomNavigationBarItem(

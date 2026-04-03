@@ -6,7 +6,7 @@ import 'package:interval_timer/l10n/app_localizations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
 import '../../../const.dart';
-import '../../../main.dart';
+
 
 class WorkoutSearchBar extends StatefulWidget {
   const WorkoutSearchBar({
@@ -29,14 +29,11 @@ class _WorkoutSearchBarState extends State<WorkoutSearchBar> {
     return Padding(
       padding: const EdgeInsets.only(top: 20.0, bottom: 32.0),
       child: SearchAnchor(
-        dividerColor:
-            MyApp.of(context).isDarkMode() ? darkNeutral200 : lightNeutral200,
+        dividerColor: context.colors.neutral200,
         viewLeading: IconButton(
           icon: Icon(
             TablerIcons.chevron_left,
-            color: MyApp.of(context).isDarkMode()
-                ? darkNeutral850
-                : lightNeutral700,
+            color: context.colors.iconPrimary,
           ),
           onPressed: () {
             Navigator.pop(context);
@@ -45,16 +42,13 @@ class _WorkoutSearchBarState extends State<WorkoutSearchBar> {
         viewSurfaceTintColor: Colors.transparent,
         searchController: controller,
         headerHintStyle: body2(context).copyWith(
-          color:
-              MyApp.of(context).isDarkMode() ? darkNeutral700 : lightNeutral700,
+          color: context.colors.neutral700,
         ),
         headerTextStyle: body2(context).copyWith(
-          color:
-              MyApp.of(context).isDarkMode() ? darkNeutral850 : lightNeutral850,
+          color: context.colors.neutral850,
         ),
         viewHintText: AppLocalizations.of(context)!.workouts_search,
-        viewBackgroundColor:
-            MyApp.of(context).isDarkMode() ? darkNeutral0 : lightNeutral100,
+        viewBackgroundColor: context.colors.scaffoldSurface,
         builder: (context, controller) {
           return SearchBar(
             shadowColor:
@@ -70,28 +64,20 @@ class _WorkoutSearchBarState extends State<WorkoutSearchBar> {
               padding: const EdgeInsets.only(left: 4.0),
               child: Icon(
                 Icons.search,
-                color: MyApp.of(context).isDarkMode()
-                    ? darkNeutral850
-                    : lightNeutral700,
+                color: context.colors.iconPrimary,
               ),
             ),
             hintText: AppLocalizations.of(context)!.workouts_search,
             hintStyle: WidgetStateProperty.all<TextStyle>(
               body2(context).copyWith(
-                  color: MyApp.of(context).isDarkMode()
-                      ? darkNeutral700
-                      : lightNeutral700),
+                  color: context.colors.neutral700),
             ),
             textStyle: WidgetStateProperty.all<TextStyle>(
               body2(context).copyWith(
-                  color: MyApp.of(context).isDarkMode()
-                      ? darkNeutral850
-                      : lightNeutral850),
+                  color: context.colors.neutral850),
             ),
             backgroundColor: WidgetStateProperty.all<Color>(
-                MyApp.of(context).isDarkMode()
-                    ? darkNeutral100
-                    : lightNeutral0),
+                context.colors.cardSurface),
             surfaceTintColor:
                 WidgetStateProperty.all<Color>(Colors.transparent),
             controller: controller,

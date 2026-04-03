@@ -24,10 +24,7 @@ dependencies:
   top_snackbar_flutter: ^3.1.0
   wakelock_plus: ^1.2.8
   just_audio: ^0.9.36
-  ffmpeg_kit_flutter_audio: ^6.0.3
   just_audio_background: ^0.0.1-beta.11
-  flutter_phoenix: ^1.1.1
-  flutter_portal: ^1.1.4
   path_provider: ^2.1.1
   audio_session: ^0.1.18
 

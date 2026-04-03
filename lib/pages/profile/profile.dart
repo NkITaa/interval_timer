@@ -8,9 +8,8 @@ import '../../components/dialogs.dart';
 import '../../const.dart';
 import '../../main.dart';
 import 'components/settins_page.dart';
-import 'package:hive/hive.dart';
+import 'package:interval_timer/services/settings_service.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -51,61 +50,19 @@ class _ProfileState extends State<Profile> {
                     title:
                         AppLocalizations.of(context)!.profile_settings_darkmode,
                     icon: Icon(TablerIcons.moon,
-                        color: MyApp.of(context).isDarkMode()
-                            ? darkNeutral700
-                            : lightNeutral600),
+                        color: context.colors.iconSecondary),
                     switching: true,
                     onTap: (selected) {
-                      showModalBottomSheet(
-                          backgroundColor: Colors.transparent,
-                          isScrollControlled: true,
-                          enableDrag: false,
-                          context: context,
-                          builder: (BuildContext context) => Container(
-                                height: 150,
-                                width: MediaQuery.of(context).size.width,
-                                decoration: BoxDecoration(
-                                  color: MyApp.of(context).isDarkMode()
-                                      ? darkNeutral0
-                                      : lightNeutral100,
-                                  borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(16),
-                                    topRight: Radius.circular(16),
-                                  ),
-                                ),
-                                child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor:
-                                          MyApp.of(context).isDarkMode()
-                                              ? darkNeutral0
-                                              : lightNeutral100,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      selected!
-                                          ? MyApp.of(context)
-                                              .changeTheme(ThemeMode.dark)
-                                          : MyApp.of(context)
-                                              .changeTheme(ThemeMode.light);
-
-                                      Phoenix.rebirth(context);
-                                    },
-                                    child: Text(
-                                      AppLocalizations.of(context)!.restart_app,
-                                      style: body1Bold(context),
-                                    )),
-                              ));
+                      selected!
+                          ? MyApp.of(context).changeTheme(ThemeMode.dark)
+                          : MyApp.of(context).changeTheme(ThemeMode.light);
                     },
                   ),
                   SettingsTile(
                       title: AppLocalizations.of(context)!
                           .profile_settings_language,
                       icon: Icon(TablerIcons.language,
-                          color: MyApp.of(context).isDarkMode()
-                              ? darkNeutral700
-                              : lightNeutral600),
+                          color: context.colors.iconSecondary),
                       onTap: (selected) => showModalBottomSheet(
                             backgroundColor: Colors.transparent,
                             isScrollControlled: true,
@@ -119,9 +76,7 @@ class _ProfileState extends State<Profile> {
                       title:
                           AppLocalizations.of(context)!.profile_settings_sound,
                       icon: Icon(TablerIcons.volume,
-                          color: MyApp.of(context).isDarkMode()
-                              ? darkNeutral700
-                              : lightNeutral600),
+                          color: context.colors.iconSecondary),
                       last: true,
                       onTap: (selected) async {
                         final player = AudioPlayer();
@@ -147,7 +102,7 @@ class _ProfileState extends State<Profile> {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => SettingsPage(
                                   language:
-                                      Hive.box("settings").get("language"),
+                                      SettingsService.language,
                                   index: 1,
                                 ))),
                   ),
@@ -158,7 +113,7 @@ class _ProfileState extends State<Profile> {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => SettingsPage(
                                   language:
-                                      Hive.box("settings").get("language"),
+                                      SettingsService.language,
                                   index: 2,
                                 ))),
                   ),

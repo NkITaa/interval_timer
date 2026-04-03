@@ -5,15 +5,13 @@ import 'package:interval_timer/pages/home.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:interval_timer/l10n/app_localizations.dart';
 import 'package:interval_timer/workout.dart';
+import 'package:interval_timer/services/settings_service.dart';
 import 'const.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:just_audio_background/just_audio_background.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:audio_session/audio_session.dart';
-import 'package:flutter_portal/flutter_portal.dart';
 
 late ThemeMode? _themeMode;
 
@@ -48,79 +46,28 @@ void main() async {
     androidNotificationOngoing: true,
   );
 
-  _themeMode =
-      Hive.box("settings").get("darkmode") ? ThemeMode.dark : ThemeMode.light;
+  _themeMode = SettingsService.isDarkMode ? ThemeMode.dark : ThemeMode.light;
 
-  runApp(Phoenix(
-    child: const MyApp(),
-  ));
+  runApp(const MyApp());
 }
 
 Future<void> initialise() async {
-  if (Hive.box("settings").get("language") == null) {
-    if (Platform.localeName.contains("de")) {
-      await Hive.box("settings").put("language", "de");
-    } else {
-      await Hive.box("settings").put("language", "en");
-    }
+  final box = Hive.box("settings");
+  if (box.get("language") == null) {
+    await SettingsService.setLanguage(
+        Platform.localeName.contains("de") ? "de" : "en");
   }
-  if (Hive.box("settings").get("sound") == null) {
-    await Hive.box("settings").put("sound", "assets/sounds/Countdown1.mp3");
+  if (box.get("sound") == null) {
+    await SettingsService.setSound(SettingsService.defaultSound);
   }
-  if (Hive.box("settings").get("darkmode") == null) {
-    await Hive.box("settings").put(
-        "darkmode",
+  if (box.get("darkmode") == null) {
+    await SettingsService.setDarkMode(
         SchedulerBinding.instance.platformDispatcher.platformBrightness ==
             Brightness.dark);
   }
 
+  // Copy lock screen art to documents directory
   Directory docDir = await getApplicationDocumentsDirectory();
-
-  if (!await File('${docDir.path}/30min.mp3').exists()) {
-    await copyAssetToFile("assets/sounds/30min.mp3", "30min.mp3");
-  }
-  if (!await File('${docDir.path}/10min.mp3').exists()) {
-    await copyAssetToFile("assets/sounds/10min.mp3", "10min.mp3");
-  }
-  if (!await File('${docDir.path}/5min.mp3').exists()) {
-    await copyAssetToFile("assets/sounds/5min.mp3", "5min.mp3");
-  }
-  if (!await File('${docDir.path}/1min.mp3').exists()) {
-    await copyAssetToFile("assets/sounds/1min.mp3", "1min.mp3");
-  }
-  if (!await File('${docDir.path}/30sec.mp3').exists()) {
-    await copyAssetToFile("assets/sounds/30sec.mp3", "30sec.mp3");
-  }
-  if (!await File('${docDir.path}/10sec.mp3').exists()) {
-    await copyAssetToFile("assets/sounds/10sec.mp3", "10sec.mp3");
-  }
-  if (!await File('${docDir.path}/5sec.mp3').exists()) {
-    await copyAssetToFile("assets/sounds/5sec.mp3", "5sec.mp3");
-  }
-  if (!await File('${docDir.path}/1sec.mp3').exists()) {
-    await copyAssetToFile("assets/sounds/1sec.mp3", "1sec.mp3");
-  }
-  if (!await File('${docDir.path}/Countdown1.mp3').exists()) {
-    await copyAssetToFile("assets/sounds/Countdown1.mp3", "Countdown1.mp3");
-  }
-  if (!await File('${docDir.path}/Countdown2.mp3').exists()) {
-    await copyAssetToFile("assets/sounds/Countdown2.mp3", "Countdown2.mp3");
-  }
-  if (!await File('${docDir.path}/Countdown3.mp3').exists()) {
-    await copyAssetToFile("assets/sounds/Countdown3.mp3", "Countdown3.mp3");
-  }
-  if (!await File('${docDir.path}/Countdown4.mp3').exists()) {
-    await copyAssetToFile("assets/sounds/Countdown4.mp3", "Countdown4.mp3");
-  }
-  if (!await File('${docDir.path}/Countdown5.mp3').exists()) {
-    await copyAssetToFile("assets/sounds/Countdown5.mp3", "Countdown5.mp3");
-  }
-  if (!await File('${docDir.path}/Countdown6.mp3').exists()) {
-    await copyAssetToFile("assets/sounds/Countdown6.mp3", "Countdown6.mp3");
-  }
-  if (!await File('${docDir.path}/Countdown7.mp3').exists()) {
-    await copyAssetToFile("assets/sounds/Countdown7.mp3", "Countdown7.mp3");
-  }
   if (!await File('${docDir.path}/pause.png').exists()) {
     await copyAssetToFile("assets/images/pause.png", "pause.png");
   }
@@ -156,12 +103,12 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  Locale _locale = Locale(Hive.box("settings").get("language"));
+  Locale _locale = Locale(SettingsService.language);
 
   void setLocale(Locale value) {
     setState(() {
       _locale = value;
-      Hive.box("settings").put("language", value.languageCode);
+      SettingsService.setLanguage(value.languageCode);
     });
   }
 
@@ -201,6 +148,7 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
         textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme),
+        extensions: const [AppColors.light],
       ),
       darkTheme: ThemeData(
         textSelectionTheme: const TextSelectionThemeData(
@@ -228,12 +176,12 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
         textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme),
+        extensions: const [AppColors.dark],
       ), // standard dark theme
       themeMode: _themeMode, // device controls theme
-      home: Portal(
-          child: (Hive.box("settings").get("visible") ?? true) == true
-              ? const Home(screenIndex: 1, visible: true)
-              : const Home(screenIndex: 0)),
+      home: SettingsService.isJumpInVisible
+          ? const Home(screenIndex: 1, visible: true)
+          : const Home(screenIndex: 0),
     );
   }
 
@@ -241,10 +189,6 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       _themeMode = themeMode;
     });
-    Hive.box("settings").put("darkmode", themeMode == ThemeMode.dark);
-  }
-
-  bool isDarkMode() {
-    return _themeMode == ThemeMode.dark;
+    SettingsService.setDarkMode(themeMode == ThemeMode.dark);
   }
 }

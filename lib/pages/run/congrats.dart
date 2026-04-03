@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
 import 'package:interval_timer/const.dart';
-import 'package:interval_timer/main.dart';
+
 import 'package:interval_timer/pages/home.dart';
 import 'package:interval_timer/l10n/app_localizations.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
@@ -65,9 +65,7 @@ class _CongratsState extends State<Congrats> {
                 iconSize: 64,
                 icon: Icon(
                   TablerIcons.trophy,
-                  color: MyApp.of(context).isDarkMode()
-                      ? darkNeutral850
-                      : lightNeutral700,
+                  color: context.colors.iconPrimary,
                 ),
               ),
               const SizedBox(
@@ -92,14 +90,15 @@ class _CongratsState extends State<Congrats> {
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const Home(screenIndex: 1)));
+                    Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                          builder: (context) => const Home(screenIndex: 1)),
+                      (route) => false,
+                    );
                   },
                   child: Text(AppLocalizations.of(context)!.run_home,
                       style: body1Bold(context).copyWith(
-                          color: MyApp.of(context).isDarkMode()
-                              ? darkNeutral50
-                              : lightNeutral50)),
+                          color: context.colors.neutral50)),
                 ),
               ),
               const SizedBox(
@@ -110,14 +109,10 @@ class _CongratsState extends State<Congrats> {
                   height: 50,
                   child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: MyApp.of(context).isDarkMode()
-                            ? darkNeutral100
-                            : lightNeutral0,
+                        backgroundColor: context.colors.cardSurface,
                         side: BorderSide(
                             width: 1,
-                            color: MyApp.of(context).isDarkMode()
-                                ? darkNeutral300
-                                : lightNeutral300),
+                            color: context.colors.neutral300),
                       ),
                       onPressed: () {
                         TextEditingController nameController =

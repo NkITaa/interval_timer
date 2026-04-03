@@ -2,9 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:interval_timer/l10n/app_localizations.dart';
-import 'package:flutter_portal/flutter_portal.dart';
 import '../const.dart';
-import '../main.dart';
 import 'dialogs.dart';
 
 class IncrementDecrementButton extends StatefulWidget {
@@ -33,13 +31,116 @@ class IncrementDecrementButton extends StatefulWidget {
 }
 
 class _IncrementDecrementButtonState extends State<IncrementDecrementButton> {
+  final LayerLink _layerLink = LayerLink();
+  OverlayEntry? _overlayEntry;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.visible) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _showOverlay();
+      });
+    }
+  }
+
+  @override
+  void didUpdateWidget(IncrementDecrementButton oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.visible && !widget.visible) {
+      _removeOverlay();
+    }
+  }
+
+  void _showOverlay() {
+    _overlayEntry = OverlayEntry(
+      builder: (overlayContext) => CompositedTransformFollower(
+        link: _layerLink,
+        targetAnchor: Alignment.bottomCenter,
+        followerAnchor: Alignment.bottomCenter,
+        child: Material(
+          type: MaterialType.transparency,
+          child: IntrinsicWidth(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 24.0, left: 24),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: context.colors.neutral50,
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(16)),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        AppLocalizations.of(context)!.tap_tutorial,
+                        style: body1(context),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Container(
+                  padding: const EdgeInsets.only(
+                      top: 8, bottom: 8, left: 12, right: 12),
+                  decoration: BoxDecoration(
+                    color: context.colors.cardSurface,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: Colors.grey),
+                  ),
+                  child: RichText(
+                    text: TextSpan(
+                      style: heading3Bold(context),
+                      text: widget.type != "set"
+                          ? widget.minutes.toString().substring(2, 7)
+                          : widget.sets.toString(),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () => showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        Dialogs.buildSetTimesDialog(
+                                            context,
+                                            widget.type,
+                                            widget.minutes,
+                                            widget.otherMinutes,
+                                            widget.sets,
+                                            widget.setValue))
+                                .then((value) {
+                              _removeOverlay();
+                              widget.killVisible!();
+                            }),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+    Overlay.of(context).insert(_overlayEntry!);
+  }
+
+  void _removeOverlay() {
+    _overlayEntry?.remove();
+    _overlayEntry = null;
+  }
+
+  @override
+  void dispose() {
+    _removeOverlay();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 72,
       padding: const EdgeInsets.only(top: 8, bottom: 8, left: 12, right: 12),
       decoration: BoxDecoration(
-        color: MyApp.of(context).isDarkMode() ? darkNeutral100 : lightNeutral0,
+        color: context.colors.cardSurface,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.grey),
       ),
@@ -52,9 +153,7 @@ class _IncrementDecrementButtonState extends State<IncrementDecrementButton> {
               },
               icon: Icon(
                 TablerIcons.minus,
-                color: MyApp.of(context).isDarkMode()
-                    ? darkNeutral850
-                    : lightNeutral700,
+                color: context.colors.iconPrimary,
               )),
           SizedBox(
             width: 106,
@@ -69,72 +168,8 @@ class _IncrementDecrementButtonState extends State<IncrementDecrementButton> {
                             : AppLocalizations.of(context)!.sets,
                     style: body1Bold(context)),
                 widget.visible
-                    ? PortalTarget(
-                        portalFollower: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(right: 24.0, left: 24),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: MyApp.of(context).isDarkMode()
-                                      ? darkNeutral50
-                                      : lightNeutral50,
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(16)),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: Text(
-                                    AppLocalizations.of(context)!.tap_tutorial,
-                                    style: body1(context),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Container(
-                              padding: const EdgeInsets.only(
-                                  top: 8, bottom: 8, left: 12, right: 12),
-                              decoration: BoxDecoration(
-                                color: MyApp.of(context).isDarkMode()
-                                    ? darkNeutral100
-                                    : lightNeutral0,
-                                borderRadius: BorderRadius.circular(16),
-                                border: Border.all(color: Colors.grey),
-                              ),
-                              child: RichText(
-                                text: TextSpan(
-                                  style: heading3Bold(context),
-                                  text: widget.type != "set"
-                                      ? widget.minutes
-                                          .toString()
-                                          .substring(2, 7)
-                                      : widget.sets.toString(),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () => showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) =>
-                                                Dialogs.buildSetTimesDialog(
-                                                    context,
-                                                    widget.type,
-                                                    widget.minutes,
-                                                    widget.otherMinutes,
-                                                    widget.sets,
-                                                    widget.setValue))
-                                        .then((value) => widget.killVisible!()),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        anchor: const Aligned(
-                          follower: Alignment.bottomCenter,
-                          target: Alignment.bottomCenter,
-                        ),
+                    ? CompositedTransformTarget(
+                        link: _layerLink,
                         child: RichText(
                           text: TextSpan(
                             style: heading3Bold(context),
@@ -185,9 +220,7 @@ class _IncrementDecrementButtonState extends State<IncrementDecrementButton> {
               },
               icon: Icon(
                 TablerIcons.plus,
-                color: MyApp.of(context).isDarkMode()
-                    ? darkNeutral850
-                    : lightNeutral700,
+                color: context.colors.iconPrimary,
               )),
         ],
       ),

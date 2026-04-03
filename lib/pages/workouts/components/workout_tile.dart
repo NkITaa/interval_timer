@@ -6,7 +6,7 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:interval_timer/l10n/app_localizations.dart';
 
 import '../../../components/dialogs.dart';
-import '../../../main.dart';
+
 
 class WorkoutTile extends StatelessWidget {
   final Workout workout;
@@ -39,7 +39,7 @@ class WorkoutTile extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.only(left: 12.0, right: 12, bottom: 12),
         decoration: BoxDecoration(
-          color: MyApp.of(context).isDarkMode() ? darkNeutral50 : lightNeutral0,
+          color: context.colors.tileSurface,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Column(
@@ -52,9 +52,7 @@ class WorkoutTile extends StatelessWidget {
                   padding: const EdgeInsets.all(0),
                   icon: Icon(
                     TablerIcons.dots,
-                    color: MyApp.of(context).isDarkMode()
-                        ? darkNeutral900
-                        : lightNeutral850,
+                    color: context.colors.bodyText,
                   ),
                   onPressed: () {
                     TextEditingController nameController =
@@ -138,9 +136,7 @@ class WorkoutTile extends StatelessWidget {
                   ),
                   child: Text(AppLocalizations.of(context)!.start_workout,
                       style: body1Bold(context).copyWith(
-                          color: MyApp.of(context).isDarkMode()
-                              ? darkNeutral50
-                              : lightNeutral50))),
+                          color: context.colors.neutral50))),
             )
           ],
         ),
