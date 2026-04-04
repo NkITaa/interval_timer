@@ -7,6 +7,7 @@ import 'package:interval_timer/const.dart';
 import 'package:interval_timer/pages/run/run.dart';
 import 'package:interval_timer/l10n/app_localizations.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:interval_timer/services/settings_service.dart';
 import 'package:interval_timer/services/haptic_service.dart';
 
@@ -19,6 +20,7 @@ class Preparation extends StatefulWidget {
   final int indexTime;
   final AudioPlayer player;
   final int totalDuration;
+  final ConcatenatingAudioSource workoutSource;
   const Preparation(
       {super.key,
       required this.time,
@@ -26,7 +28,8 @@ class Preparation extends StatefulWidget {
       required this.currentSet,
       required this.indexTime,
       required this.totalDuration,
-      required this.player});
+      required this.player,
+      required this.workoutSource});
 
   @override
   State<Preparation> createState() => _PreparationState();
@@ -38,7 +41,6 @@ class _PreparationState extends State<Preparation> {
   bool _navigating = false;
 
   String sound = SettingsService.sound;
-  AudioPlayer? _countdownPlayer;
 
   late Timer timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
     if (_navigating) return;
@@ -47,9 +49,9 @@ class _PreparationState extends State<Preparation> {
       await next();
     }
     if (counter > 0 && !isPaused) {
-      if (counter >= 2 && counter <= 4 && sound != "off" && _countdownPlayer != null) {
-        _countdownPlayer!.seek(Duration.zero);
-        _countdownPlayer!.play();
+      if (counter >= 2 && counter <= 4 && sound != "off") {
+        widget.player.seek(Duration.zero);
+        widget.player.play();
       }
       if (counter >= 2 && counter <= 4) {
         HapticService.light();
@@ -65,21 +67,25 @@ class _PreparationState extends State<Preparation> {
   @override
   void initState() {
     super.initState();
-    _initCountdownPlayer();
+    _initBeepSound();
     timer;
   }
 
-  void _initCountdownPlayer() async {
+  void _initBeepSound() async {
     if (sound != "off") {
-      _countdownPlayer = AudioPlayer();
-      await _countdownPlayer!.setAsset(sound);
+      await widget.player.setAudioSource(
+        AudioSource.asset(sound, tag: const MediaItem(
+          id: 'beep',
+          album: 'countdown',
+          title: 'countdown beep',
+        )),
+      );
     }
   }
 
   @override
   void dispose() {
     timer.cancel();
-    _countdownPlayer?.dispose();
     super.dispose();
   }
 
@@ -87,9 +93,9 @@ class _PreparationState extends State<Preparation> {
     if (_navigating) return;
     _navigating = true;
     timer.cancel();
-    _countdownPlayer?.stop();
-    _countdownPlayer?.dispose();
-    _countdownPlayer = null;
+    await widget.player.stop();
+    await widget.player.setAudioSource(widget.workoutSource);
+    sound == "off" ? widget.player.setVolume(0) : widget.player.setVolume(1);
     widget.player.play();
     if (!mounted) return;
     Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -101,6 +107,7 @@ class _PreparationState extends State<Preparation> {
               indexTime: widget.indexTime,
               player: widget.player,
               totalDuration: widget.totalDuration,
+              workoutSource: widget.workoutSource,
             )));
   }
 
@@ -126,8 +133,6 @@ class _PreparationState extends State<Preparation> {
                 _navigating = true;
                 HapticService.selection();
                 timer.cancel();
-                await _countdownPlayer?.dispose();
-                _countdownPlayer = null;
                 await widget.player.dispose();
                 SchedulerBinding.instance.addPostFrameCallback((_) {
                   Navigator.of(context).pushAndRemoveUntil(

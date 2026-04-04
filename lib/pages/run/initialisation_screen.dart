@@ -46,7 +46,8 @@ class InitialisationScreen extends StatelessWidget {
                   sets: sets,
                   currentSet: currentSet,
                   indexTime: indexTime,
-                  player: player);
+                  player: player,
+                  workoutSource: data.workoutSource);
             } else {
               return Center(
                 child: Text(AppLocalizations.of(context)!.error_not_enough_space),

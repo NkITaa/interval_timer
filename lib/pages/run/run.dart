@@ -23,6 +23,7 @@ class Run extends StatefulWidget {
   final int indexTime;
   final DateTime startTime;
   final AudioPlayer player;
+  final ConcatenatingAudioSource workoutSource;
 
   const Run({
     super.key,
@@ -33,6 +34,7 @@ class Run extends StatefulWidget {
     required this.indexTime,
     required this.startTime,
     required this.player,
+    required this.workoutSource,
   });
 
   @override
@@ -129,7 +131,8 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
                 time: widget.time,
                 sets: widget.sets,
                 currentSet: 1,
-                indexTime: 0)));
+                indexTime: 0,
+                workoutSource: widget.workoutSource)));
       });
     } else {
       await widget.player.seekToPrevious();

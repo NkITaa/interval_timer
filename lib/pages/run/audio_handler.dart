@@ -9,7 +9,8 @@ import 'package:interval_timer/services/settings_service.dart';
 class AudioReturn {
   final List<String> concatenationResult;
   final String sound;
-  AudioReturn(this.concatenationResult, this.sound);
+  final ConcatenatingAudioSource workoutSource;
+  AudioReturn(this.concatenationResult, this.sound, this.workoutSource);
 }
 
 Future<AudioReturn> initialize(player, List<int> time, int sets) async {
@@ -31,9 +32,20 @@ Future<AudioReturn> initialize(player, List<int> time, int sets) async {
     shuffleOrder: DefaultShuffleOrder(),
     children: workoutList,
   );
-  await player.setAudioSource(workout);
 
-  return AudioReturn([messageRun, messagePause], sound);
+  // Load beep sound into player for preparation countdown.
+  // The workout source will be swapped in when preparation finishes.
+  if (sound != "off") {
+    await player.setAudioSource(
+      AudioSource.asset(sound, tag: const MediaItem(
+        id: 'beep',
+        album: 'countdown',
+        title: 'countdown beep',
+      )),
+    );
+  }
+
+  return AudioReturn([messageRun, messagePause], sound, workout);
 }
 
 Future<String> concatenateAssets(

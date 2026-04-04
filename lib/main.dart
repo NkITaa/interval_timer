@@ -26,21 +26,24 @@ void main() async {
   await initialise();
 
   final session = await AudioSession.instance;
-  await session.configure(const AudioSessionConfiguration(
-    avAudioSessionCategory: AVAudioSessionCategory.playback,
-    avAudioSessionCategoryOptions: AVAudioSessionCategoryOptions.mixWithOthers,
-    avAudioSessionMode: AVAudioSessionMode.defaultMode,
-    avAudioSessionRouteSharingPolicy:
-        AVAudioSessionRouteSharingPolicy.defaultPolicy,
-    avAudioSessionSetActiveOptions: AVAudioSessionSetActiveOptions.none,
-    androidAudioAttributes: AndroidAudioAttributes(
-      contentType: AndroidAudioContentType.music,
-      flags: AndroidAudioFlags.none,
-      usage: AndroidAudioUsage.media,
+  await session.configure(
+    const AudioSessionConfiguration(
+      avAudioSessionCategory: AVAudioSessionCategory.playback,
+      avAudioSessionCategoryOptions:
+          AVAudioSessionCategoryOptions.mixWithOthers,
+      avAudioSessionMode: AVAudioSessionMode.defaultMode,
+      avAudioSessionRouteSharingPolicy:
+          AVAudioSessionRouteSharingPolicy.defaultPolicy,
+      avAudioSessionSetActiveOptions: AVAudioSessionSetActiveOptions.none,
+      androidAudioAttributes: AndroidAudioAttributes(
+        contentType: AndroidAudioContentType.music,
+        flags: AndroidAudioFlags.none,
+        usage: AndroidAudioUsage.media,
+      ),
+      androidAudioFocusGainType: AndroidAudioFocusGainType.gainTransientMayDuck,
+      androidWillPauseWhenDucked: true,
     ),
-    androidAudioFocusGainType: AndroidAudioFocusGainType.gainTransientMayDuck,
-    androidWillPauseWhenDucked: true,
-  ));
+  );
   await JustAudioBackground.init(
     androidNotificationChannelId: 'com.nikita.interval_timer.channel.audio',
     androidNotificationChannelName: 'Audio playback',
@@ -62,8 +65,9 @@ Future<void> initialise() async {
   }
   if (box.get("darkmode") == null) {
     await SettingsService.setDarkMode(
-        SchedulerBinding.instance.platformDispatcher.platformBrightness ==
-            Brightness.dark);
+      SchedulerBinding.instance.platformDispatcher.platformBrightness ==
+          Brightness.dark,
+    );
   }
 
   // Copy lock screen art to documents directory
@@ -76,10 +80,7 @@ Future<void> initialise() async {
   }
 }
 
-Future<String> copyAssetToFile(
-  String assetPath,
-  String tempFileName,
-) async {
+Future<String> copyAssetToFile(String assetPath, String tempFileName) async {
   ByteData data = await rootBundle.load(assetPath);
   List<int> bytes = data.buffer.asUint8List();
 
@@ -144,11 +145,12 @@ class _MyAppState extends State<MyApp> {
           backgroundColor: lightNeutral0,
         ),
         appBarTheme: const AppBarTheme(
-            backgroundColor: Colors.transparent,
-            shadowColor: Colors.transparent,
-            titleTextStyle: TextStyle(color: Colors.black),
-            iconTheme: IconThemeData(color: Colors.black),
-            centerTitle: false),
+          backgroundColor: Colors.transparent,
+          shadowColor: Colors.transparent,
+          titleTextStyle: TextStyle(color: Colors.black),
+          iconTheme: IconThemeData(color: Colors.black),
+          centerTitle: false,
+        ),
         iconTheme: const IconThemeData(color: lightNeutral900),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
@@ -170,13 +172,15 @@ class _MyAppState extends State<MyApp> {
           selectionHandleColor: darkNeutral900,
         ),
         scaffoldBackgroundColor: darkNeutral0,
-        bottomNavigationBarTheme:
-            const BottomNavigationBarThemeData(backgroundColor: darkNeutral100),
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          backgroundColor: darkNeutral100,
+        ),
         appBarTheme: const AppBarTheme(
-            backgroundColor: Colors.transparent,
-            titleTextStyle: TextStyle(color: Colors.black),
-            centerTitle: false,
-            shadowColor: Colors.transparent),
+          backgroundColor: Colors.transparent,
+          titleTextStyle: TextStyle(color: Colors.black),
+          centerTitle: false,
+          shadowColor: Colors.transparent,
+        ),
         iconTheme: const IconThemeData(color: darkNeutral900),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
