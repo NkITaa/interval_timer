@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:interval_timer/const.dart';
@@ -47,6 +48,16 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
   bool _disposed = false;
   int _advanceVersion = 0;
   int _lastHapticSecond = -1;
+  bool _userPaused = false;
+
+  // Robustness: watchdog and error recovery
+  Timer? _watchdogTimer;
+  StreamSubscription<PlayerState>? _playerStateSubscription;
+  DateTime _lastPositionUpdate = DateTime.now();
+  int _lastPositionSeconds = -1;
+  int _recoveryAttempts = 0;
+  bool _recovering = false;
+  static const int _maxRecoveryAttempts = 3;
 
   next() async {
     if (_navigating) return;
@@ -56,6 +67,8 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
         widget.sets == widget.player.currentIndex! ~/ 2 + 1) {
       _navigating = true;
       _disposed = true;
+      _watchdogTimer?.cancel();
+      _playerStateSubscription?.cancel();
       await widget.player.dispose();
       await WakelockPlus.disable();
       HapticService.success();
@@ -123,11 +136,150 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
   void _togglePlayPause() {
     HapticService.selection();
     if (!widget.player.playerState.playing) {
+      _userPaused = false;
       widget.player.play();
     } else {
+      _userPaused = true;
       widget.player.pause();
     }
     setState(() {});
+  }
+
+  void _startWatchdog() {
+    _watchdogTimer?.cancel();
+    _watchdogTimer = Timer.periodic(const Duration(seconds: 2), (timer) {
+      if (_disposed || _navigating || !mounted) {
+        timer.cancel();
+        return;
+      }
+
+      final player = widget.player;
+      final isPlaying = player.playerState.playing;
+      final processingState = player.playerState.processingState;
+
+      if (!isPlaying) return;
+
+      if (processingState == ProcessingState.ready) {
+        final elapsed = DateTime.now().difference(_lastPositionUpdate);
+        if (elapsed.inSeconds >= 4) {
+          debugPrint('Watchdog: positionStream stall detected '
+              '(no update for ${elapsed.inSeconds}s).');
+          _attemptRecovery();
+        }
+        return;
+      }
+
+      if (processingState == ProcessingState.buffering) {
+        final elapsed = DateTime.now().difference(_lastPositionUpdate);
+        if (elapsed.inSeconds >= 6) {
+          debugPrint('Watchdog: stuck in buffering for ${elapsed.inSeconds}s.');
+          _attemptRecovery();
+        }
+        return;
+      }
+
+      if (processingState == ProcessingState.idle) {
+        debugPrint('Watchdog: player idle but should be playing.');
+        _attemptRecovery();
+      }
+    });
+  }
+
+  Future<void> _attemptRecovery() async {
+    if (_disposed || _navigating || !mounted || _recovering || _dialogOpen) return;
+    _recovering = true;
+
+    try {
+      _recoveryAttempts++;
+
+      if (_recoveryAttempts > _maxRecoveryAttempts) {
+        debugPrint(
+            'Watchdog: max recovery attempts reached. Aborting workout.');
+        await _navigateToCongratsWithFailure();
+        return;
+      }
+
+      debugPrint(
+          'Watchdog: recovery attempt $_recoveryAttempts/$_maxRecoveryAttempts');
+
+      final player = widget.player;
+      final currentPos = player.position;
+      final currentIdx = player.currentIndex;
+
+      final intendedDuration = widget.time[(currentIdx ?? 0) % 2];
+      if (currentPos.inSeconds >= intendedDuration) {
+        debugPrint('Watchdog: segment already complete. Advancing.');
+        next();
+        return;
+      }
+
+      // Pause-seek-play to restart the audio pipeline
+      await player.pause();
+      await player.seek(currentPos, index: currentIdx);
+      await player.play();
+
+      _lastPositionUpdate = DateTime.now();
+    } catch (e) {
+      debugPrint('Watchdog: recovery failed: $e');
+    } finally {
+      _recovering = false;
+    }
+  }
+
+  Future<void> _navigateToCongratsWithFailure() async {
+    if (_navigating || _disposed || !mounted) return;
+    _navigating = true;
+    _disposed = true;
+    _watchdogTimer?.cancel();
+    _playerStateSubscription?.cancel();
+
+    try {
+      await widget.player.stop();
+      await widget.player.dispose();
+    } catch (_) {}
+
+    await WakelockPlus.disable();
+
+    if (!mounted) return;
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (context) => Congrats(
+          time: widget.time,
+          didIt: false,
+          sets: widget.sets,
+          duration: DateTime.now().difference(widget.startTime).inSeconds,
+        ),
+      ),
+      (route) => false,
+    );
+  }
+
+  void _listenToPlayerState() {
+    _playerStateSubscription?.cancel();
+    _playerStateSubscription = widget.player.playerStateStream.listen(
+      (state) {
+        if (_disposed || _navigating || !mounted) return;
+
+        final processingState = state.processingState;
+
+        if (processingState == ProcessingState.completed) {
+          if (!_advancing) {
+            next();
+          }
+        }
+
+        if (processingState == ProcessingState.ready && state.playing) {
+          if (mounted && !_disposed) {
+            setState(() {});
+          }
+        }
+      },
+      onError: (Object error, StackTrace stackTrace) {
+        debugPrint('PlayerState error: $error');
+        if (_disposed || _navigating || !mounted) return;
+        _attemptRecovery();
+      },
+    );
   }
 
   @override
@@ -136,10 +288,14 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
     widget.player.seek(Duration.zero, index: 0);
     WidgetsBinding.instance.addObserver(this);
     WakelockPlus.enable();
+    _listenToPlayerState();
+    _startWatchdog();
   }
 
   @override
   void dispose() {
+    _watchdogTimer?.cancel();
+    _playerStateSubscription?.cancel();
     WakelockPlus.disable();
     if (!_disposed) {
       _disposed = true;
@@ -151,16 +307,51 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      int temp = 0;
-      for (int i = 0; i < widget.player.currentIndex!; i++) {
-        temp += widget.time[i % 2];
-      }
-      remainderBasis = widget.totalDuration - temp;
+    if (_disposed || _navigating) return;
 
-      if (remainderBasis - widget.player.position.inSeconds <= 0) {
-        next();
-      }
+    switch (state) {
+      case AppLifecycleState.resumed:
+        final currentIndex = widget.player.currentIndex;
+        if (currentIndex == null) return;
+
+        int temp = 0;
+        for (int i = 0; i < currentIndex; i++) {
+          temp += widget.time[i % 2];
+        }
+        remainderBasis = widget.totalDuration - temp;
+
+        // Check if current segment finished while backgrounded
+        final positionSeconds = widget.player.position.inSeconds;
+        final intendedDuration = widget.time[currentIndex % 2];
+        if (positionSeconds >= intendedDuration) {
+          next();
+          return;
+        }
+
+        // Resume playback if the OS stopped it (not user-initiated pause)
+        final playerState = widget.player.playerState;
+        if (!playerState.playing && !_userPaused && !_dialogOpen) {
+          debugPrint('Lifecycle resumed: player stopped by OS, resuming.');
+          widget.player.play();
+        }
+
+        _lastPositionUpdate = DateTime.now();
+        _startWatchdog();
+        setState(() {});
+        break;
+
+      case AppLifecycleState.paused:
+      case AppLifecycleState.hidden:
+        _watchdogTimer?.cancel();
+        break;
+
+      case AppLifecycleState.detached:
+        _watchdogTimer?.cancel();
+        _playerStateSubscription?.cancel();
+        break;
+
+      case AppLifecycleState.inactive:
+        break;
     }
   }
 
@@ -207,12 +398,14 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
                   if (shouldExit == true) {
                     _navigating = true;
                     _disposed = true;
+                    _watchdogTimer?.cancel();
+                    _playerStateSubscription?.cancel();
                     try {
                       await widget.player.stop();
                       await widget.player.dispose();
                     } catch (_) {}
                     await WakelockPlus.disable();
-                    if (!mounted) return;
+                    if (!context.mounted) return;
                     Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
                         builder: (context) => Congrats(
@@ -228,6 +421,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
                     );
                   } else {
                     _dialogOpen = false;
+                    _userPaused = false;
                     widget.player.play();
                     setState(() {});
                   }
@@ -279,6 +473,14 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
                           return const SizedBox(height: 380);
                         }
                         final positionSeconds = snapshot.data!.inSeconds;
+
+                        // Track position updates for the watchdog
+                        if (positionSeconds != _lastPositionSeconds) {
+                          _lastPositionSeconds = positionSeconds;
+                          _lastPositionUpdate = DateTime.now();
+                          _recoveryAttempts = 0;
+                        }
+
                         final intendedDuration =
                             widget.time[currentIndex % 2];
                         int duration = intendedDuration - positionSeconds;

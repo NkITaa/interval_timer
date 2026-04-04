@@ -72,10 +72,17 @@ class _SettingsTileState extends State<SettingsTile> {
                         TablerIcons.chevron_right,
                         color: context.colors.bodyText,
                       ),
-                onTap: () {
-                  HapticService.light();
-                  widget.onTap!(false);
-                },
+                onTap: widget.switching
+                    ? () {
+                        HapticService.light();
+                        final current = widget.switchValue ??
+                            (Theme.of(context).brightness == Brightness.dark);
+                        widget.onTap!(!current);
+                      }
+                    : () {
+                        HapticService.light();
+                        widget.onTap!(false);
+                      },
               ),
         widget.last
             ? const SizedBox()

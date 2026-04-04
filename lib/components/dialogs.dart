@@ -359,6 +359,7 @@ class Dialogs {
                             HapticService.heavy();
                             showDialog(
                               context: context,
+                              barrierDismissible: false,
                               builder: (BuildContext context) {
                                 return buildDeleteDialog(
                                     context, index, setListState);

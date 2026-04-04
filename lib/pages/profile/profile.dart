@@ -52,6 +52,7 @@ class _ProfileState extends State<Profile> {
                     icon: Icon(TablerIcons.moon,
                         color: context.colors.iconSecondary),
                     switching: true,
+                    switchValue: SettingsService.isDarkMode,
                     onTap: (selected) {
                       selected!
                           ? MyApp.of(context).changeTheme(ThemeMode.dark)

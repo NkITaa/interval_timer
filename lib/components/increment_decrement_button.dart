@@ -102,6 +102,7 @@ class _IncrementDecrementButtonState extends State<IncrementDecrementButton> {
                             HapticService.selection();
                             showDialog(
                                     context: context,
+                                    barrierDismissible: false,
                                     builder: (BuildContext context) =>
                                         Dialogs.buildSetTimesDialog(
                                             context,
@@ -186,6 +187,7 @@ class _IncrementDecrementButtonState extends State<IncrementDecrementButton> {
                                     HapticService.selection();
                                     showDialog(
                                       context: context,
+                                      barrierDismissible: false,
                                       builder: (BuildContext context) =>
                                           Dialogs.buildSetTimesDialog(
                                               context,
@@ -210,6 +212,7 @@ class _IncrementDecrementButtonState extends State<IncrementDecrementButton> {
                                   HapticService.selection();
                                   showDialog(
                                     context: context,
+                                    barrierDismissible: false,
                                     builder: (BuildContext context) =>
                                         Dialogs.buildSetTimesDialog(
                                             context,

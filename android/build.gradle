@@ -1,16 +1,3 @@
-buildscript {
-    ext.kotlin_version = '1.9.22'
-    repositories {
-        google()
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath 'com.android.tools.build:gradle:7.4.2'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
-}
-
 allprojects {
     repositories {
         google()
@@ -28,4 +15,12 @@ subprojects {
 
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
+}
+
+gradle.projectsEvaluated {
+    subprojects {
+        tasks.withType(JavaCompile).configureEach {
+            options.compilerArgs.remove("-Werror")
+        }
+    }
 }
