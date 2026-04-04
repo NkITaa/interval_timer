@@ -41,6 +41,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get system_language => 'System Language';
 
   @override
+  String get system_default => 'System Default';
+
+  @override
   String get dialog_required_field => 'Please enter a name!';
 
   @override
@@ -72,12 +75,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get workout_sets_save => 'Save Set Number';
-
-  @override
-  String get german => 'Deutsch';
-
-  @override
-  String get english => 'English';
 
   @override
   String get title_workouts => 'Workouts';
@@ -180,12 +177,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profile_settings_language => 'Language';
-
-  @override
-  String get profile_settings_language_english => 'English';
-
-  @override
-  String get profile_settings_language_german => 'German';
 
   @override
   String get profile_settings_sound => 'Sound';

@@ -10,15 +10,14 @@ import '../../const.dart';
 import 'package:interval_timer/services/haptic_service.dart';
 
 class JumpIn extends StatefulWidget {
-  final bool visible;
-  final Function? killVisible;
-  const JumpIn({super.key, required this.visible, this.killVisible});
+  final GlobalKey? trainingButtonKey;
+  const JumpIn({super.key, this.trainingButtonKey});
 
   @override
-  State<JumpIn> createState() => _JumpInState();
+  State<JumpIn> createState() => JumpInState();
 }
 
-class _JumpInState extends State<JumpIn> {
+class JumpInState extends State<JumpIn> {
   void updateTime(Duration pause, Duration training, int sets) {
     workoutTime = (pause + training) * sets;
     setState(() {});
@@ -94,8 +93,7 @@ class _JumpInState extends State<JumpIn> {
               height: 48,
             ),
             WorkoutTimesContainer(
-              killVisible: widget.killVisible,
-              visible: widget.visible,
+              trainingButtonKey: widget.trainingButtonKey,
               update: update,
               setValue: setValue,
               minutesTraining: minutesTraining,

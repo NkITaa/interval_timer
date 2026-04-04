@@ -54,8 +54,7 @@ void main() async {
 Future<void> initialise() async {
   final box = Hive.box("settings");
   if (box.get("language") == null) {
-    await SettingsService.setLanguage(
-        Platform.localeName.contains("de") ? "de" : "en");
+    await SettingsService.setLanguage("system");
   }
   if (box.get("sound") == null) {
     await SettingsService.setSound(SettingsService.defaultSound);
@@ -103,12 +102,17 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  Locale _locale = Locale(SettingsService.language);
+  Locale? _locale = _resolveLocale(SettingsService.language);
 
-  void setLocale(Locale value) {
+  static Locale? _resolveLocale(String language) {
+    if (language == "system") return null;
+    return Locale(language);
+  }
+
+  void setLocale(Locale? value) {
     setState(() {
       _locale = value;
-      SettingsService.setLanguage(value.languageCode);
+      SettingsService.setLanguage(value?.languageCode ?? "system");
     });
   }
 
@@ -120,6 +124,14 @@ class _MyAppState extends State<MyApp> {
       locale: _locale,
       supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
+      localeResolutionCallback: (locale, supportedLocales) {
+        for (var supported in supportedLocales) {
+          if (supported.languageCode == locale?.languageCode) {
+            return supported;
+          }
+        }
+        return const Locale('en');
+      },
       theme: ThemeData(
         textSelectionTheme: const TextSelectionThemeData(
           cursorColor: lightNeutral900,

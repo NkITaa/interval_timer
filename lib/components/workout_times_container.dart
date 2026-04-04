@@ -5,20 +5,18 @@ import 'increment_decrement_button.dart';
 class WorkoutTimesContainer extends StatelessWidget {
   final Function(String type, bool increment) update;
   final Function(String type, int value, bool? minute) setValue;
-  final Function? killVisible;
+  final GlobalKey? trainingButtonKey;
   final Duration minutesTraining;
   final Duration minutesPause;
-  final bool visible;
   final int sets;
 
   const WorkoutTimesContainer(
       {super.key,
       required this.update,
-      this.killVisible,
+      this.trainingButtonKey,
       required this.setValue,
       required this.minutesTraining,
       required this.minutesPause,
-      required this.visible,
       required this.sets});
 
   @override
@@ -46,8 +44,7 @@ class WorkoutTimesContainer extends StatelessWidget {
         ),
         child: Wrap(spacing: 12, runSpacing: 12, children: [
           IncrementDecrementButton(
-            killVisible: killVisible,
-            visible: visible,
+            buttonKey: trainingButtonKey,
             type: "training",
             minutes: minutesTraining,
             otherMinutes: minutesPause,
@@ -56,7 +53,6 @@ class WorkoutTimesContainer extends StatelessWidget {
             setValue: setValue,
           ),
           IncrementDecrementButton(
-            visible: false,
             type: "pause",
             minutes: minutesPause,
             otherMinutes: minutesTraining,
@@ -65,7 +61,6 @@ class WorkoutTimesContainer extends StatelessWidget {
             setValue: setValue,
           ),
           IncrementDecrementButton(
-            visible: false,
             type: "set",
             sets: sets,
             minutes: minutesTraining,

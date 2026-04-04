@@ -6,142 +6,28 @@ import '../const.dart';
 import 'dialogs.dart';
 import 'package:interval_timer/services/haptic_service.dart';
 
-class IncrementDecrementButton extends StatefulWidget {
+class IncrementDecrementButton extends StatelessWidget {
   final String type;
   final int sets;
   final Duration minutes;
   final Duration otherMinutes;
-  final bool visible;
-  final Function? killVisible;
+  final GlobalKey? buttonKey;
   final Function(String type, bool increment) update;
   final Function(String type, int value, bool? minute) setValue;
   const IncrementDecrementButton(
       {super.key,
-      this.killVisible,
+      this.buttonKey,
       required this.type,
       required this.update,
       required this.setValue,
       required this.sets,
       required this.minutes,
-      required this.visible,
       required this.otherMinutes});
-
-  @override
-  State<IncrementDecrementButton> createState() =>
-      _IncrementDecrementButtonState();
-}
-
-class _IncrementDecrementButtonState extends State<IncrementDecrementButton> {
-  final LayerLink _layerLink = LayerLink();
-  OverlayEntry? _overlayEntry;
-
-  @override
-  void initState() {
-    super.initState();
-    if (widget.visible) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _showOverlay();
-      });
-    }
-  }
-
-  @override
-  void didUpdateWidget(IncrementDecrementButton oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.visible && !widget.visible) {
-      _removeOverlay();
-    }
-  }
-
-  void _showOverlay() {
-    _overlayEntry = OverlayEntry(
-      builder: (overlayContext) => CompositedTransformFollower(
-        link: _layerLink,
-        targetAnchor: Alignment.bottomCenter,
-        followerAnchor: Alignment.bottomCenter,
-        child: Material(
-          type: MaterialType.transparency,
-          child: IntrinsicWidth(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 24.0, left: 24),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: context.colors.neutral50,
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(16)),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Text(
-                        AppLocalizations.of(context)!.tap_tutorial,
-                        style: body1(context),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Container(
-                  padding: const EdgeInsets.only(
-                      top: 8, bottom: 8, left: 12, right: 12),
-                  decoration: BoxDecoration(
-                    color: context.colors.cardSurface,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: Colors.grey),
-                  ),
-                  child: RichText(
-                    text: TextSpan(
-                      style: heading3Bold(context),
-                      text: widget.type != "set"
-                          ? widget.minutes.toString().substring(2, 7)
-                          : widget.sets.toString(),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                            HapticService.selection();
-                            showDialog(
-                                    context: context,
-                                    barrierDismissible: false,
-                                    builder: (BuildContext context) =>
-                                        Dialogs.buildSetTimesDialog(
-                                            context,
-                                            widget.type,
-                                            widget.minutes,
-                                            widget.otherMinutes,
-                                            widget.sets,
-                                            widget.setValue))
-                                .then((value) {
-                              _removeOverlay();
-                              widget.killVisible!();
-                            });
-                          },
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-    Overlay.of(context).insert(_overlayEntry!);
-  }
-
-  void _removeOverlay() {
-    _overlayEntry?.remove();
-    _overlayEntry = null;
-  }
-
-  @override
-  void dispose() {
-    _removeOverlay();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      key: buttonKey,
       height: 72,
       padding: const EdgeInsets.only(top: 8, bottom: 8, left: 12, right: 12),
       decoration: BoxDecoration(
@@ -155,7 +41,7 @@ class _IncrementDecrementButtonState extends State<IncrementDecrementButton> {
           IconButton(
               onPressed: () {
                 HapticService.light();
-                widget.update(widget.type, false);
+                update(type, false);
               },
               icon: Icon(
                 TablerIcons.minus,
@@ -167,71 +53,43 @@ class _IncrementDecrementButtonState extends State<IncrementDecrementButton> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                    widget.type == "training"
+                    type == "training"
                         ? AppLocalizations.of(context)!.training
-                        : widget.type == "pause"
+                        : type == "pause"
                             ? AppLocalizations.of(context)!.pause
                             : AppLocalizations.of(context)!.sets,
                     style: body1Bold(context)),
-                widget.visible
-                    ? CompositedTransformTarget(
-                        link: _layerLink,
-                        child: RichText(
-                          text: TextSpan(
-                            style: heading3Bold(context),
-                            text: widget.type != "set"
-                                ? widget.minutes.toString().substring(2, 7)
-                                : widget.sets.toString(),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                    HapticService.selection();
-                                    showDialog(
-                                      context: context,
-                                      barrierDismissible: false,
-                                      builder: (BuildContext context) =>
-                                          Dialogs.buildSetTimesDialog(
-                                              context,
-                                              widget.type,
-                                              widget.minutes,
-                                              widget.otherMinutes,
-                                              widget.sets,
-                                              widget.setValue),
-                                    );
-                                  },
-                          ),
-                        ),
-                      )
-                    : RichText(
-                        text: TextSpan(
-                          style: heading3Bold(context),
-                          text: widget.type != "set"
-                              ? widget.minutes.toString().substring(2, 7)
-                              : widget.sets.toString(),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                                  HapticService.selection();
-                                  showDialog(
-                                    context: context,
-                                    barrierDismissible: false,
-                                    builder: (BuildContext context) =>
-                                        Dialogs.buildSetTimesDialog(
-                                            context,
-                                            widget.type,
-                                            widget.minutes,
-                                            widget.otherMinutes,
-                                            widget.sets,
-                                            widget.setValue),
-                                  );
-                                },
-                        ),
-                      ),
+                RichText(
+                  text: TextSpan(
+                    style: heading3Bold(context),
+                    text: type != "set"
+                        ? minutes.toString().substring(2, 7)
+                        : sets.toString(),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                            HapticService.selection();
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (BuildContext context) =>
+                                  Dialogs.buildSetTimesDialog(
+                                      context,
+                                      type,
+                                      minutes,
+                                      otherMinutes,
+                                      sets,
+                                      setValue),
+                            );
+                          },
+                  ),
+                ),
               ],
             ),
           ),
           IconButton(
               onPressed: () {
                 HapticService.light();
-                widget.update(widget.type, true);
+                update(type, true);
               },
               icon: Icon(
                 TablerIcons.plus,

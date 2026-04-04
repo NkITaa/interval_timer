@@ -10,6 +10,7 @@ import 'package:interval_timer/pages/run/preparation.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:interval_timer/services/settings_service.dart';
 import 'package:interval_timer/services/haptic_service.dart';
+import 'package:interval_timer/services/live_activity_service.dart';
 import '../../components/dialogs.dart';
 import 'congrats.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
@@ -53,6 +54,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
   // Robustness: watchdog and error recovery
   Timer? _watchdogTimer;
   StreamSubscription<PlayerState>? _playerStateSubscription;
+  StreamSubscription<int?>? _indexSubscription;
   DateTime _lastPositionUpdate = DateTime.now();
   int _lastPositionSeconds = -1;
   int _recoveryAttempts = 0;
@@ -69,9 +71,11 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
       _disposed = true;
       _watchdogTimer?.cancel();
       _playerStateSubscription?.cancel();
+      _indexSubscription?.cancel();
       await widget.player.dispose();
       await WakelockPlus.disable();
       HapticService.success();
+      LiveActivityService.stop();
 
       if (!mounted) return;
       Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -84,9 +88,13 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
     } else {
       HapticService.heavy();
       _lastHapticSecond = -1;
+      // Capture the expected new index before seeking — seekToNext() may
+      // update currentIndex asynchronously, so we can't rely on reading it
+      // after the await.
+      final newIndex = widget.player.currentIndex! + 1;
       await widget.player.seekToNext();
       int temp = 0;
-      for (int i = 0; i < widget.player.currentIndex!; i++) {
+      for (int i = 0; i < newIndex; i++) {
         temp += widget.time[i % 2];
       }
       remainderBasis = widget.totalDuration - temp;
@@ -112,6 +120,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
       _navigating = true;
       await widget.player.stop();
       await WakelockPlus.disable();
+      LiveActivityService.stop();
       SchedulerBinding.instance.addPostFrameCallback((_) {
         Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (context) => Preparation(
@@ -138,9 +147,11 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
     if (!widget.player.playerState.playing) {
       _userPaused = false;
       widget.player.play();
+      _updateLiveActivity(isPaused: false);
     } else {
       _userPaused = true;
       widget.player.pause();
+      _updateLiveActivity(isPaused: true);
     }
     setState(() {});
   }
@@ -232,6 +243,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
     _disposed = true;
     _watchdogTimer?.cancel();
     _playerStateSubscription?.cancel();
+    _indexSubscription?.cancel();
 
     try {
       await widget.player.stop();
@@ -239,6 +251,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
     } catch (_) {}
 
     await WakelockPlus.disable();
+    LiveActivityService.stop();
 
     if (!mounted) return;
     Navigator.of(context).pushAndRemoveUntil(
@@ -282,6 +295,45 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
     );
   }
 
+  void _updateLiveActivity({bool isPaused = false}) {
+    final currentIndex = widget.player.currentIndex ?? 0;
+    final now = DateTime.now().millisecondsSinceEpoch;
+    final positionMs = widget.player.position.inMilliseconds;
+    final intendedDurationMs = widget.time[currentIndex % 2] * 1000;
+    final segmentRemainingMs = (intendedDurationMs - positionMs).clamp(0, intendedDurationMs);
+
+    int futureMs = 0;
+    for (int i = currentIndex + 1; i < widget.sets * 2 - 1; i++) {
+      futureMs += widget.time[i % 2] * 1000;
+    }
+
+    final totalRemainingMs = segmentRemainingMs + futureMs;
+
+    LiveActivityService.update(
+      totalEndTimestamp: now + totalRemainingMs,
+      isPaused: isPaused,
+      totalRemainingSeconds: (totalRemainingMs / 1000.0).ceil(),
+    );
+  }
+
+  /// Listens to player index changes (segment transitions).
+  void _listenToIndexChanges() {
+    _indexSubscription?.cancel();
+    _indexSubscription =
+        widget.player.currentIndexStream.skip(1).listen((index) {
+      if (index == null || _disposed || _navigating) return;
+
+      int temp = 0;
+      for (int i = 0; i < index; i++) {
+        temp += widget.time[i % 2];
+      }
+      remainderBasis = widget.totalDuration - temp;
+      _lastHapticSecond = -1;
+
+      if (mounted) setState(() {});
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -289,14 +341,23 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
     WakelockPlus.enable();
     _listenToPlayerState();
+    _listenToIndexChanges();
     _startWatchdog();
+
+    // Start Live Activity with total workout end time
+    final now = DateTime.now().millisecondsSinceEpoch;
+    LiveActivityService.start(
+      totalEndTimestamp: now + widget.totalDuration * 1000,
+    );
   }
 
   @override
   void dispose() {
     _watchdogTimer?.cancel();
     _playerStateSubscription?.cancel();
+    _indexSubscription?.cancel();
     WakelockPlus.disable();
+    LiveActivityService.stop();
     if (!_disposed) {
       _disposed = true;
       widget.player.dispose();
@@ -348,6 +409,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
       case AppLifecycleState.detached:
         _watchdogTimer?.cancel();
         _playerStateSubscription?.cancel();
+        _indexSubscription?.cancel();
         break;
 
       case AppLifecycleState.inactive:
@@ -384,6 +446,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
                   HapticService.selection();
                   _dialogOpen = true;
                   widget.player.pause();
+                  _updateLiveActivity(isPaused: true);
                   setState(() {});
 
                   final shouldExit = await showDialog<bool>(
@@ -399,12 +462,14 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
                     _navigating = true;
                     _disposed = true;
                     _watchdogTimer?.cancel();
-                    _playerStateSubscription?.cancel();
+                                  _playerStateSubscription?.cancel();
+                    _indexSubscription?.cancel();
                     try {
                       await widget.player.stop();
                       await widget.player.dispose();
                     } catch (_) {}
                     await WakelockPlus.disable();
+                    LiveActivityService.stop();
                     if (!context.mounted) return;
                     Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
@@ -423,6 +488,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
                     _dialogOpen = false;
                     _userPaused = false;
                     widget.player.play();
+                    _updateLiveActivity(isPaused: false);
                     setState(() {});
                   }
                 },
@@ -497,9 +563,11 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
                         if (duration <= 0 && !_navigating && !_advancing) {
                           _advancing = true;
                           final version = _advanceVersion;
+                          final expectedIndex = currentIndex;
                           WidgetsBinding.instance.addPostFrameCallback((_) {
                             _advancing = false;
-                            if (_advanceVersion == version) {
+                            if (_advanceVersion == version &&
+                                widget.player.currentIndex == expectedIndex) {
                               next();
                             }
                           });

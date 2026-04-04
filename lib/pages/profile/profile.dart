@@ -114,7 +114,7 @@ class _ProfileState extends State<Profile> {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => SettingsPage(
                                   language:
-                                      SettingsService.language,
+                                      Localizations.localeOf(context).languageCode,
                                   index: 1,
                                 ))),
                   ),
@@ -124,7 +124,7 @@ class _ProfileState extends State<Profile> {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => SettingsPage(
                                   language:
-                                      SettingsService.language,
+                                      Localizations.localeOf(context).languageCode,
                                   index: 2,
                                 ))),
                   ),
@@ -135,7 +135,7 @@ class _ProfileState extends State<Profile> {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => SettingsPage(
                                   language:
-                                      SettingsService.language,
+                                      Localizations.localeOf(context).languageCode,
                                   index: 3,
                                 ))),
                   ),

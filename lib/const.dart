@@ -5,6 +5,30 @@ export 'theme/app_colors.dart';
 
 const appVersion = '1.2.0';
 
+// Locale code → native language name (for language selector)
+const Map<String, String> localeNativeNames = {
+  'en': 'English',
+  'de': 'Deutsch',
+  'es': 'Español',
+  'fr': 'Français',
+  'it': 'Italiano',
+  'pt': 'Português',
+  'nl': 'Nederlands',
+  'pl': 'Polski',
+  'ru': 'Русский',
+  'ja': '日本語',
+  'ko': '한국어',
+  'zh': '中文',
+  'tr': 'Türkçe',
+  'hi': 'हिन्दी',
+  'sv': 'Svenska',
+  'nb': 'Norsk',
+  'da': 'Dansk',
+  'fi': 'Suomi',
+  'cs': 'Čeština',
+  'uk': 'Українська',
+};
+
 // L - lightNeutral
 const lightNeutral0 = Color(0xffFCFCFC);
 const lightNeutral50 = Color(0xffF5F5F5);

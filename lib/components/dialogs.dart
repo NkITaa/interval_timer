@@ -154,7 +154,6 @@ class Dialogs {
                   nameController: nameController,
                 ),
                 WorkoutTimesContainer(
-                  visible: false,
                   update: helpers.update,
                   setValue: helpers.setValue,
                   minutesTraining: minutesTraining,
@@ -264,7 +263,6 @@ class Dialogs {
                   nameController: nameController,
                 ),
                 WorkoutTimesContainer(
-                  visible: false,
                   update: helpers.update,
                   setValue: helpers.setValue,
                   minutesTraining: minutesTraining,
@@ -611,6 +609,30 @@ class Dialogs {
     );
   }
 
+  static Widget _languageRow(
+      BuildContext context, String value, String label) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: SizedBox(
+        width: double.infinity,
+        height: 24,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 2.0),
+              child: Text(label, style: body1(context)),
+            ),
+            Radio<String>(
+              activeColor: context.colors.iconPrimary,
+              value: value,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   static Widget buildChangeLanguageDialog(
       BuildContext context, Function setStateParent) {
     String language = SettingsService.language;
@@ -620,10 +642,12 @@ class Dialogs {
           builder: (BuildContext context, StateSetter setState) {
         return Container(
           decoration: BoxDecoration(
-            color:
-                context.colors.cardSurface,
+            color: context.colors.cardSurface,
             borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+          ),
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.7,
           ),
           padding:
               const EdgeInsets.only(left: 24, right: 24, bottom: 24, top: 12),
@@ -635,78 +659,46 @@ class Dialogs {
               setState(() {});
             },
             child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _dialogHeader(context,
-                  AppLocalizations.of(context)!.system_language),
-              const SizedBox(
-                height: 8,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4.0),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 24,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 2.0),
-                        child: Text(AppLocalizations.of(context)!.german,
-                            style: body1(context)),
-                      ),
-                      Radio<String>(
-                        activeColor: context.colors.iconPrimary,
-                        value: "de",
-                      ),
-                    ],
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _dialogHeader(context,
+                    AppLocalizations.of(context)!.profile_settings_language),
+                const SizedBox(height: 8),
+                Flexible(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        _languageRow(context, "system",
+                            AppLocalizations.of(context)!.system_default),
+                        Divider(color: context.colors.subtleElement, height: 20),
+                        ...localeNativeNames.entries.map((entry) => Padding(
+                              padding: const EdgeInsets.only(bottom: 6),
+                              child:
+                                  _languageRow(context, entry.key, entry.value),
+                            )),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4.0),
-                child: SizedBox(
+                const SizedBox(height: 24),
+                SizedBox(
                   width: double.infinity,
-                  height: 24,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 2.0),
-                        child: Text(AppLocalizations.of(context)!.english,
-                            style: body1(context)),
-                      ),
-                      Radio<String>(
-                        activeColor: context.colors.iconPrimary,
-                        value: "en",
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 24,
-              ),
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () {
-                      HapticService.medium();
-                      MyApp.of(context).setLocale(Locale(language));
-                      Navigator.pop(context);
-                    },
-                    child: Text(
-                      AppLocalizations.of(context)!.confirm,
-                      style: body1Bold(context).copyWith(
-                          color: context.colors.neutral50),
-                    )),
-              )
-            ],
-          ),
+                  height: 50,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        HapticService.medium();
+                        MyApp.of(context).setLocale(
+                            language == "system" ? null : Locale(language));
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        AppLocalizations.of(context)!.confirm,
+                        style: body1Bold(context)
+                            .copyWith(color: context.colors.neutral50),
+                      )),
+                )
+              ],
+            ),
           ),
         );
       }),

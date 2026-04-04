@@ -14,7 +14,7 @@ class SettingsService {
   static Future<void> setDarkMode(bool value) => _box.put("darkmode", value);
 
   // Language
-  static String get language => _box.get("language", defaultValue: "en");
+  static String get language => _box.get("language", defaultValue: "system");
   static Future<void> setLanguage(String value) => _box.put("language", value);
 
   // Haptic
