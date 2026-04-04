@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:interval_timer/pages/home.dart';
+import 'package:interval_timer/pages/onboarding/onboarding.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:interval_timer/l10n/app_localizations.dart';
 import 'package:interval_timer/workout.dart';
@@ -192,7 +193,7 @@ class _MyAppState extends State<MyApp> {
       ), // standard dark theme
       themeMode: _themeMode, // device controls theme
       home: SettingsService.isJumpInVisible
-          ? const Home(screenIndex: 1, visible: true)
+          ? const Onboarding()
           : const Home(screenIndex: 0),
     );
   }

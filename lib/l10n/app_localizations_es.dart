@@ -215,4 +215,43 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get error_not_enough_space =>
       'No hay suficiente espacio en el dispositivo';
+
+  @override
+  String get onboarding_skip => 'Skip';
+
+  @override
+  String get onboarding_next => 'Next';
+
+  @override
+  String get onboarding_get_started => 'Get Started';
+
+  @override
+  String get onboarding_welcome => 'Welcome to Interval Timer';
+
+  @override
+  String get onboarding_welcome_desc =>
+      'Your personal companion for interval training. Set your pace, stay on track, and crush your goals.';
+
+  @override
+  String get onboarding_features_title => 'How It Works';
+
+  @override
+  String get onboarding_features_desc =>
+      'Configure your workout in three simple steps.';
+
+  @override
+  String get onboarding_feature_training => 'Set your active training duration';
+
+  @override
+  String get onboarding_feature_pause => 'Define your rest period between sets';
+
+  @override
+  String get onboarding_feature_sets => 'Choose how many rounds to complete';
+
+  @override
+  String get onboarding_ready_title => 'Ready to Train?';
+
+  @override
+  String get onboarding_ready_desc =>
+      'Set up your first interval workout and get moving. You can always save your favorite routines for later.';
 }

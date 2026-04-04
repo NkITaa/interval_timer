@@ -214,4 +214,45 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get error_not_enough_space =>
       'Nicht genug Speicherplatz auf dem Gerät';
+
+  @override
+  String get onboarding_skip => 'Überspringen';
+
+  @override
+  String get onboarding_next => 'Weiter';
+
+  @override
+  String get onboarding_get_started => 'Los geht\'s';
+
+  @override
+  String get onboarding_welcome => 'Willkommen beim Interval Timer';
+
+  @override
+  String get onboarding_welcome_desc =>
+      'Dein persönlicher Begleiter für Intervalltraining. Setze dein Tempo, bleib auf Kurs und erreiche deine Ziele.';
+
+  @override
+  String get onboarding_features_title => 'So funktioniert\'s';
+
+  @override
+  String get onboarding_features_desc =>
+      'Konfiguriere dein Workout in drei einfachen Schritten.';
+
+  @override
+  String get onboarding_feature_training =>
+      'Lege deine aktive Trainingszeit fest';
+
+  @override
+  String get onboarding_feature_pause =>
+      'Bestimme deine Pause zwischen den Sätzen';
+
+  @override
+  String get onboarding_feature_sets => 'Wähle die Anzahl der Runden';
+
+  @override
+  String get onboarding_ready_title => 'Bereit zum Trainieren?';
+
+  @override
+  String get onboarding_ready_desc =>
+      'Richte dein erstes Intervalltraining ein und leg los. Du kannst deine Lieblings-Workouts jederzeit speichern.';
 }

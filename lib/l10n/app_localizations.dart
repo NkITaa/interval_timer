@@ -535,6 +535,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Not Enough Space on Device'**
   String get error_not_enough_space;
+
+  /// No description provided for @onboarding_skip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get onboarding_skip;
+
+  /// No description provided for @onboarding_next.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get onboarding_next;
+
+  /// No description provided for @onboarding_get_started.
+  ///
+  /// In en, this message translates to:
+  /// **'Get Started'**
+  String get onboarding_get_started;
+
+  /// No description provided for @onboarding_welcome.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to Interval Timer'**
+  String get onboarding_welcome;
+
+  /// No description provided for @onboarding_welcome_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Your personal companion for interval training. Set your pace, stay on track, and crush your goals.'**
+  String get onboarding_welcome_desc;
+
+  /// No description provided for @onboarding_features_title.
+  ///
+  /// In en, this message translates to:
+  /// **'How It Works'**
+  String get onboarding_features_title;
+
+  /// No description provided for @onboarding_features_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Configure your workout in three simple steps.'**
+  String get onboarding_features_desc;
+
+  /// No description provided for @onboarding_feature_training.
+  ///
+  /// In en, this message translates to:
+  /// **'Set your active training duration'**
+  String get onboarding_feature_training;
+
+  /// No description provided for @onboarding_feature_pause.
+  ///
+  /// In en, this message translates to:
+  /// **'Define your rest period between sets'**
+  String get onboarding_feature_pause;
+
+  /// No description provided for @onboarding_feature_sets.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose how many rounds to complete'**
+  String get onboarding_feature_sets;
+
+  /// No description provided for @onboarding_ready_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready to Train?'**
+  String get onboarding_ready_title;
+
+  /// No description provided for @onboarding_ready_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Set up your first interval workout and get moving. You can always save your favorite routines for later.'**
+  String get onboarding_ready_desc;
 }
 
 class _AppLocalizationsDelegate

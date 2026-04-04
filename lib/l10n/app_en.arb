@@ -70,5 +70,18 @@
     "profile_legal_terms": "Terms",
 
     "profile_settings_sound_dialog": "Select Sound",
-    "error_not_enough_space": "Not Enough Space on Device"
+    "error_not_enough_space": "Not Enough Space on Device",
+
+    "onboarding_skip": "Skip",
+    "onboarding_next": "Next",
+    "onboarding_get_started": "Get Started",
+    "onboarding_welcome": "Welcome to Interval Timer",
+    "onboarding_welcome_desc": "Your personal companion for interval training. Set your pace, stay on track, and crush your goals.",
+    "onboarding_features_title": "How It Works",
+    "onboarding_features_desc": "Configure your workout in three simple steps.",
+    "onboarding_feature_training": "Set your active training duration",
+    "onboarding_feature_pause": "Define your rest period between sets",
+    "onboarding_feature_sets": "Choose how many rounds to complete",
+    "onboarding_ready_title": "Ready to Train?",
+    "onboarding_ready_desc": "Set up your first interval workout and get moving. You can always save your favorite routines for later."
 }

@@ -70,5 +70,18 @@
     "profile_legal_terms": "AGBs",
 
     "profile_settings_sound_dialog": "Sound Auswählen",
-    "error_not_enough_space": "Nicht genug Speicherplatz auf dem Gerät"
+    "error_not_enough_space": "Nicht genug Speicherplatz auf dem Gerät",
+
+    "onboarding_skip": "Überspringen",
+    "onboarding_next": "Weiter",
+    "onboarding_get_started": "Los geht's",
+    "onboarding_welcome": "Willkommen beim Interval Timer",
+    "onboarding_welcome_desc": "Dein persönlicher Begleiter für Intervalltraining. Setze dein Tempo, bleib auf Kurs und erreiche deine Ziele.",
+    "onboarding_features_title": "So funktioniert's",
+    "onboarding_features_desc": "Konfiguriere dein Workout in drei einfachen Schritten.",
+    "onboarding_feature_training": "Lege deine aktive Trainingszeit fest",
+    "onboarding_feature_pause": "Bestimme deine Pause zwischen den Sätzen",
+    "onboarding_feature_sets": "Wähle die Anzahl der Runden",
+    "onboarding_ready_title": "Bereit zum Trainieren?",
+    "onboarding_ready_desc": "Richte dein erstes Intervalltraining ein und leg los. Du kannst deine Lieblings-Workouts jederzeit speichern."
 }

@@ -11,12 +11,10 @@ class IncrementDecrementButton extends StatelessWidget {
   final int sets;
   final Duration minutes;
   final Duration otherMinutes;
-  final GlobalKey? buttonKey;
   final Function(String type, bool increment) update;
   final Function(String type, int value, bool? minute) setValue;
   const IncrementDecrementButton(
       {super.key,
-      this.buttonKey,
       required this.type,
       required this.update,
       required this.setValue,
@@ -27,7 +25,6 @@ class IncrementDecrementButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      key: buttonKey,
       height: 72,
       padding: const EdgeInsets.only(top: 8, bottom: 8, left: 12, right: 12),
       decoration: BoxDecoration(
