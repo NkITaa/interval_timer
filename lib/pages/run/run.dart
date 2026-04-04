@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:interval_timer/const.dart';
@@ -11,6 +12,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:interval_timer/services/settings_service.dart';
 import 'package:interval_timer/services/haptic_service.dart';
 import 'package:interval_timer/services/live_activity_service.dart';
+import 'package:interval_timer/services/android_notification_service.dart';
 import '../../components/dialogs.dart';
 import 'congrats.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
@@ -78,6 +80,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
       await WakelockPlus.disable();
       HapticService.success();
       LiveActivityService.stop();
+      AndroidNotificationService.stop();
 
       if (!mounted) return;
       Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -101,6 +104,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
       }
       remainderBasis = widget.totalDuration - temp;
       _advancing = false;
+      _updateLiveActivity();
       setState(() {});
     }
   }
@@ -116,6 +120,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
         temp += widget.time[i % 2];
       }
       remainderBasis = widget.totalDuration - temp;
+      _updateLiveActivity();
       setState(() {});
     } else if (widget.player.currentIndex! % 2 == 0 &&
         widget.player.currentIndex! ~/ 2 + 1 == 1) {
@@ -123,6 +128,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
       await widget.player.stop();
       await WakelockPlus.disable();
       LiveActivityService.stop();
+      AndroidNotificationService.stop();
       SchedulerBinding.instance.addPostFrameCallback((_) {
         Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (context) => Preparation(
@@ -255,6 +261,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
 
     await WakelockPlus.disable();
     LiveActivityService.stop();
+    AndroidNotificationService.stop();
 
     if (!mounted) return;
     Navigator.of(context).pushAndRemoveUntil(
@@ -299,6 +306,8 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
   }
 
   void _updateLiveActivity({bool isPaused = false}) {
+    if (_disposed || _navigating) return;
+
     final currentIndex = widget.player.currentIndex ?? 0;
     final now = DateTime.now().millisecondsSinceEpoch;
     final positionMs = widget.player.position.inMilliseconds;
@@ -317,6 +326,52 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
       isPaused: isPaused,
       totalRemainingSeconds: (totalRemainingMs / 1000.0).ceil(),
     );
+
+    _updateAndroidNotification(
+      currentIndex: currentIndex,
+      phaseRemainingSec: (segmentRemainingMs / 1000.0).ceil(),
+      totalRemainingSec: (totalRemainingMs / 1000.0).ceil(),
+      isPaused: isPaused,
+    );
+  }
+
+  void _updateAndroidNotification({
+    required int currentIndex,
+    required int phaseRemainingSec,
+    required int totalRemainingSec,
+    required bool isPaused,
+  }) {
+    if (!Platform.isAndroid || _disposed || _navigating) return;
+
+    final l10n = AppLocalizations.of(context)!;
+    final isTraining = currentIndex % 2 == 0;
+
+    final title = isPaused
+        ? l10n.paused.toUpperCase()
+        : isTraining
+            ? l10n.training.toUpperCase()
+            : l10n.pause.toUpperCase();
+
+    final setNum = currentIndex ~/ 2 + 1;
+    final minutes = totalRemainingSec ~/ 60;
+    final seconds = totalRemainingSec % 60;
+    final timeStr = '$minutes:${seconds.toString().padLeft(2, '0')}';
+    final content =
+        '${l10n.run_set_from_one}$setNum${l10n.run_set_from_two}${widget.sets} · $timeStr ${l10n.run_remaining}';
+
+    final color = isPaused
+        ? 0xFF7C7C7C
+        : isTraining
+            ? 0xFFF01D52
+            : 0xFF1373C8;
+
+    AndroidNotificationService.update(
+      title: title,
+      content: content,
+      color: color,
+      phaseRemainingSec: phaseRemainingSec,
+      isPaused: isPaused,
+    );
   }
 
   /// Listens to player index changes (segment transitions).
@@ -333,6 +388,21 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
       remainderBasis = widget.totalDuration - temp;
       _lastHapticSecond = -1;
 
+      // Update Android notification on phase transition (Training ↔ Pause)
+      if (Platform.isAndroid) {
+        final phaseDuration = widget.time[index % 2];
+        int totalRemaining = phaseDuration;
+        for (int i = index + 1; i < widget.sets * 2 - 1; i++) {
+          totalRemaining += widget.time[i % 2];
+        }
+        _updateAndroidNotification(
+          currentIndex: index,
+          phaseRemainingSec: phaseDuration,
+          totalRemainingSec: totalRemaining,
+          isPaused: false,
+        );
+      }
+
       if (mounted) setState(() {});
     });
   }
@@ -347,11 +417,21 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
     _listenToIndexChanges();
     _startWatchdog();
 
-    // Start Live Activity with total workout end time
+    // Start platform notifications for workout progress
     final now = DateTime.now().millisecondsSinceEpoch;
     LiveActivityService.start(
       totalEndTimestamp: now + widget.totalDuration * 1000,
     );
+    AndroidNotificationService.requestPermission();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_disposed || _navigating) return;
+      _updateAndroidNotification(
+        currentIndex: 0,
+        phaseRemainingSec: widget.time[0],
+        totalRemainingSec: widget.totalDuration,
+        isPaused: false,
+      );
+    });
   }
 
   @override
@@ -361,6 +441,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
     _indexSubscription?.cancel();
     WakelockPlus.disable();
     LiveActivityService.stop();
+    AndroidNotificationService.stop();
     if (!_disposed) {
       _disposed = true;
       widget.player.dispose();
@@ -401,6 +482,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
 
         _lastPositionUpdate = DateTime.now();
         _startWatchdog();
+        _updateLiveActivity(isPaused: _userPaused);
         setState(() {});
         break;
 
@@ -473,6 +555,7 @@ class _RunState extends State<Run> with WidgetsBindingObserver {
                     } catch (_) {}
                     await WakelockPlus.disable();
                     LiveActivityService.stop();
+                    AndroidNotificationService.stop();
                     if (!context.mounted) return;
                     Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
