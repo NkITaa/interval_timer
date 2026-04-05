@@ -5,12 +5,14 @@ class ScrollToHideWidget extends StatefulWidget {
   final Widget child;
   final ScrollController controller;
   final Duration duration;
+  final double height;
 
   const ScrollToHideWidget(
       {super.key,
       required this.child,
       required this.controller,
-      this.duration = const Duration(milliseconds: 200)});
+      this.duration = const Duration(milliseconds: 200),
+      this.height = 82});
 
   @override
   State<ScrollToHideWidget> createState() => _ScrollToHideWidgetState();
@@ -36,7 +38,14 @@ class _ScrollToHideWidgetState extends State<ScrollToHideWidget> {
     if (direction == ScrollDirection.forward) {
       show();
     } else if (direction == ScrollDirection.reverse) {
-      hide();
+      // Only hide if there's enough scroll extent so that after the viewport
+      // expands by widget.height, the user can still scroll back up to
+      // re-show the navbar. Without this guard, content that barely overflows
+      // causes the navbar to hide, the viewport to grow, the content to fit,
+      // and the user gets stuck with no way to bring the navbar back.
+      if (widget.controller.position.maxScrollExtent > widget.height) {
+        hide();
+      }
     }
   }
 
@@ -54,7 +63,7 @@ class _ScrollToHideWidgetState extends State<ScrollToHideWidget> {
 
   @override
   Widget build(BuildContext context) => AnimatedContainer(
-        height: isVisible ? 82 : 0,
+        height: isVisible ? widget.height : 0,
         duration: widget.duration,
         child: Wrap(children: [widget.child]),
       );
