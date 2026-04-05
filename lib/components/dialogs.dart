@@ -143,6 +143,7 @@ class Dialogs {
                   topLeft: Radius.circular(16), topRight: Radius.circular(16)),
             ),
             child: SingleChildScrollView(
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               child: Column(mainAxisSize: MainAxisSize.min, children: [
                 _dialogHeader(context,
                     AppLocalizations.of(context)!.workouts_create),
@@ -249,6 +250,7 @@ class Dialogs {
                   topLeft: Radius.circular(16), topRight: Radius.circular(16)),
             ),
             child: SingleChildScrollView(
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               child: Column(mainAxisSize: MainAxisSize.min, children: [
                 _dialogHeader(
                     context,
